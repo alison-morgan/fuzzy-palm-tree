@@ -4,6 +4,7 @@
 
 # Xcode
 #
+ios/GoogleService-Info.plist
 build/
 *.pbxuser
 !default.pbxuser
@@ -24,11 +25,13 @@ project.xcworkspace
 
 # Android/IntelliJ
 #
+android/google-services.json
 build/
 .idea
 .gradle
 local.properties
 *.iml
+
 
 # node.js
 #

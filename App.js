@@ -26,7 +26,7 @@ export default class App extends React.Component {
             Welcome to {'\n'} React Native Firebase
           </Text>
           <Text style={styles.instructions}>
-            To get started, edit App.js
+            To get started, edit App
           </Text>
           {Platform.OS === 'ios' ? (
             <Text style={styles.instructions}>
