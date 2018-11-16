@@ -15,10 +15,24 @@ export default class SignUp extends React.Component {
   }
 
   handleSignUp = () => {
+    let { username, email, password } = this.state
     firebase
       .auth()
       .createUserWithEmailAndPassword(this.state.email, this.state.password)
-      .then(() => this.props.navigation.navigate('Main'))
+      .then(() => {
+        firebase.firestore().collection("users").add({
+          email: email,
+          password: password,
+          username: username
+        })
+        .then(function(docRef) {
+          console.log("Document written with ID: ", docRef.id);
+        })
+        .catch(function(error) {
+          console.error("Error adding document: ", error);
+        });
+        this.props.navigation.navigate('Main')
+      })
       .catch(error => this.setState({ errorMessage: error.message }))
   }
 
