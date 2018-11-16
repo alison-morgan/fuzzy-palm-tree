@@ -32,51 +32,51 @@ import java.util.List;
 
 public class MainApplication extends Application implements ReactApplication {
 
-  private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
-    @Override
-    public boolean getUseDeveloperSupport() {
-      return BuildConfig.DEBUG;
-    }
+ private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
+   @Override
+   public boolean getUseDeveloperSupport() {
+     return BuildConfig.DEBUG;
+   }
 
-    @SuppressLint("MissingPermission")
-    @Override
-    protected List<ReactPackage> getPackages() {
-      return Arrays.asList(
-        new MainReactPackage(),
-        new RNFirebasePackage(),
-        // add/remove these packages as appropriate
-        new RNFirebaseAdMobPackage(),
-        new RNFirebaseAnalyticsPackage(),
-        new RNFirebaseAuthPackage(),
-        new RNFirebaseRemoteConfigPackage(),
-        new RNFirebaseCrashlyticsPackage(),
-        new RNFirebaseDatabasePackage(),
-        new RNFirebaseFirestorePackage(),
-        new RNFirebaseFunctionsPackage(),
-        new RNFirebaseInstanceIdPackage(),
-        new RNFirebaseInvitesPackage(),
-        new RNFirebaseLinksPackage(),
-        new RNFirebaseMessagingPackage(),
-        new RNFirebaseNotificationsPackage(),
-        new RNFirebasePerformancePackage(),
-        new RNFirebaseStoragePackage()
-      );
-    }
+   @SuppressLint("MissingPermission")
+   @Override
+   protected List<ReactPackage> getPackages() {
+     return Arrays.asList(
+       new MainReactPackage(),
+       new RNFirebasePackage(),
+       // add/remove these packages as appropriate
+       new RNFirebaseAdMobPackage(),
+       new RNFirebaseAnalyticsPackage(),
+       new RNFirebaseAuthPackage(),
+       new RNFirebaseRemoteConfigPackage(),
+       new RNFirebaseCrashlyticsPackage(),
+       new RNFirebaseDatabasePackage(),
+       new RNFirebaseFirestorePackage(),
+       new RNFirebaseFunctionsPackage(),
+       new RNFirebaseInstanceIdPackage(),
+       new RNFirebaseInvitesPackage(),
+       new RNFirebaseLinksPackage(),
+       new RNFirebaseMessagingPackage(),
+       new RNFirebaseNotificationsPackage(),
+       new RNFirebasePerformancePackage(),
+       new RNFirebaseStoragePackage()
+     );
+   }
 
-    @Override
-    protected String getJSMainModuleName() {
-      return "index";
-    }
-  };
+   @Override
+   protected String getJSMainModuleName() {
+     return "index";
+   }
+ };
 
-  @Override
-  public ReactNativeHost getReactNativeHost() {
-    return mReactNativeHost;
-  }
+ @Override
+ public ReactNativeHost getReactNativeHost() {
+   return mReactNativeHost;
+ }
 
-  @Override
-  public void onCreate() {
-    super.onCreate();
-    SoLoader.init(this, /* native exopackage */ false);
-  }
+ @Override
+ public void onCreate() {
+   super.onCreate();
+   SoLoader.init(this, /* native exopackage */ false);
+ }
 }

@@ -106,7 +106,7 @@ android {
     javaMaxHeapSize "4g"
   }
   compileSdkVersion rootProject.ext.compileSdkVersion
-  buildToolsVersion rootProject.ext.buildToolsVersion
+  buildToolsVersion '28.0.3'
 
   defaultConfig {
     applicationId "com.company.minigames"
@@ -154,6 +154,8 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-vector-icons')
+    compile project(':react-native-firebase')
   //noinspection GradleDynamicVersion
   implementation "com.facebook.react:react-native:+"
   implementation fileTree(dir: "libs", include: ["*.jar"])
