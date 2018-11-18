@@ -31,6 +31,7 @@ export default class SignUp extends React.Component {
         .catch(function(error) {
           console.error("Error adding document: ", error);
         });
+        console.log("will take you to main");
         this.props.navigation.navigate('Main')
       })
       .catch(error => this.setState({ errorMessage: error.message }))

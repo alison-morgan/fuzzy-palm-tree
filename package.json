@@ -32,6 +32,7 @@
     "mobx-react": "^5.3.6",
     "react": "16.5.0",
     "react-native": "0.57.1",
+    "react-native-android-log": "^1.1.0",
     "react-native-elements": "^0.19.1",
     "react-native-firebase": "^5.1.0",
     "react-native-vector-icons": "^6.0.2",
