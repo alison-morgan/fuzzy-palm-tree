@@ -29,7 +29,7 @@ const AppStack = createStackNavigator({
         screen: FriendsList
       },
       SignOut: SignOut
-    })
+    }),
   }
 }, {
   headerMode: 'float',
