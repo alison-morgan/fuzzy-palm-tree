@@ -9,10 +9,9 @@ export default class App extends React.Component{
 		 this.store = new Store();
 	}	
 	render(){
-		console.log(this.store)
 		return(
-			<Provider>
-			<Main store={this.stores}/>
+			<Provider store={this.store}>
+			<AppNavigator />
 			</Provider>
 		)
 	}
