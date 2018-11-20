@@ -3,7 +3,7 @@ import {View,StyleSheet} from 'react-native';
 // import Store from './mobx/store';
 import AppNavigator from './components/Navigation';
 import firebase from 'react-native-firebase';
-// import mobxFirebaseStore from 'mobx-firebase-store';
+import MobxFirebaseStore from 'mobx-firebase-store';
 
 // dont know if you need this ->
 // const fbApp = firebase.initializeApp({
@@ -13,7 +13,7 @@ import firebase from 'react-native-firebase';
 //   storageBucket: 'docs-examples.firebaseio.com'
 // }, "chatApp");
  
-// const store = new MobxFirebaseStore(firebase.firestore().collection('users'));
+const store = new MobxFirebaseStore(firebase.firestore().collection('users'));
 
 // // const Main = observer(({timerStore}) => { <- like that
 // // more like that really ->
@@ -30,7 +30,7 @@ export default class App extends React.Component{
 	// 	 this.store = new Store();
 	// }	
 	render(){
-		// console.log(this.store)		
+		console.log(store)		
 		return(
 			 <AppNavigator />
 		)

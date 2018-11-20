@@ -5,7 +5,7 @@ import MobxFirebaseStore from 'mobx-firebase-store';
 export default class Store extends mobxFirebaseStore {
 
     constructor() {
-        // const store = new mobxFirebaseStore(firebase.firestore().collection('users'))
+         const store = new MobxFirebaseStore(firebase.firestore().collection('users'))
         super(store.fb)
     }
 
