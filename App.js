@@ -2,8 +2,7 @@ import React from 'react';
 import {View,StyleSheet} from 'react-native';
 // import Store from './mobx/store';
 import AppNavigator from './components/Navigation';
-// import Store from './mobx/store';
-// import firebase from 'firebase';
+import firebase from 'react-native-firebase';
 // import mobxFirebaseStore from 'mobx-firebase-store';
 
 // dont know if you need this ->
@@ -33,16 +32,7 @@ export default class App extends React.Component{
 	render(){
 		// console.log(this.store)		
 		return(
-			
-				 <AppNavigator />
+			 <AppNavigator />
 		)
 	}
-
 }
-const styles = StyleSheet.create( {
-	container: {
-		flex: 1,
-		justifyContent: 'center',
-		alignItems: 'center',
-	}
-} )
