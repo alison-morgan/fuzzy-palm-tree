@@ -1,70 +1,42 @@
 import React from 'react';
-import {StyleSheet} from 'react-native';
-import {Icon} from 'react-native-elements';
-import {
-  createStackNavigator,
-  createSwitchNavigator,
-  createDrawerNavigator
-} from 'react-navigation';
-import Login from './screens/Login';
-import Main from './screens/Main';
-import SignUp from './screens/SignUp';
-import Loading from './screens/Loading';
-import MessagesList from './screens/MessagesList';
-import FriendsList from './screens/FriendsList';
-import SignOut from './components/SignOut';
-import firebase from 'react-native-firebase';
-const user=firebase.auth();
+import {View,Text} from 'react-native';
+// import Store from './mobx/store';
+// import AppNavigator from './components/Navigation';
+// import Store from './mobx/store';
+// import firebase from 'firebase';
+// import mobxFirebaseStore from 'mobx-firebase-store';
 
-const AppStack = createStackNavigator({
-  DrawerStack: {
-    screen: createDrawerNavigator({
-      Home: {
-        screen: Main
-      },
-      Messages:{
-        screen: MessagesList
-      },
-      Friends:{
-        screen: FriendsList
-      },
-      SignOut: SignOut
-    }),
-  }
-}, {
-  headerMode: 'float',
-  navigationOptions: ({navigation}) => ({
-    headerLeft: (<Icon name='menu' size={45} onPress={() =>{
-     if (navigation.state.isDrawerOpen) 
-        navigation.closeDrawer()
-      else 
-        navigation.openDrawer()
-      }}/>),
-    title:`hello,${user.username}`,
-    headerRight:(<Icon name='home' size={45} onPress={()=>{
-     navigation.navigate('Home')
-    }
-    }/>),
-    headerStyle: {backgroundColor: 'purple'},
-    headerTintColor: 'white',
-  })
-})
-const AuthStack = createSwitchNavigator({
-  Login,
-  SignUp
-}, {
-  initialRouteName: 'Login'
-});
+// dont know if you need this ->
+// const fbApp = firebase.initializeApp({
+//   apiKey: 'yourApiKey',
+//   authDomain: "localhost",
+//   databaseURL: 'https://docs-examples.firebaseio.com',
+//   storageBucket: 'docs-examples.firebaseio.com'
+// }, "chatApp");
+ 
+// const store = new MobxFirebaseStore(firebase.firestore().collection('users'));
 
-export default createSwitchNavigator({
-  Loading,
-  AppStack,
-  AuthStack,
-}, {
-  initialRouteName: 'Loading',
-});
-const styles = StyleSheet.create({
-  icon: {
-    padding:'100px'
-  }
-})
+// // const Main = observer(({timerStore}) => { <- like that
+// // more like that really ->
+// const Test = observer(({store}) => {
+//   return (
+//     <View>
+//       <Text>hi</Text>
+//     </View>
+//   );
+// });
+
+export default class App extends React.Component{
+	// componentWillMount(){
+	// 	 this.store = new Store();
+	// }	
+	render(){
+		// console.log(this.store)		
+		return(
+			<View>
+				 <Text>hello</Text> 
+			</View>
+		)
+	}
+
+}
