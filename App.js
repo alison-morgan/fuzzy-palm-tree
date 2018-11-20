@@ -1,9 +1,10 @@
 import React from 'react';
-import {View,StyleSheet} from 'react-native';
-// import Store from './mobx/store';
+import {View} from 'react-native';
+import {Provider} from 'mobx-react';
+import Store from './mobx/store';
+import Test from './screens/Test';
 import AppNavigator from './components/Navigation';
-import firebase from 'react-native-firebase';
-import MobxFirebaseStore from 'mobx-firebase-store';
+
 
 // dont know if you need this ->
 // const fbApp = firebase.initializeApp({
@@ -13,26 +14,21 @@ import MobxFirebaseStore from 'mobx-firebase-store';
 //   storageBucket: 'docs-examples.firebaseio.com'
 // }, "chatApp");
  
-const store = new MobxFirebaseStore(firebase.firestore().collection('users'));
+// const store = new MobxFirebaseStore(firebase.firestore().collection('users'));
 
-// // const Main = observer(({timerStore}) => { <- like that
-// // more like that really ->
-// const Test = observer(({store}) => {
-//   return (
-//     <View>
-//       <Text>hi</Text>
-//     </View>
-//   );
-// });
+
 
 export default class App extends React.Component{
-	// componentWillMount(){
-	// 	 this.store = new Store();
-	// }	
+	componentWillMount(){
+		 this.store = new Store();
+	}	
 	render(){
-		console.log(store)		
+		console.log(this.store)		
 		return(
-			 <AppNavigator />
+			//  <AppNavigator />
+
+				<Test store={this.store}/>
+			
 		)
 	}
 }
