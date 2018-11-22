@@ -47,6 +47,7 @@ export default class SignUp extends React.Component {
 
 	}
 	render() {
+		console.log(this.props, "in signup")
 		let { email, passwordPlaceholder, emailPlaceholder, confirmPlaceholder,password,confirmPassword } = this.state
 		return (
 		  <View style={styles.container}>

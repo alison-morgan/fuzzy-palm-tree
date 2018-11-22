@@ -8,6 +8,7 @@ import SignUp from '../screens/SignUp';
 import Loading from '../screens/Loading';
 import MessagesList from '../screens/MessagesList';
 import FriendsList from '../screens/FriendsList';
+import TicMain from '../screens/TicMain';
 import SignOut from './SignOut';
 
 const AppStack = createStackNavigator( {
@@ -21,6 +22,9 @@ const AppStack = createStackNavigator( {
 			},
 			Friends: {
 				screen: FriendsList
+			},
+			TicMain: {
+				screen: TicMain
 			},
 			SignOut: SignOut,
 		} )
