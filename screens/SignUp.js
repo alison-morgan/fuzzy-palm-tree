@@ -1,120 +1,71 @@
 // SignUp.js
 import React from 'react';
 import { StyleSheet, Text, TextInput, View, Button } from 'react-native';
-import firebase from 'react-native-firebase'
+import {observer,inject} from 'mobx-react';
 
-const db = firebase.firestore().collection( 'users' );
-export default class SignUp extends React.Component {
-	state = {
-		email: '',
-		password: '',
-		errorMessage: null,
-		username: '',
-		passwordPlaceholder: 'Password',
-		emailPlaceholder: 'Email',
-		usernamePlaceholder: 'Username',
-		confirmPlaceholder: 'Confirm Password'
-	}
+const SignUp=inject("store")(observer(
+ class SignUp extends React.Component {
 
-	validate = ( text ) => {
-		let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-		if ( reg.test( text ) === false ) 
-			return "Email is Not Correct";
-		else 
-			return text;
-		}
-	
-	handleSignUp = () => {
-		let { username, email, password,usernamePlaceholder } = this.state;
-		// check if user with entered uyarn sername already exist in the
-		// database
-		 db.doc( username ).get().then( (doc )=> {
-			//if document exist
-			if ( doc.exists ) {		
-				//let user know that he can not user entered username
-				usernamePlaceholder = 'this username already exist'
-				username = ''
-				 this.setState( { username, usernamePlaceholder } )
-				//if username not in use
-			} else {
-				//authorize user in the system
-				firebase.auth().createUserWithEmailAndPassword( email, password ).then( () => {
-					//add user to the database
-					db.doc( `${ username }` ).set( { email: email, password: password, username: username,uid:firebase.auth().currentUser.uid })
-				} ).catch( error => this.setState( { errorMessage: error.message } ) )
-			}
-		} )
-
-	}
 	render() {
-		let { email, passwordPlaceholder, emailPlaceholder, confirmPlaceholder,password,confirmPassword } = this.state
+		const store=this.props.store;
 		return (
 		  <View style={styles.container}>
 			<Text>Sign Up</Text>
-			{this.state.errorMessage &&
 			  <Text style={{ color: 'red' }}>
-				{this.state.errorMessage}
-			  </Text>}
+				{store.errorMessage}
+			  </Text>
 			<TextInput
-			  placeholder={this.state.emailPlaceholder}
+			  placeholder={store.placeholders.email}
 			  autoCapitalize="none"
 			  style={styles.textInput}
-			  onChangeText={email => this.setState({ email })}
-			  value={this.state.email}
+			  onChangeText={email => store.setEmail(email)}
+			  value={store.email}
 			/>
 			<TextInput
-			  placeholder={this.state.usernamePlaceholder}
+			  placeholder={store.placeholders.username}
 			  autoCapitalize="none"
 			  style={styles.textInput}
-			  onChangeText={username => this.setState({ username })}
-			  value={this.state.username}
+			  onChangeText={username => store.setUsername(username)}
+			  value={store.username}
 			/>
-	
 			<TextInput
 			  secureTextEntry
-			  placeholder={this.state.passwordPlaceholder}
+			  placeholder={store.placeholders.password}
 			  autoCapitalize="none"
 			  style={styles.textInput}
-			  onChangeText={password => this.setState({ password })}
-			  value={this.state.password}
+			  onChangeText={password => store.setPassword(password)}
+			  value={store.password}
 			/>
 			  <TextInput
 			  secureTextEntry
-			  placeholder={this.state.confirmPlaceholder}
+			  placeholder={store.placeholders.confirmPassword}
 			  autoCapitalize="none"
 			  style={styles.textInput}
-			  onChangeText={confirmPassword => this.setState({ confirmPassword })}
-			  value={this.state.confirmPassword}
+			  onChangeText={confirmPassword => store.setConfirmPassword(confirmPassword)}
+			  value={store.confirmPassword}
 			/>
 			<Button title="Sign Up" onPress={() => {
-			  if (this.state.password === '') {
-				passwordPlaceholder = 'Please enter password'
-				this.setState({passwordPlaceholder})
-			  } else if (this.state.email === '') {
-				emailPlaceholder = 'Please enter email'
-				this.setState({emailPlaceholder})
-			  } else if (this.state.username === '') {
-				usernamePlaceholder = 'Please enter username'
-				this.setState({usernamePlaceholder})
+			  if (store.password === '') {
+				store.placeholders('password', 'Please enter password');
+			  } else if (store.email === '') {
+				store.placeholders('email','Please enter email');
+			  } else if (store.username === '') {
+				store.placeholders('username', 'Please enter username');
 			  }
 			  else {
-				if (this.state.password.length < 6) {
-				  passwordPlaceholder = 'Password should be at least 6 characters';
-				  password = '';
-				  this.setState({ passwordPlaceholder, password })
-				} else if (this.state.email) {
-				  if (this.validate(email) === 'Email is Not Correct') {
-					emailPlaceholder = 'Please enter a valid email';
-					email='';
-					this.setState({ emailPlaceholder,email })
+				if (store.password.length < 6) {
+				  store.placeholders('password','Password should be at least 6 characters');
+				  store.setPassword('');
+				} else if (store.email) {
+				  if (store.validate(store.email) === 'Email is Not Correct') {
+					store.placeholders('email','Please enter a valid email');
+					store.setEmail('');
 				  } else{
-					  console.log("your right before handle signup")
-					  if(password===confirmPassword)
-						this.handleSignUp()
+					  if(store.password===store.confirmPassword)
+						store.handleSignUp()
 					  else{
-						confirmPlaceholder='Passwords do not match';
-						confirmPassword='';
-						this.setState({confirmPlaceholder,confirmPassword});
+						store.placeholders('confirmPassword','Passwords do not match');
+						store.setConfirmPassword('');
 					  }
 				  }  
 				}
@@ -122,12 +73,12 @@ export default class SignUp extends React.Component {
 			}} />
 			<Button
 			  title='Already have an account? Login'
-			  onPress={() => this.props.navigation.navigate('Login')}
-			/>
+			  onPress={() => this.props.navigation.navigate('Login')}/>
 		  </View>
 		)
 	  }
 	}
+	))
 	const styles = StyleSheet.create({
 	  container: {
 		flex: 1,
@@ -142,3 +93,4 @@ export default class SignUp extends React.Component {
 		marginTop: 8
 	  }
 	})
+	export default SignUp;

@@ -1,17 +1,18 @@
+// Main.js
 import React from 'react';
-import { StyleSheet, Text, View, Button, } from 'react-native';
-import firebase from 'react-native-firebase';
+import { StyleSheet, Text, View } from 'react-native';
+import {observer,inject} from 'mobx-react';
 
-const collection = firebase.firestore().collection( 'users' );
-export default class FriendsList extends React.Component {
-	render() {
-		return ( <View style={styles.container}>
-			<Text>
-				Friends
-			</Text>
-		</View> )
-	}
+const FriendsList=inject("store")(observer( ({store})=> {
+	console.log("hereeeeee",store);
+	return ( <View style={styles.container}>
+				<Text>
+					Frineds
+				</Text>
+			</View> 
+			)
 }
+))
 const styles = StyleSheet.create( {
 	container: {
 		flex: 1,
@@ -19,3 +20,4 @@ const styles = StyleSheet.create( {
 		alignItems: 'center',
 	}
 } )
+export default FriendsList;

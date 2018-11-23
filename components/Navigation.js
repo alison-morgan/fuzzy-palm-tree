@@ -8,7 +8,7 @@ import SignUp from '../screens/SignUp';
 import Loading from '../screens/Loading';
 import MessagesList from '../screens/MessagesList';
 import FriendsList from '../screens/FriendsList';
-import SignOut from './SignOut';
+import SignOut from '../components/SignOut';
 
 const AppStack = createStackNavigator( {
 	DrawerStack: {
@@ -54,7 +54,7 @@ const AuthStack = createSwitchNavigator( {
 	SignUp,
 }, { initialRouteName: 'Login' } );
 
-export default AppNavigator= createSwitchNavigator( {
+export default AppNavigator = createSwitchNavigator( {
 	Loading,
 	AppStack,
 	AuthStack

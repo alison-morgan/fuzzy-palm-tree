@@ -1,15 +1,20 @@
 // Main.js
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View,Button } from 'react-native';
 import {observer,inject} from 'mobx-react';
-const Main=inject("store")(observer( ({store})=> {
-	console.log("hereeeeee",store);
+const Main=inject("store")(observer( 
+	class Main extends React.Component {
+	render(){
+		const store=this.props.store;
+		 console.log("hereeeeee??????",store);
 	return ( <View style={styles.container}>
 				<Text>
-					Main
+					 {store.email}
+					Hi
 				</Text>
+				<Button title='click me' onPress={()=>{console.log('clicked');store.setEmail("blablabla")}}/>
 			</View> 
-			)
+			)}
 }
 ))
 const styles = StyleSheet.create( {

@@ -7,83 +7,58 @@ import {
 	View,
 	Button,
 } from 'react-native';
-import firebase from 'react-native-firebase';
+import {observer,inject} from 'mobx-react';
 
-export default class Login extends React.Component {
-	state = {
-		email: '',
-		password: '',
-		errorMessage: null,
-		passwordPlaceholder: 'Password',
-		emailPlaceholder: 'Email',
-	}
-	handleLogin = () => {
-		const { email, password, } = this.state;
-		this.props.navigation.navigate('AppStack')
-		 firebase.auth().signInWithEmailAndPassword( email, password ).catch( error => this.setState( { errorMessage: error.message } ) )
-	}
-	validate = ( text ) => {
-		let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-		if ( reg.test( text ) === false ) 
-			return "Email is Not Correct";
-		else 
-			return text;
-		}
-	render() {
-		let { email, password, passwordPlaceholder, emailPlaceholder, } = this.state
-		return ( <View style={styles.container}>
-			<Text>Login</Text>
-			{
-				this.state.errorMessage && <Text style={{
-							color: 'red'
-						}}>
-						{this.state.errorMessage}
-					</Text>
-			}
-			<TextInput
-				style={styles.textInput}
-				autoCapitalize="none"
-				placeholder={this.state.emailPlaceholder}
-				onChangeText={email => this.setState( { email } )}
-				value={this.state.email}/>
-			<TextInput
-				secureTextEntry
-				style={styles.textInput}
-				autoCapitalize="none"
-				placeholder={this.state.passwordPlaceholder}
-				onChangeText={password => this.setState( { password } )}
-				value={this.state.password}/>
-			<Button
-				title="Login"
-				onPress={() => {
-					if ( this.state.password === '' ) {
-						passwordPlaceholder = 'Please enter password'
-						this.setState( { passwordPlaceholder } )
-					} else if ( this.state.email === '' ) {
-						emailPlaceholder = 'Please enter email'
-						this.setState( { emailPlaceholder } )
-					} else {
-						if ( this.state.password.length < 6 ) {
-							passwordPlaceholder = 'Password should be at least 6 characters'
-							password = ''
-							this.setState( { passwordPlaceholder, password, } )
-						} else if ( this.state.email ) {
-							if ( this.validate( email ) === 'Email is Not Correct' ) {
-								emailPlaceholder = 'Please enter a valid email'
-								email = ''
-								this.setState( { emailPlaceholder, email, } )
-							} else {
-								this.handleLogin();
-							}
+const Login=inject("store")(observer(
+	class Login extends React.Component{
+		render(){
+			console.log(this.props.store);
+			const store=this.props.store;
+	return ( <View style={styles.container}>
+		<Text>Login</Text>
+			<Text style={{color: 'red'}}>
+				{store.errorMessage}
+			</Text>
+		 <TextInput
+			style={styles.textInput}
+			autoCapitalize="none"
+			placeholder={store.placeholders.email}
+			onChangeText={email => store.setEmail(email)}
+			value={store.email}/> 
+		<TextInput
+			secureTextEntry
+			style={styles.textInput}
+			autoCapitalize="none"
+			placeholder={store.placeholders.password}
+			onChangeText={password => store.setPassword(password)}
+			value={store.password}/>
+		<Button
+			title="Login"
+			onPress={() => {
+				if ( store.password === '' ) {
+					store.setPlaceholders('password','Please enter password');	
+				} else if ( store.email === '' ) {
+					store.placeholders('email', 'Please enter email');
+				} else {
+					if ( store.password.length < 6 ) {
+						store.placeholders('password', 'Password should be at least 6 characters');
+						store.setPassword('');
+					} else if ( store.email ) {
+						if ( store.validate( store.email ) === 'Email is Not Correct' ) {
+							store.placeholders('email', 'Please enter a valid email');
+							store.setEmail('')
+						} else {
+							store.handleLogin();
 						}
 					}
-				}}/>
-			<Button
-				title="Don't have an account? Sign Up"
-				onPress={() => this.props.navigation.navigate( 'SignUp' )}/>
-		</View> )
-	}
-}
+				}
+			}}/>
+		<Button
+			title="Don't have an account? Sign Up"
+			onPress={() => this.props.navigation.navigate( 'SignUp' )}/>
+	</View> )
+	}}
+));
 const styles = StyleSheet.create( {
 	container: {
 		flex: 1,
@@ -98,3 +73,4 @@ const styles = StyleSheet.create( {
 		marginTop: 8,
 	},
 } )
+export default Login
