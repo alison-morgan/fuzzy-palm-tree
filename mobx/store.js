@@ -19,15 +19,16 @@ export default class Store {
 
   constructor() {
     this.collectionReference = firebase.firestore().collection('users');
-    this._email = '';
-    this._password = '';
-    this._confirmPassword='';
-    this._username = '';
+    this._email = 'ol@m.com';
+    this._password = '123456';
+    this._confirmPassword='123456';
+    this._username = 'ol';
     this._errorMessage = '';
     this._isAuthorized='';
     this._friends=[];
     this._uid='';
     this._isOnline=false;
+    this._instanceId=[];
     this._placeholders = {
       username: 'Username',
       confirmPassword: 'Confirm Password',
@@ -103,7 +104,8 @@ export default class Store {
   }
   @action setInstanceId(value) {
     console.log('setting',value)
-    this._instanceId = value;
+    this._instanceId=value;
+    console.log(this._instanceId)
    }
 
      validate = ( text ) => {
@@ -116,43 +118,74 @@ export default class Store {
 
   handleLogin = () => {
     console.log('handleLogin')
-    firebase.auth().signInWithEmailAndPassword(this.email, this.password).then(
-      this.collectionReference.where("uid", "==", firebase.auth().currentUser.uid)
-      .get().then((querySnapshot) => {
-        const data=querySnapshot.docs[0].data;
-        for(field in data){
-          this[`${field}`]=data[field]
-        }
-      }).then(()=>{
-        this.authorization();
-      }).catch(function (error) {
-        console.log('Error getting document: ', error)
-      })
-    ).catch(error => this.errorMessage = error.message)
+    console.log(this['setUsername'])
+    // firebase.auth().signInWithEmailAndPassword(this.email, this.password).then(
+    //   firebase.messaging()
+    //   .requestPermission()
+    //   .then(()=>{
+    //     firebase.messaging().getToken()
+    //     .then((currentToken)=>{
+
+    //     this.collectionReference.where("uid", "==", firebase.auth().currentUser.uid)
+    //   .get().then((querySnapshot) => {
+    //     const data=querySnapshot.docs[0].data;
+    //     for(field in data){
+    //       if(field === 'InstanceId'){
+    //         querySnapshot.docs[0].update({
+    //           'InstanceId': FieldValue.arrayUnion(currentToken)
+    //         })
+    //         this.setInstanceId(currentToken)
+    //       }else{
+    //       console.log(this[`set${field} data[field]`])
+    //     }
+    //     }
+    //   }).then(()=>{
+    //     this.authorization();
+    //   }).catch(function (error) {
+    //     console.log('Error getting document: ', error)
+    //   })
+
+    //      console.log(currentToken)
+    //     })
+    //   }) 
+     
+    // ).catch(error => this.setErrorMessage(error.message))
   }
 
-  handleSignUp = () => {
-		// check if user with entered username already exist in the
-		// database
-		 this.collectionReference.doc( username ).get().then( (doc )=> {
-			//if document exist
-			if ( doc.exists ) {		
-				//let user know that he can not user entered username
-				this.placeholders.username = 'this username already exist';
-				this.username = '';
-				//if username not in use
-			} else {
-				//authorize user in the system
-				firebase.auth().createUserWithEmailAndPassword( email, password ).then( () => {
-					//add user to the database
-          this.collectionReference.doc( `${ this.username }` )
-          .set( { email: this.email, password: this.password,
-             username: this.username,
-            uid: firebase.auth().currentUser.uid })
-				} ).catch( error => this.errorMessage=error.message)
-			}
-		} )
 
-	}
+  handleSignUp = () => {
+    // check if user with entered username already exist in the
+    // database
+     this.collectionReference.doc( this.username ).get().then( (doc )=> {
+        //if document exist
+        if ( doc.exists ) {
+            //let user know that he can not user entered username
+            this.setPlaceholders('username','this username already exist');
+            this.setUsername('');
+            //if username not in use
+          } else {
+            //authorize user in the system
+            firebase.auth().createUserWithEmailAndPassword( this.email, this.password )
+            .then(()=>{
+              firebase.messaging()
+              .requestPermission()
+              .then(()=>{
+                firebase.messaging().getToken()
+                .then((currentToken)=>{
+                  const uid=firebase.auth().currentUser.uid;
+                  this.setUid(uid);
+                  this.setInstanceId(currentToken)
+                  this.collectionReference.doc( this.username )
+                  .set( { InstanceId:[this.instanceId], Email: this.email, Password: this.password,
+                    Username: this.username,
+                    Uid: this.uid })
+                })
+              }) 
+            })
+            .catch( error => this.setErrorMessage(error.message))
+        }
+    } )
+ 
+ }
 
 }

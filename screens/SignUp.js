@@ -46,25 +46,25 @@ const SignUp=inject("store")(observer(
 			/>
 			<Button title="Sign Up" onPress={() => {
 			  if (store.password === '') {
-				store.placeholders('password', 'Please enter password');
+				store.setPlaceholders('password', 'Please enter password');
 			  } else if (store.email === '') {
-				store.placeholders('email','Please enter email');
+				store.setPlaceholders('email','Please enter email');
 			  } else if (store.username === '') {
-				store.placeholders('username', 'Please enter username');
+				store.setPlaceholders('username', 'Please enter username');
 			  }
 			  else {
 				if (store.password.length < 6) {
-				  store.placeholders('password','Password should be at least 6 characters');
+				  store.setPlaceholders('password','Password should be at least 6 characters');
 				  store.setPassword('');
 				} else if (store.email) {
 				  if (store.validate(store.email) === 'Email is Not Correct') {
-					store.placeholders('email','Please enter a valid email');
+					store.setPlaceholders('email','Please enter a valid email');
 					store.setEmail('');
 				  } else{
 					  if(store.password===store.confirmPassword)
 						store.handleSignUp()
 					  else{
-						store.placeholders('confirmPassword','Passwords do not match');
+						store.setPlaceholders('confirmPassword','Passwords do not match');
 						store.setConfirmPassword('');
 					  }
 				  }  

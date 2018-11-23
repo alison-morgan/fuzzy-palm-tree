@@ -11,8 +11,8 @@ export default Loading=inject('store')(observer(
 				console.log('user',user)
 				this.props.navigation.navigate(
 					// user
-						'AppStack'
-						// : 'AuthStack'
+					// 	?'AppStack'
+						'AuthStack'
 				)
 			} )
 		}

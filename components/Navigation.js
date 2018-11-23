@@ -56,6 +56,6 @@ const AuthStack = createSwitchNavigator( {
 
 export default AppNavigator = createSwitchNavigator( {
 	Loading,
-	AppStack,
+	// AppStack,
 	AuthStack
 }, { initialRouteName: 'Loading' } );
