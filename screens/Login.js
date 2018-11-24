@@ -11,6 +11,15 @@ import {observer,inject} from 'mobx-react';
 
 const Login=inject("store")(observer(
 	class Login extends React.Component{
+
+		login=async()=>{
+			await this.props.store.handleLogin();
+			console.log('logiiiin',this.props.store)
+			this.props.store.navigation.navigate('AppStack');
+		}
+		setLogin=(variable)=>{
+			console.log(variable)
+		}
 		render(){
 			console.log(this.props.store);
 			const store=this.props.store;
@@ -49,6 +58,8 @@ const Login=inject("store")(observer(
 							store.setEmail('')
 						} else {
 							store.handleLogin();
+							// const sm='Login';
+							// this[`set${sm}`]('testing');
 						}
 					}
 				}
