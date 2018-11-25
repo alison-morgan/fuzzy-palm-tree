@@ -23,7 +23,7 @@ const Login=inject("store")(observer(
 		render(){
 			console.log(this.props.store);
 			const store=this.props.store;
-	return ( <View style={styles.container}>
+		return ( <View style={styles.container}>
 		<Text>Login</Text>
 			<Text style={{color: 'red'}}>
 				{store.errorMessage}

@@ -30,6 +30,7 @@
     "babel-core": "^6.0.0",
     "babel-plugin-transform-flow-strip-types": "^6.22.0",
     "babel-upgrade": "^0.0.24",
+    "firebase-admin": "^6.2.0",
     "mobx": "^4.0.0",
     "mobx-react": "^5.4.0",
     "prop-types": "^15.0.0",

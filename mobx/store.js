@@ -66,8 +66,6 @@ export default class Store {
     console.log('setting',value)
     this._isOnline = value;
    }
-
-
   @computed get navigation() { 
     return this._navigation;
   }
@@ -75,7 +73,6 @@ export default class Store {
     console.log('setting',value)
     this._navigation = value;
    }
-
   @computed get email() {  
     return this._email;
   }
@@ -115,8 +112,6 @@ export default class Store {
     console.log('setting',value)
     this._errorMessage = value;
    }
-
-
    @computed get uid() {
     
     return this._uid;
@@ -153,10 +148,12 @@ export default class Store {
       }
 
   handleLogin = () => {
+    messaging = firebase.messaging();
+    // messaging.usePublicVapidKey("BBMWsfeTiUk7wFjU12u3rCeFMEMVMKYWm3t4ys-5KXw_mjMLHPJrlyQlzwPJlW1YHQyI9DYqqtMSiM8DtdrmhchE");
     firebase.auth().signInWithEmailAndPassword(this.email, this.password).then(()=>{
-      firebase.messaging().requestPermission()
+      messaging.requestPermission()
       .then(()=>{ 
-        firebase.messaging().getToken()
+        messaging.getToken()
         .then((currentToken)=>{
           this.collectionReference.where("Uid", "==", firebase.auth().currentUser.uid)
           .get().then((querySnapshot) => {
@@ -184,6 +181,7 @@ export default class Store {
   handleSignUp = () => {
     // check if user with entered username already exist in the
     // database
+    messaging = firebase.messaging();
      this.collectionReference.doc( this.username ).get().then( (doc )=> {
         //if document exist
         if ( doc.exists ) {
@@ -195,10 +193,10 @@ export default class Store {
             //authorize user in the system
             firebase.auth().createUserWithEmailAndPassword( this.email, this.password )
             .then(()=>{
-              firebase.messaging()
+              messaging
               .requestPermission()
               .then(()=>{
-                firebase.messaging().getToken()
+                messaging.getToken()
                 .then((currentToken)=>{
                   const uid=firebase.auth().currentUser.uid;
                   this.setUid(uid);
