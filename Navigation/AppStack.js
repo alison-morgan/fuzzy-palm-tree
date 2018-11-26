@@ -5,6 +5,7 @@ import Main from '../screens/Main';
 import MessagesList from '../screens/MessagesList';
 import FriendsList from '../screens/FriendsList';
 import SignOut from '../components/SignOut';
+import DrawerContainer from './DrawerContainer'
 export default AppStack = createStackNavigator( {
 	DrawerStack: {
 		screen: createDrawerNavigator( {
@@ -17,7 +18,7 @@ export default AppStack = createStackNavigator( {
 			Friends: {
 				screen: FriendsList
 			},
-			SignOut: SignOut,
+			SignOut:{screen:SignOut},
 		} )
 	}
 }, {

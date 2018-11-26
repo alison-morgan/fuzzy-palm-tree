@@ -9,21 +9,43 @@ import {
 export default class Store {
   constructor() {
     this._collectionReference = firebase.firestore().collection('users');
-    this._email = 'ol@m.com';
-    this._password = '123456';
-    this._confirmPassword = '';
-    this._username = '';
-    this._errorMessage = '';
-    this._isAuthorized = '';
+    this._email = null;
+    this._password = null;
+    this._confirmPassword = null;
+    this._username = null;
+    this._errorMessage = null;
     this._friends = null;
     this._uid = null;
     this._isOnline = null;
-    this._instanceId = '';
+    this._instanceId = null;
+    this._friendsInfo={};
     this._placeholders = {
       username: 'Username',
       confirmPassword: 'Confirm Password',
       password: 'Password',
       email: 'Email'
+    }
+  }
+  get friendsInfo() {
+     console.log('calling get friends')
+     return this._friendsInfo
+   }
+   setFriendsInfo(value) {
+     console.log('setting', value)
+       this._friendsInfo[value.username] = value
+       console.log(this._friendsInfo, "friends ifo")
+   }
+   get friends() {
+    console.log('calling get friends')
+    return this._friends
+  }
+   setFriends(value) {
+    console.log('setting', value)
+    if(this._friends){
+     this._friends.push(value)
+    }
+    else{
+    this._friends = value;
     }
   }
   get collectionReference() {return this._collectionReference;}
@@ -92,22 +114,21 @@ export default class Store {
     else
       return text;
   }
-  handleLogin = (navigate) => {
+
+  handleLogin = () => {
 	  console.log('handleLogin')
     firebase.auth().signInWithEmailAndPassword(this.email, this.password).then(() => {
-      console.log('going to navigate',navigate)
-      navigate()
+      console.log('user auth')
       firebase.messaging().requestPermission().then(() => {
 		console.log('permission') 
         firebase.messaging().getToken().then((currentToken) => {
           const uid=firebase.auth().currentUser.uid
 			console.log('token',uid)
           this.collectionReference.where("Uid", "==", uid).get().then((querySnapshot) => {
-			const data = querySnapshot.docs[0].data();
+			  const data = querySnapshot.docs[0].data();
 			console.log('found document,getting data')
             for (field in data) {
               if (field === 'InstanceId') {
-
                 this.collectionReference.doc(data.Username).update({
                   'InstanceId': firebase.firestore.FieldValue.arrayUnion(currentToken)
                 })
@@ -120,14 +141,14 @@ export default class Store {
               } else {
                 this[`set${ field }`](data[field])
               }
-			}
+			      }
           }).catch(error => console.log('Error getting document: ', error))
         }).catch(error => console.log('An error occurred while retrieving token. ', error))
       }).catch(error => console.log('Unable to get permission to notify.', error))
     }).catch(error => this.setErrorMessage(error.message))
   }
 
-  handleSignUp = (navigate) => {
+  handleSignUp = () => {
     // check if user with entered username already exist in the
     // database
     this.collectionReference.doc(this.username).get().then((doc) => {
@@ -142,7 +163,6 @@ export default class Store {
         firebase.auth().createUserWithEmailAndPassword(this.email, this.password).then(() => {
           firebase.messaging().requestPermission().then(() => {
             firebase.messaging().getToken().then((currentToken) => {
-              navigate()
               const uid = firebase.auth().currentUser.uid;
               this.setUid(uid);
               this.setIsOnline(true);
@@ -161,6 +181,30 @@ export default class Store {
       }
     })
   }
+  signOut=()=>{
+    console.log('signOut')
+      firebase.auth().signOut().then(()=>{
+        this.collectionReference.doc(this.username).update({
+        'InstanceId': firebase.firestore.FieldValue.arrayRemove(this.instanceId),
+        'IsOnline': false
+      })})
+}
+
+reset=()=>{
+  console.log('reset')
+    this.setEmail(null);
+    this.setPassword(null);
+    this.setConfirmPassword(null);
+    this.setUsername(null);
+    this.setErrorMessage(null);
+    this.setFriends(null);
+    this.setUid(null);
+    this.setIsOnline(null);
+    this.setInstanceId(null);
+    this.setFriendsInfo({});
+}
+
+
 }
 decorate(Store,{
   _collectionReference:observable,
@@ -171,6 +215,7 @@ decorate(Store,{
    _errorMessage:observable,
    _isAuthorized:observable,
    _friends:observable,
+   _friendsInfo:observable,
    _uid:observable,
    _isOnline:observable,
    _placeholders:observable,
@@ -193,5 +238,11 @@ decorate(Store,{
   placeholders:computed,
   setPlaceholders:action,
   instanceId:computed,
-  setInstanceId:action
+  setInstanceId:action,
+  friendsInfo:computed,
+  setFriendsInfo:action,
+  friends:computed,
+  setFriends:action,
+  friendsInfo:computed,
+  getFriendsInfo:action
 })

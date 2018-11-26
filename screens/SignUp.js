@@ -62,7 +62,7 @@ const SignUp=inject("stores")(observer(
 					userStore.setEmail('');
 				  } else{
 					  if(userStore.password===userStore.confirmPassword){
-						userStore.handleSignUp(this.props.navigation.navigate.bind(this,'AppStack')) }
+						userStore.handleSignUp() }
 					  else{
 						userStore.setPlaceholders('confirmPassword','Passwords do not match');
 						userStore.setConfirmPassword('');
