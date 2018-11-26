@@ -34,6 +34,7 @@ export default class Store {
   }
   get email() {
     console.log('getting email', this._email)
+
     return this._email;
   }
   setEmail(value) {
@@ -91,7 +92,6 @@ export default class Store {
     else
       return text;
   }
-
   handleLogin = (navigate) => {
 	  console.log('handleLogin')
     firebase.auth().signInWithEmailAndPassword(this.email, this.password).then(() => {
@@ -107,6 +107,7 @@ export default class Store {
 			console.log('found document,getting data')
             for (field in data) {
               if (field === 'InstanceId') {
+
                 this.collectionReference.doc(data.Username).update({
                   'InstanceId': firebase.firestore.FieldValue.arrayUnion(currentToken)
                 })

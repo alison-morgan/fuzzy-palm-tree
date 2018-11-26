@@ -5,7 +5,6 @@ import AppNavigator from './Navigation/Navigation';
 import NavigationStore from 'react-navigation-mobx-helpers';
 import {observer,inject} from 'mobx-react';
 
-  
 export default class Root extends React.Component {
 	componentWillMount(){
 		this.userStore=new Store();
