@@ -2,17 +2,17 @@
 import React from 'react';
 import { StyleSheet, Text, View,Button } from 'react-native';
 import {observer,inject} from 'mobx-react';
-const Main=inject("store")(observer( 
+const Main=inject("stores")(observer( 
 	class Main extends React.Component {
 	render(){
-		const store=this.props.store;
-		 console.log("hereeeeee??????",store);
+		const userStore=this.props.stores.userStore;
+		 console.log("hereeeeee??????",userStore);
 	return ( <View style={styles.container}>
 				<Text>
-					 {store.email}
+					 {userStore.email}
 					Hi
 				</Text>
-				<Button title='click me' onPress={()=>{console.log('clicked');store.setEmail("blablabla")}}/>
+				<Button title='click me' onPress={()=>{console.log('clicked');userStore.setEmail("blablabla")}}/>
 			</View> 
 			)}
 }

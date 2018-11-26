@@ -3,69 +3,69 @@ import React from 'react';
 import { StyleSheet, Text, TextInput, View, Button } from 'react-native';
 import {observer,inject} from 'mobx-react';
 
-const SignUp=inject("store")(observer(
+const SignUp=inject("stores")(observer(
  class SignUp extends React.Component {
 
 	render() {
-		const store=this.props.store;
+		const userStore=this.props.stores.userStore;
 		return (
 		  <View style={styles.container}>
 			<Text>Sign Up</Text>
 			  <Text style={{ color: 'red' }}>
-				{store.errorMessage}
+				{userStore.errorMessage}
 			  </Text>
 			<TextInput
-			  placeholder={store.placeholders.email}
+			  placeholder={userStore.placeholders.email}
 			  autoCapitalize="none"
 			  style={styles.textInput}
-			  onChangeText={email => store.setEmail(email)}
-			  value={store.email}
+			  onChangeText={email => userStore.setEmail(email)}
+			  value={userStore.email}
 			/>
 			<TextInput
-			  placeholder={store.placeholders.username}
+			  placeholder={userStore.placeholders.username}
 			  autoCapitalize="none"
 			  style={styles.textInput}
-			  onChangeText={username => store.setUsername(username)}
-			  value={store.username}
+			  onChangeText={username => userStore.setUsername(username)}
+			  value={userStore.username}
 			/>
 			<TextInput
 			  secureTextEntry
-			  placeholder={store.placeholders.password}
+			  placeholder={userStore.placeholders.password}
 			  autoCapitalize="none"
 			  style={styles.textInput}
-			  onChangeText={password => store.setPassword(password)}
-			  value={store.password}
+			  onChangeText={password => userStore.setPassword(password)}
+			  value={userStore.password}
 			/>
 			  <TextInput
 			  secureTextEntry
-			  placeholder={store.placeholders.confirmPassword}
+			  placeholder={userStore.placeholders.confirmPassword}
 			  autoCapitalize="none"
 			  style={styles.textInput}
-			  onChangeText={confirmPassword => store.setConfirmPassword(confirmPassword)}
-			  value={store.confirmPassword}
+			  onChangeText={confirmPassword => userStore.setConfirmPassword(confirmPassword)}
+			  value={userStore.confirmPassword}
 			/>
 			<Button title="Sign Up" onPress={() => {
-			  if (store.password === '') {
-				store.setPlaceholders('password', 'Please enter password');
-			  } else if (store.email === '') {
-				store.setPlaceholders('email','Please enter email');
-			  } else if (store.username === '') {
-				store.setPlaceholders('username', 'Please enter username');
+			  if (userStore.password === '') {
+				userStore.setPlaceholders('password', 'Please enter password');
+			  } else if (userStore.email === '') {
+				userStore.setPlaceholders('email','Please enter email');
+			  } else if (userStore.username === '') {
+				userStore.setPlaceholders('username', 'Please enter username');
 			  }
 			  else {
-				if (store.password.length < 6) {
-				  store.setPlaceholders('password','Password should be at least 6 characters');
-				  store.setPassword('');
-				} else if (store.email) {
-				  if (store.validate(store.email) === 'Email is Not Correct') {
-					store.setPlaceholders('email','Please enter a valid email');
-					store.setEmail('');
+				if (userStore.password.length < 6) {
+				  userStore.setPlaceholders('password','Password should be at least 6 characters');
+				  userStore.setPassword('');
+				} else if (userStore.email) {
+				  if (userStore.validate(userStore.email) === 'Email is Not Correct') {
+					userStore.setPlaceholders('email','Please enter a valid email');
+					userStore.setEmail('');
 				  } else{
-					  if(store.password===store.confirmPassword)
-						store.handleSignUp()
+					  if(userStore.password===userStore.confirmPassword){
+						userStore.handleSignUp(this.props.navigation.navigate.bind(this,'AppStack')) }
 					  else{
-						store.setPlaceholders('confirmPassword','Passwords do not match');
-						store.setConfirmPassword('');
+						userStore.setPlaceholders('confirmPassword','Passwords do not match');
+						userStore.setConfirmPassword('');
 					  }
 				  }  
 				}

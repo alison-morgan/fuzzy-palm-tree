@@ -3,8 +3,8 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import {observer,inject} from 'mobx-react';
 
-const FriendsList=inject("store")(observer( ({store})=> {
-	console.log("hereeeeee",store);
+const FriendsList=inject("stores")(observer( ({stores})=> {
+	console.log("hereeeeee",stores);
 	return ( <View style={styles.container}>
 				<Text>
 					Frineds

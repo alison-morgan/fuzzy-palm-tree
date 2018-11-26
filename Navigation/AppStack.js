@@ -1,16 +1,11 @@
-import React from 'react'
-import { StyleSheet } from 'react-native';
+import React from 'react';
+import { createStackNavigator,  createDrawerNavigator, } from 'react-navigation';
 import { Icon } from 'react-native-elements';
-import { createStackNavigator, createSwitchNavigator, createDrawerNavigator, } from 'react-navigation';
-import Login from '../screens/Login';
 import Main from '../screens/Main';
-import SignUp from '../screens/SignUp';
-import Loading from '../screens/Loading';
 import MessagesList from '../screens/MessagesList';
 import FriendsList from '../screens/FriendsList';
 import SignOut from '../components/SignOut';
-
-const AppStack = createStackNavigator( {
+export default AppStack = createStackNavigator( {
 	DrawerStack: {
 		screen: createDrawerNavigator( {
 			Home: {
@@ -49,13 +44,3 @@ const AppStack = createStackNavigator( {
 		headerTintColor: 'white'
 	} ),
 } )
-const AuthStack = createSwitchNavigator( {
-	Login,
-	SignUp,
-}, { initialRouteName: 'Login' } );
-
-export default AppNavigator = createSwitchNavigator( {
-	Loading,
-	AppStack,
-	AuthStack
-}, { initialRouteName: 'Loading' } );

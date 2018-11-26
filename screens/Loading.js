@@ -3,16 +3,14 @@ import React from 'react'
 import { View, Text, ActivityIndicator, StyleSheet, } from 'react-native';
 import {inject,observer} from 'mobx-react';
 
-export default Loading=inject('store')(observer(
+export default Loading=inject('stores')(observer(
 	class Loading extends React.Component{
 		componentDidMount() {
-			const store=this.props.store;
-			store.setNavigation(this.props.navigation);
-			console.log('uid',store.uid)
-			store.navigation.navigate(
-				// store.uid
-					// 'AppStack'
-					'AuthStack'
+			console.log('uid',this.props)
+			this.props.navigation.navigate(
+				this.props.stores.userStore.uid
+					?'AppStack'
+					:'AuthStack'
 			)
 		}
 		render() {

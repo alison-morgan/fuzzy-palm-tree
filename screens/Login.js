@@ -9,64 +9,56 @@ import {
 } from 'react-native';
 import {observer,inject} from 'mobx-react';
 
-const Login=inject("store")(observer(
+const Login=inject("stores")(observer(
 	class Login extends React.Component{
+	render(){
+	console.log(this.props);
+	const userStore=this.props.stores.userStore;
 
-		login=async()=>{
-			await this.props.store.handleLogin();
-			console.log('logiiiin',this.props.store)
-			this.props.store.navigation.navigate('AppStack');
-		}
-		setLogin=(variable)=>{
-			console.log(variable)
-		}
-		render(){
-			console.log(this.props.store);
-			const store=this.props.store;
 	return ( <View style={styles.container}>
 		<Text>Login</Text>
 			<Text style={{color: 'red'}}>
-				{store.errorMessage}
+				{userStore.errorMessage}
 			</Text>
 		 <TextInput
 			style={styles.textInput}
 			autoCapitalize="none"
-			placeholder={store.placeholders.email}
-			onChangeText={email => store.setEmail(email)}
-			value={store.email}/> 
+			placeholder={userStore.placeholders.email}
+			onChangeText={email => userStore.setEmail(email)}
+			value={userStore._email}/> 
 		<TextInput
 			secureTextEntry
 			style={styles.textInput}
 			autoCapitalize="none"
-			placeholder={store.placeholders.password}
-			onChangeText={password => store.setPassword(password)}
-			value={store.password}/>
+			placeholder={userStore.placeholders.password}
+			onChangeText={password => userStore.setPassword(password)}
+			value={userStore.password}/>
 		<Button
 			title="Login"
 			onPress={() => {
-				if ( store.password === '' ) {
-					store.setPlaceholders('password','Please enter password');	
-				} else if ( store.email === '' ) {
-					store.placeholders('email', 'Please enter email');
+				if ( userStore.password === '' ) {
+					userStore.setPlaceholders('password','Please enter password');	
+				} else if ( userStore.email === '' ) {
+					userStore.setPlaceholders('email', 'Please enter email');
 				} else {
-					if ( store.password.length < 6 ) {
-						store.placeholders('password', 'Password should be at least 6 characters');
-						store.setPassword('');
-					} else if ( store.email ) {
-						if ( store.validate( store.email ) === 'Email is Not Correct' ) {
-							store.placeholders('email', 'Please enter a valid email');
-							store.setEmail('')
+					if ( userStore.password.length < 6 ) {
+						userStore.setPlaceholders('password', 'Password should be at least 6 characters');
+						userStore.setPassword('');
+					} else if ( userStore.email ) {
+						if ( userStore.validate( userStore.email ) === 'Email is Not Correct' ) {
+							userStore.setPlaceholders('email', 'Please enter a valid email');
+							userStore.setEmail('')
 						} else {
-							store.handleLogin();
-							// const sm='Login';
-							// this[`set${sm}`]('testing');
+							console.log(this.props)
+							
+							userStore.handleLogin(this.props.navigation.navigate.bind(this,'AppStack'));
 						}
 					}
 				}
 			}}/>
 		<Button
 			title="Don't have an account? Sign Up"
-			onPress={() => this.props.navigation.navigate( 'SignUp' )}/>
+			onPress={() => this.props.navigation.navigate('SignUp')}/>
 	</View> )
 	}}
 ));
