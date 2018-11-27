@@ -5,7 +5,7 @@ import Cross from '../components/Cross';
 import { CENTERPOINTS, AREAS, CONDITIONS, GAME_RESULT_NO, GAME_RESULT_USER, GAME_RESULT_AI, GAME_RESULT_TIE, CENTER_POINTS } from '../components/Constants';
 import PromptArea from './PromptArea';
 
-export default class TicTac extends React.Component{
+export default class TicTacToe extends React.Component{
 
     constructor(){
         super()

@@ -1,7 +1,8 @@
 import React from 'react';
-import { createStackNavigator,  createDrawerNavigator, } from 'react-navigation';
+import { createStackNavigator,  createDrawerNavigator,createTabNavigator } from 'react-navigation';
 import { Icon } from 'react-native-elements';
 import Main from '../screens/Main';
+import TicMain from '../screens/TicMain'
 import MessagesList from '../screens/MessagesList';
 import FriendsList from '../screens/FriendsList';
 import SignOut from '../components/SignOut';
@@ -9,7 +10,7 @@ export default AppStack = createStackNavigator( {
 	DrawerStack: {
 		screen: createDrawerNavigator( {
 			Home: {
-				screen: Main 
+				screen: Main
 			},
 			Messages: {
 				screen: MessagesList
@@ -17,8 +18,11 @@ export default AppStack = createStackNavigator( {
 			Friends: {
 				screen: FriendsList
 			},
-			SignOut: SignOut,
+			SignOut:{screen:SignOut},
 		} )
+	},
+	TicTacToe:{
+		screen: TicMain
 	}
 }, {
 	headerMode: 'float',
