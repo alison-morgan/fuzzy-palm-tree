@@ -8,9 +8,9 @@ import {
 } from 'react-native';
 
 
-import TicTac from './TicTac'
+import TicTacToe from './TicTacToe'
 
-export default class App extends Component {
+export default class TicMain extends Component {
   constructor() {
     super()
     this.state={ gameStarted: false }
@@ -19,29 +19,13 @@ export default class App extends Component {
   startGame() {
     this.setState({ gameStarted: true })
   }
-
-//   getInstanceId(){
-//     const messaging = firebase.messaging();
-//     messaging.requestPermission()
-//     .then(function() {
-//         console.log('Notification permission granted.')
-//         messaging.getToken()
-//         .then(function(currentToken) {
-//             console.log(currentToken, "in current token")
-//         })
-//     })
-//     .catch(function(err) {
-//         console.log('Unable to get permission to notify', err);
-//     })
-// }
-
   render() {
     const { gameStarted } = this.state
     return (
       <View style={styles.container}>
         {
           gameStarted ? (
-            <TicTac />
+            <TicTacToe />
           ) : (
             <View>
               <Text style={styles.welcome}>

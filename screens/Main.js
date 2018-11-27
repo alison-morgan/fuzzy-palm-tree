@@ -6,13 +6,12 @@ const Main=inject("stores")(observer(
 	class Main extends React.Component {
 	render(){
 		const userStore=this.props.stores.userStore;
-		 console.log("hereeeeee??????",userStore);
 	return ( <View style={styles.container}>
 				<Text>
 					 {userStore.email}
 					Hi
 				</Text>
-				<Button title='click me' onPress={()=>{console.log('clicked');userStore.setEmail("blablabla")}}/>
+				<Button title='TicTacToe' onPress={()=>{this.props.navigation.navigate('TicTacToe')}}/>
 			</View> 
 			)}
 }

@@ -5,7 +5,6 @@ import {observer,inject} from 'mobx-react';
 export default SignOut=inject("stores")(observer( 
 class SignOut extends React.Component {
 	componentDidMount(){
-		console.log('will signout',this.props.stores.userStore)
 		this.props.stores.userStore.signOut();
 		this.props.navigation.navigate('Loading')
 	}

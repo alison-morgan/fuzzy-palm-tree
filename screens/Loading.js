@@ -7,7 +7,6 @@ import {inject,observer} from 'mobx-react';
 export default Loading=inject('stores')(observer(
 	class Loading extends React.Component{
 		componentDidMount() {
-			console.log('uid',this.props)
 			firebase.auth().onAuthStateChanged(user => {
 				if(user){
 					this.props.navigation.navigate( 'AppStack')

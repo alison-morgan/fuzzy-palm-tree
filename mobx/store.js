@@ -26,21 +26,10 @@ export default class Store {
       email: 'Email'
     }
   }
-  get friendsInfo() {
-     console.log('calling get friends')
-     return this._friendsInfo
-   }
-   setFriendsInfo(value) {
-     console.log('setting', value)
-       this._friendsInfo[value.username] = value
-       console.log(this._friendsInfo, "friends ifo")
-   }
-   get friends() {
-    console.log('calling get friends')
-    return this._friends
-  }
-   setFriends(value) {
-    console.log('setting', value)
+  get friendsInfo() {return this._friendsInfo}
+  setFriendsInfo(value) {this._friendsInfo[value.username] = value}
+  get friends() {return this._friends}
+  setFriends(value) {
     if(this._friends){
      this._friends.push(value)
     }
@@ -48,64 +37,43 @@ export default class Store {
     this._friends = value;
     }
   }
-  get collectionReference() {return this._collectionReference;}
-  get isOnline() {return this._isOnline;}
-  setIsOnline(value) {
-    console.log('setting', value)
-    this._isOnline = value;
-  }
-  get email() {
-    console.log('getting email', this._email)
+  get collectionReference() {return this._collectionReference}
 
-    return this._email;
+  get isOnline() {return this._isOnline}
+
+  setIsOnline(value) {this._isOnline = value}
+
+  get email() {return this._email}
+
+  setEmail(value) {this._email = value}
+
+  get password() {return this._password}
+
+  setPassword(value) {this._password = value}
+
+  get username() {return this._username}
+
+  setUsername(value) {this._username = value}
+
+  get confirmPassword() {return this._confirmPassword}
+
+  setConfirmPassword(value) {this._confirmPassword = value;
   }
-  setEmail(value) {
-    console.log('setting', value)
-    this._email = value;
-    console.log('email', this.email)
-  }
-  get password() {return this._password;}
-  setPassword(value) {
-    console.log('setting', value)
-    this._password = value;
-  }
-  get username() {
-    console.log('getting username', this._username)
-    return this._username;
-  }
-  setUsername(value) {
-    console.log('setting', value)
-    this._username = value;
-    console.log('username', this._username)
-  }
-  get confirmPassword() {
-    return this._confirmPassword;
-  }
-  setConfirmPassword(value) {
-    console.log('setting', value)
-    this._confirmPassword = value;
-  }
-  get errorMessage() {return this._errorMessage;}
-  setErrorMessage(value) {
-    console.log('setting', value)
-    this._errorMessage = value;
-  }
+  get errorMessage() {return this._errorMessage}
+
+  setErrorMessage(value) {this._errorMessage = value}
+
   get uid() {return this._uid;}
-  setUid(value) {
-    console.log('setting', value)
-    this._uid = value;
-  }
-  get placeholders() {return this._placeholders;}
-  setPlaceholders(key, value) {
-    console.log('setting', value)
-    this._placeholders[key] = value;
-  }
-  get instanceId() {return this._instanceId;}
-  setInstanceId(value) {
-    console.log('setting', value)
-    this._instanceId = value;
-    console.log(this._instanceId)
-  }
+
+  setUid(value) {this._uid = value}
+
+  get placeholders() {return this._placeholders}
+
+  setPlaceholders(key, value) {this._placeholders[key] = value}
+
+  get instanceId() {return this._instanceId}
+
+  setInstanceId(value) {this._instanceId = value}
 
   validate = (text) => {
     let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
@@ -182,16 +150,14 @@ export default class Store {
     })
   }
   signOut=()=>{
-    console.log('signOut')
-      firebase.auth().signOut().then(()=>{
-        this.collectionReference.doc(this.username).update({
-        'InstanceId': firebase.firestore.FieldValue.arrayRemove(this.instanceId),
-        'IsOnline': false
-      })})
+    firebase.auth().signOut().then(()=>{
+      this.collectionReference.doc(this.username).update({
+      'InstanceId': firebase.firestore.FieldValue.arrayRemove(this.instanceId),
+      'IsOnline': false
+    })})
 }
 
 reset=()=>{
-  console.log('reset')
     this.setEmail(null);
     this.setPassword(null);
     this.setConfirmPassword(null);
@@ -203,7 +169,6 @@ reset=()=>{
     this.setInstanceId(null);
     this.setFriendsInfo({});
 }
-
 
 }
 decorate(Store,{

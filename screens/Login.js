@@ -12,7 +12,6 @@ import {observer,inject} from 'mobx-react';
 const Login=inject("stores")(observer(
 	class Login extends React.Component{
 	render(){
-	console.log('login',this.props);
 	const userStore=this.props.stores.userStore;
 	return ( <View style={styles.container}>
 
@@ -49,8 +48,6 @@ const Login=inject("stores")(observer(
 							userStore.setPlaceholders('email', 'Please enter a valid email');
 							userStore.setEmail('')
 						} else {
-							console.log(this.props)
-							
 							userStore.handleLogin();
 						}
 					}

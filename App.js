@@ -9,7 +9,6 @@ export default class Root extends React.Component {
 	componentWillMount(){
 		this.userStore=new Store();
 		this.rootNavigation= new NavigationStore();
-		console.log('navigation',this.rootNavigation)
 	}
   render() {
     return (
@@ -23,7 +22,6 @@ export default class Root extends React.Component {
 const App=inject("rootNavigation")(observer(
 class App extends React.Component{
 	render(){
-		console.log('inside App,checking root navigation',this.props.rootNavigation)
 		return <AppNavigator myRef={this.props.rootNavigation.createRef} />;
 	}
 }))
