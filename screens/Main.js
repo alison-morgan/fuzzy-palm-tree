@@ -11,7 +11,7 @@ const Main=inject("stores")(observer(
 		 console.log("hereeeeee??????",userStore);
 	return ( <View style={styles.container}>
 				<Text>
-					 {userStore.email}
+					 {userStore.username}
 					Hi
 				</Text>
 				<Button title='click me' onPress={()=>{console.log('clicked');userStore.setEmail("blablabla")}}/>
