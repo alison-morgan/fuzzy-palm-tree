@@ -21,7 +21,8 @@ export default class Store {
     this._friendsInfo=null;
     this._possibleFriends=null;
     this._friendSearch=null;
-    this._friendSearchResult=null;
+    this._friendRequests=null;
+    this._searchResult=null;
     this._placeholders = {
       username: 'Username',
       confirmPassword: 'Confirm Password',
@@ -30,9 +31,19 @@ export default class Store {
       search:'Type in username'
     }
   }
-  get friendSearchResult(){return this._isSearch}
 
-  setfriendSearchResult(value){this._isSearch=value}
+  get friendRequests(){return this._friendRequests}
+
+  setFriendRequests(value){
+    if(Array.isArray(value)|| value===null )
+    this._friendRequests = value;
+  else
+     this._friendRequests.push(value)
+  }
+
+  get searchResult(){return this._searchResult}
+
+  setSearchResult(value){this._searchResult=value}
 
   get friendSearch(){return this._friendSearch}
 
@@ -185,6 +196,7 @@ export default class Store {
                 Username: this.username,
                 Uid: uid,
                 IsOnline: true,
+                FriendRequests:[],
               }).then(()=>{
                 this.collectionReference.doc(this.username).onSnapshot((doc)=>{
                   const data=doc.data();
@@ -218,20 +230,30 @@ export default class Store {
   }
   search=(name)=>{
     if(name==='friends'){
-      console.log(Object.keys(this.friendsInfo).filter(name=>name.indexOf(this.friendSearch)))
-      console.log(Object.keys(this.possibleFriends).filter(name=>name.indexOf(this.friendSearch)))
+       const searchFriend = Object.keys(this.friendsInfo).reduce((searchFriend,name)=>{
+        if(name.toLowerCase().includes(this.friendSearch.toLowerCase())){
+          searchFriend[name]=this.friendsInfo[name]
+        }
+        return searchFriend
+       },{})
+       const searchPossibleFriend = Object.keys(this.possibleFriends).reduce((searchPossibleFriend,name)=>{
+        if(name.toLowerCase().includes(this.friendSearch.toLowerCase())){
+          searchPossibleFriend[name]=this.possibleFriends[name]
+        }
+        return searchPossibleFriend
+       },{})
 
-      // this.setfriendSearchResult={
-      //   friends: this.friendsInfo,
-      //   possibleFriends: this.possibleFriends
-      // }
+      this.setSearchResult({
+        friends: searchFriend,
+        possibleFriends: searchPossibleFriend
+      })
     }
 
   }
   signOut=()=>{
     firebase.auth().signOut().then(()=>{
       this.collectionReference.doc(this.username).update({
-      'InstanceId': firebase.firestore.FieldValue.arrayRemove(this.instanceId),
+      'InstanceId': firebase.firestore.FieldValue.arrayRemove(this.instanceId[0]),
       'IsOnline': false
     })})
 }
@@ -244,7 +266,7 @@ reset=()=>{
     this.setErrorMessage(null);
     this.setFriends(null);
     this.setFriendSearch(null)
-    this.setfriendSearchResult(null)
+    this.setSearchResult(null)
     this.setUid(null);
     this.setIsOnline(null);
     this.setInstanceId(null);
@@ -265,7 +287,8 @@ decorate(Store,{
   _friendsInfo:observable,
   _possibleFriends:observable,
   _friendSearch:observable,
-  _friendSearchResult:observable,
+  _searchResult:observable,
+  _friendRequests:observable,
   _uid:observable,
   _isOnline:observable,
   _placeholders:observable,
@@ -297,6 +320,8 @@ decorate(Store,{
   setPossibleFriends:action,
   friendSearch:computed,
   setFriendSearch:action,
-  friendSearchResult:computed,
-  setfriendSearchResult:action
+  searchResult:computed,
+  setSearchResult:action,
+  friendRequests:computed,
+  setFriendRequests:action
 })

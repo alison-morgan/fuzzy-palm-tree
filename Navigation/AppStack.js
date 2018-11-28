@@ -23,9 +23,6 @@ export default AppStack = createStackNavigator( {
 	},
 	TicTacToe:{
 		screen: TicMain,
-		navigationOptions:({navigation})=>{
-			header:'none'
-		}
 	}
 }, {
 	headerMode: 'float',
@@ -53,7 +50,7 @@ return	navigation.toggleDrawer?
 				navigation.toggleDrawer()
 			}}/>
 	:<Icon
-		name='arrow'
+		name='arrow-back'
 		size={45}
 		onPress={() => {
 			console.log(navigation)
