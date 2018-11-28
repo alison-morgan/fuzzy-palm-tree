@@ -3,73 +3,58 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { List, ListItem, Button, Icon } from 'react-native-elements';
 import { observer,inject } from 'mobx-react';
-import firebase from 'react-native-firebase';
 
 const FriendsList=inject("stores")(observer(
     class FriendsList extends React.Component {
 
     render(){
-		// this.props.stores.userStore.isFriendOnline()
-	let friendInfo = this.props.stores.userStore.friendsInfo;
-	let nameArr = Object.keys(friendInfo)
-	if (friendInfo) {
-
+	const userStore = this.props.stores.userStore;
+	const friendsNames = Object.keys(userStore.friendsInfo);
+	const possibleFriendsNames=Object.keys(userStore.possibleFriends);
+	console.log('all of my friends',userStore.friendsInfo)
+	console.log('stooooore',userStore)
+	if (userStore.friendsInfo) {
 		return ( <View style={styles.container}>
-			<Text>
-				Friends
-			</Text>
+			<Text>Friends</Text>
 			<List>
 				{
-					
-				nameArr.map((item) => {
-					this.props.stores.userStore.isFriendOnline(friendInfo[item].username)
-					console.log(this.props.stores.userStore.friendsInfo[item].isOnline, "in map")
-					return(
+				friendsNames.map(friend => (
 				<ListItem
-					key={item}
-					title={friendInfo[item].username}
+					key={friend}
+					title={userStore.friendsInfo[friend].username}
 					rightIcon={{ type:'entypo', name:'paper-plane'}}
-					leftIcon={ (this.props.stores.userStore.friendsInfo[item].isOnline) ? {type:'font-awesome', name: 'eye', color:'green'} : {type:'font-awesome', name: 'eye-slash'}}
-				>
-				</ListItem>
-				)
-			})
+					leftIcon={ (userStore.friendsInfo[friend].isOnline) ? {type:'font-awesome', name: 'eye', color:'green'} : {type:'font-awesome', name: 'eye-slash'}}
+				/>))
 				}
 				</List>
 			<Text>Explore Users</Text>
 			{/* <List>
-				{
-				 .map(not) => (
+				{possibleFriendsNames.length>0?
+				 possibleFriendsNames.map(friend => (
 				<ListItem
-				key={not}
-				title={not}
+				key={friend}
+				title={friend}
 				rightIcon={{ type:'entypo', name:'paper-plane'}}
-				leftIcon={{ type:'font-awesome', name: 'eye', color:'green'}}
-				>
-				</ListItem>
+				leftIcon={ (userStore.possibleFriends[friend].isOnline) ? {type:'font-awesome', name: 'eye', color:'green'} : {type:'font-awesome', name: 'eye-slash'}}
+				/>))
+				:<Text>No possible friends available</Text>
 				}
-				
-			</List>
-			 */}
+			</List> */}
+			
 		</View> 
 		)
 	} else {
 		<View>
 			<Text>Explore Users</Text>
-			{/* <List>
-				{
-				 .map(not) => (
+			{
+				friendsNames.map(friend => (
 				<ListItem
-				key={not}
-				title={not}
-				rightIcon={{ type:'entypo', name:'paper-plane'}}
-				leftIcon={{ type:'font-awesome', name: 'eye', color:'green'}}
-				>
-				</ListItem>
+					key={friend}
+					title={userStore.friendsInfo[friend].username}
+					rightIcon={{ type:'entypo', name:'paper-plane'}}
+					leftIcon={ (userStore.friendsInfo[friend].isOnline) ? {type:'font-awesome', name: 'eye', color:'green'} : {type:'font-awesome', name: 'eye-slash'}}
+				/>))
 				}
-				
-			</List>
-			 */}
 		</View>
 	}
 

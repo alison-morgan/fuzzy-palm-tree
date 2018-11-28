@@ -1,5 +1,5 @@
 import React from 'react';
-import { createStackNavigator,  createDrawerNavigator,createTabNavigator } from 'react-navigation';
+import { createStackNavigator,  createDrawerNavigator } from 'react-navigation';
 import { Icon } from 'react-native-elements';
 import Main from '../screens/Main';
 import TicMain from '../screens/TicMain'
@@ -31,6 +31,7 @@ export default AppStack = createStackNavigator( {
 			name='menu'
 			size={45}
 			onPress={() => {
+				console.log(navigation)
 				if ( navigation.state.isDrawerOpen ) 
 					navigation.closeDrawer()
 				else 
@@ -40,7 +41,7 @@ export default AppStack = createStackNavigator( {
 			name='home'
 			size={45}
 			onPress={() => {
-				navigation.navigate( 'Home' )
+				navigation.push( 'Home' )
 			}}/> ),
 		headerStyle: {
 			backgroundColor: 'purple'
