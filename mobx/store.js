@@ -30,7 +30,7 @@ export default class Store {
   get possibleFriends(){return this._possibleFriends}
 
   setPossibleFriends(value){
-    if(this.possibleFriends && Object.keys(value).length !== 0){
+    if( Object.keys(value).length !== 0){
       this._possibleFriends[value.username]=value
     }else{
       this._possibleFriends=value
@@ -38,7 +38,8 @@ export default class Store {
   }
 
   setFriendsInfo(value) {
-    if(this.friendsInfo && Object.keys(value).length !== 0){
+    console.log('friends value',value)
+    if(Object.keys(value).length !== 0){
       this._friendsInfo[value.username]=value
     }else{
       this._friendsInfo=value
@@ -116,7 +117,7 @@ export default class Store {
           this.collectionReference.where("Uid", "==", uid).onSnapshot((querySnapshot)=>{
             console.log('found document')
             const data=querySnapshot._docs[0].data();
-            console.log('data',data)
+            // console.log('data',data)
             this.collectionReference.doc(data.Username).update({
               'InstanceId': firebase.firestore.FieldValue.arrayUnion(currentToken),
               'IsOnline': true
@@ -124,26 +125,32 @@ export default class Store {
             for (field in data) {
               this[`set${ field }`](data[field])
             }
-          if(this.friends){
-            console.log(this.friends)
-            this.friends.forEach(friend => { 
-              console.log('friiiiiend',friend)
-              this.collectionReference.doc(friend).onSnapshot(doc => {
-                const data=doc.data();
-                console.log(data)
-               this.setFriendsInfo({username:data.Username,isOnline:data.IsOnline,instanceId:data.InstanceId})
-              })
-            });
-          } else {
-            console.log("no friends")
-          }
-          },(error)=>{console.log('error getting document: ',error)})
+            this.getMyFriends();
+            this.getAllUsers();
+          },error=>{console.log('error getting document: ',error)})
         }).catch(error => console.log('An error occurred while retrieving token. ', error))
       }).catch(error => console.log('Unable to get permission to notify.', error))
     }).catch(error => this.setErrorMessage(error.message))
   }
 
+  getMyFriends=()=>{
+    if(this.friends){
+      // console.log(this.friends)
+      this.friends.forEach(friend => { 
+        // console.log('friiiiiend',friend)
+        this.collectionReference.doc(friend).onSnapshot(doc => {
+          const data=doc.data();
+          // console.log(data)
+         this.setFriendsInfo({username:data.Username,isOnline:data.IsOnline,instanceId:data.InstanceId})
+        })
+      });
+    } else {
+      console.log("no friends")
+    }
+  }
+
   handleSignUp = () => {
+    console.log('handleSignUp')
     // check if user with entered username already exist in the
     // database
     this.collectionReference.doc(this.username).get().then((doc) => {
@@ -156,20 +163,26 @@ export default class Store {
       } else {
         //authorize user in the system
         firebase.auth().createUserWithEmailAndPassword(this.email, this.password).then(() => {
+          console.log('signed up')
           firebase.messaging().requestPermission().then(() => {
             firebase.messaging().getToken().then((currentToken) => {
               const uid = firebase.auth().currentUser.uid;
-              this.setUid(uid);
-              this.setIsOnline(true);
-              this.setInstanceId(currentToken)
               this.collectionReference.doc(this.username).set({
-                InstanceId: [this.instanceId],
+                InstanceId: [currentToken],
                 Email: this.email,
                 Password: this.password,
                 Username: this.username,
-                Uid: this.uid,
-                IsOnline: this.isOnline,
-              })
+                Uid: uid,
+                IsOnline: true,
+              }).then(()=>{
+                this.collectionReference.doc(this.username).onSnapshot((doc)=>{
+                  const data=doc.data();
+                  for (field in data) {
+                    this[`set${ field }`](data[field])
+                  }
+                  this.getAllUsers();
+                },error=>{console.log('error getting document: ',error)})
+              }).catch(error=>console.log('',error))
             })
           })
         }).catch(error => this.setErrorMessage(error.message))
@@ -179,11 +192,15 @@ export default class Store {
   getAllUsers=()=>{
     console.log('gettingAllUsers')
     this.collectionReference.onSnapshot(querySnapshot=>{
-      querySnapshot._docs.forEach(document=>{
-        const user=document.data();
-        if(this.friends.indexOf(user.Username)===-1 && user.Username!==this.username){
-          console.log('user',user)
-          this.setPossibleFriends({username:user.Username,isOnline:user.IsOnline,instanceId:user.InstanceId,friends:user.Friends})
+      querySnapshot.forEach(doc=>{
+        const user=doc.data();
+        if(this.friends){
+          if( this.friends.indexOf(user.Username)===-1  
+          && user.Username!==this.username)
+            this.setPossibleFriends({username:user.Username,isOnline:user.IsOnline,instanceId:user.InstanceId,friends:user.Friends})
+        }else{
+          if( user.Username!==this.username)
+            this.setPossibleFriends({username:user.Username,isOnline:user.IsOnline,instanceId:user.InstanceId,friends:user.Friends})
         }
       })
     })
@@ -207,8 +224,8 @@ reset=()=>{
     this.setUid(null);
     this.setIsOnline(null);
     this.setInstanceId(null);
-    this.setFriendsInfo(null);
-    this.setPossibleFriends(null)
+    this.setFriendsInfo({});
+    this.setPossibleFriends({})
 }
 
 }
