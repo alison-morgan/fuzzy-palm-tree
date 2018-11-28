@@ -92,8 +92,7 @@ const FriendsList=inject("stores")(observer(
 					key={friend}
 					title={friend}
 					rightIcon={{ type:'entypo', name:'paper-plane'}}
-					leftIcon={ (userStore.friendsInfo[friend].isOnline) ? {type:'font-awesome', name: 'eye', color:'green'} : {type:'font-awesome', name: 'eye-slash'}}
-				/>))
+					leftIcon={ (userStore.friendsInfo[friend].isOnline) ? {type:'font-awesome', name: 'eye', color:'green'} : {type:'font-awesome', name: 'eye-slash'}}				/>))
 				:<Text>You didn't find any friends yet</Text>
 				}
 				</List>
@@ -106,6 +105,8 @@ const FriendsList=inject("stores")(observer(
 				title={friend}
 				rightIcon={{ type:'entypo', name:'paper-plane'}}
 				leftIcon={ (userStore.possibleFriends[friend].isOnline) ? {type:'font-awesome', name: 'eye', color:'green'} : {type:'font-awesome', name: 'eye-slash'}}
+				onPress={() => userStore.friendReq(userStore.possibleFriends[friend].username)}
+
 				/>))
 				:<Text>No possible friends available</Text>
 				}

@@ -51,6 +51,11 @@ export default class Store {
 
   get possibleFriends(){return this._possibleFriends}
 
+  friendReq = (friend) => {
+    this.collectionReference.doc(friend).set({FriendRequests:[this.username]}, { merge: true })
+    console.log(friend, "in friend Req")
+  }
+
   setPossibleFriends(value){
     if( Object.keys(value).length !== 0){
       this._possibleFriends[value.username]=value
