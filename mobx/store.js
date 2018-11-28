@@ -20,13 +20,24 @@ export default class Store {
     this._instanceId = null;
     this._friendsInfo=null;
     this._possibleFriends=null;
+    this._friendSearch=null;
+    this._friendSearchResult=null;
     this._placeholders = {
       username: 'Username',
       confirmPassword: 'Confirm Password',
       password: 'Password',
-      email: 'Email'
+      email: 'Email',
+      search:'Type in username'
     }
   }
+  get friendSearchResult(){return this._isSearch}
+
+  setfriendSearchResult(value){this._isSearch=value}
+
+  get friendSearch(){return this._friendSearch}
+
+  setFriendSearch(value){this._friendSearch=value}
+
   get possibleFriends(){return this._possibleFriends}
 
   setPossibleFriends(value){
@@ -205,7 +216,18 @@ export default class Store {
       })
     })
   }
+  search=(name)=>{
+    if(name==='friends'){
+      console.log(Object.keys(this.friendsInfo).filter(name=>name.indexOf(this.friendSearch)))
+      console.log(Object.keys(this.possibleFriends).filter(name=>name.indexOf(this.friendSearch)))
 
+      // this.setfriendSearchResult={
+      //   friends: this.friendsInfo,
+      //   possibleFriends: this.possibleFriends
+      // }
+    }
+
+  }
   signOut=()=>{
     firebase.auth().signOut().then(()=>{
       this.collectionReference.doc(this.username).update({
@@ -221,6 +243,8 @@ reset=()=>{
     this.setUsername(null);
     this.setErrorMessage(null);
     this.setFriends(null);
+    this.setFriendSearch(null)
+    this.setfriendSearchResult(null)
     this.setUid(null);
     this.setIsOnline(null);
     this.setInstanceId(null);
@@ -232,24 +256,26 @@ reset=()=>{
 decorate(Store,{
   _collectionReference:observable,
   _email:observable,
-   _password:observable,
-   _confirmPassword: observable,
-   _username: observable,
-   _errorMessage:observable,
-   _isAuthorized:observable,
-   _friends:observable,
-   _friendsInfo:observable,
-   _possibleFriends:observable,
-   _uid:observable,
-   _isOnline:observable,
-   _placeholders:observable,
-   _instanceId:observable,
-   collectionReference:computed,
-   isOnline:computed,
-   setIsOnline:action,
-   email:computed,
-   setEmail:action,
-   password: computed,
+  _password:observable,
+  _confirmPassword: observable,
+  _username: observable,
+  _errorMessage:observable,
+  _isAuthorized:observable,
+  _friends:observable,
+  _friendsInfo:observable,
+  _possibleFriends:observable,
+  _friendSearch:observable,
+  _friendSearchResult:observable,
+  _uid:observable,
+  _isOnline:observable,
+  _placeholders:observable,
+  _instanceId:observable,
+  collectionReference:computed,
+  isOnline:computed,
+  setIsOnline:action,
+  email:computed,
+  setEmail:action,
+  password: computed,
   setPassword:action,
   username:computed,
   setUsername:action,
@@ -268,5 +294,9 @@ decorate(Store,{
   friends:computed,
   setFriends:action,
   possibleFriends:computed,
-  setPossibleFriends:action
+  setPossibleFriends:action,
+  friendSearch:computed,
+  setFriendSearch:action,
+  friendSearchResult:computed,
+  setfriendSearchResult:action
 })

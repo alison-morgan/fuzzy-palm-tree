@@ -10,7 +10,7 @@ export default AppStack = createStackNavigator( {
 	DrawerStack: {
 		screen: createDrawerNavigator( {
 			Home: {
-				screen: Main
+				screen:Main
 			},
 			Messages: {
 				screen: MessagesList
@@ -22,26 +22,20 @@ export default AppStack = createStackNavigator( {
 		} )
 	},
 	TicTacToe:{
-		screen: TicMain
+		screen: TicMain,
+		navigationOptions:({navigation})=>{
+			header:'none'
+		}
 	}
 }, {
 	headerMode: 'float',
 	navigationOptions: ( { navigation } ) => ( {
-		headerLeft: ( <Icon
-			name='menu'
-			size={45}
-			onPress={() => {
-				console.log(navigation)
-				if ( navigation.state.isDrawerOpen ) 
-					navigation.closeDrawer()
-				else 
-					navigation.openDrawer()
-			}}/> ),
+		headerLeft: DrawerButton(navigation),
 		headerRight: ( <Icon
 			name='home'
 			size={45}
 			onPress={() => {
-				navigation.push( 'Home' )
+				navigation.navigate( 'Home' )
 			}}/> ),
 		headerStyle: {
 			backgroundColor: 'purple'
@@ -49,3 +43,20 @@ export default AppStack = createStackNavigator( {
 		headerTintColor: 'white'
 	} ),
 } )
+const DrawerButton=(navigation)=>{
+return	navigation.toggleDrawer?
+<Icon
+			name='menu'
+			size={45}
+			onPress={() => {
+				console.log(navigation)
+				navigation.toggleDrawer()
+			}}/>
+	:<Icon
+		name='arrow'
+		size={45}
+		onPress={() => {
+			console.log(navigation)
+			navigation.goBack()
+		}}/>
+}

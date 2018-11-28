@@ -17,7 +17,8 @@
     "ios": "react-native run-ios",
     "apk": "cd android && ./gradlew assembleRelease",
     "rename": "node ./bin/rename.js",
-    "start": "react-native start",
+    "start": "react-native start -- --reset-cache",
+    "clean":"watchman watch-del-all && rm -rf /tmp/metro-cache && yarn cache clean && cd android/app rm -rf build cd ../..",
     "test": "jest"
   },
   "jest": {
