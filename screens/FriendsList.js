@@ -6,6 +6,9 @@ import { observer,inject } from 'mobx-react';
 
 const FriendsList=inject("stores")(observer(
     class FriendsList extends React.Component {
+		componentWillMount(){
+			this.props.stores.userStore.getAllUsers()
+		}
 
     render(){
 	const userStore = this.props.stores.userStore;

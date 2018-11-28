@@ -9,8 +9,8 @@ import {
 export default class Store {
   constructor() {
     this._collectionReference = firebase.firestore().collection('users');
-    this._email = 'ol@m.com';
-    this._password = '123456';
+    this._email = null;
+    this._password = null;
     this._confirmPassword = null;
     this._username = null;
     this._errorMessage = null;
@@ -50,10 +50,11 @@ export default class Store {
   get friends() {return this._friends}
 
   setFriends(value) {
-    if(this._friends)
-     this._friends.push(value)
+    console.log('setting friends',value,'checking friends',this.friends)
+    if(Array.isArray(value)|| value===null )
+      this._friends = value;
     else
-    this._friends = value;
+       this._friends.push(value)
   }
 
   get collectionReference() {return this._collectionReference}
@@ -103,17 +104,19 @@ export default class Store {
   }
  
   handleLogin = () => {
-    // console.log('handle login')
+    console.log('handle login')
     firebase.auth().signInWithEmailAndPassword(this.email, this.password).then(() => {
-      // console.log('auth')
-
+      console.log('auth')
       firebase.messaging().requestPermission().then(() => {
         console.log('permission')
         firebase.messaging().getToken().then((currentToken) => {
+          console.log('token')
           const uid=firebase.auth().currentUser.uid
+          console.log('uid  ',uid)
           this.collectionReference.where("Uid", "==", uid).onSnapshot((querySnapshot)=>{
             console.log('found document')
             const data=querySnapshot._docs[0].data();
+            console.log('data',data)
             this.collectionReference.doc(data.Username).update({
               'InstanceId': firebase.firestore.FieldValue.arrayUnion(currentToken),
               'IsOnline': true
@@ -122,7 +125,9 @@ export default class Store {
               this[`set${ field }`](data[field])
             }
           if(this.friends){
+            console.log(this.friends)
             this.friends.forEach(friend => { 
+              console.log('friiiiiend',friend)
               this.collectionReference.doc(friend).onSnapshot(doc => {
                 const data=doc.data();
                 console.log(data)
@@ -132,7 +137,6 @@ export default class Store {
           } else {
             console.log("no friends")
           }
-          this.getAllUsers()
           },(error)=>{console.log('error getting document: ',error)})
         }).catch(error => console.log('An error occurred while retrieving token. ', error))
       }).catch(error => console.log('Unable to get permission to notify.', error))
