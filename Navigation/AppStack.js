@@ -53,7 +53,7 @@ return	navigation.toggleDrawer?
 				navigation.toggleDrawer()
 			}}/>
 	:<Icon
-		name='arrow'
+		name='arrow-back'
 		size={45}
 		onPress={() => {
 			console.log(navigation)
