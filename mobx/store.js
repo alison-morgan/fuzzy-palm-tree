@@ -21,7 +21,7 @@ export default class Store {
     this._friendsInfo=null;
     this._possibleFriends=null;
     this._friendSearch=null;
-    this._friendRequests=null;
+    this._friendRequests={};
     this._searchResult=null;
     this._placeholders = {
       username: 'Username',
@@ -35,10 +35,14 @@ export default class Store {
   get friendRequests(){return this._friendRequests}
 
   setFriendRequests(value){
-    if(Array.isArray(value)|| value===null )
-    this._friendRequests = value;
-  else
-     this._friendRequests.push(value)
+    console.log('settttttttting request',value.username)
+    if(Object.keys(value).length !== 0 && Object.keys(this.friendRequests).length!==0 ){
+      console.log('will add field',this.friendRequests)
+      this._friendRequests[value.username]=value
+    }else{
+      this._friendRequests=value
+    }
+    console.log('settiiiiiiing',this._friendRequests)
   }
 
   get searchResult(){return this._searchResult}
@@ -64,7 +68,7 @@ export default class Store {
 
   setPossibleFriends(value){
     if( Object.keys(value).length !== 0){
-      this._possibleFriends[value.username]=value
+        this._possibleFriends[value.username]=value
     }else{
       this._possibleFriends=value
     }
@@ -227,14 +231,14 @@ export default class Store {
       querySnapshot.forEach(doc=>{
         const user=doc.data();
         if(this.friends && this.friendRequests){
-          if( (this.friends.indexOf(user.Username)===-1 && this.friendRequests.indexOf(user.Username)===-1)
+          if( (this.friends.indexOf(user.Username)===-1 && !this.friendRequests.hasOwnProperty(user.Username))
           && user.Username!==this.username)
             this.setPossibleFriends({username:user.Username,isOnline:user.IsOnline,instanceId:user.InstanceId,friends:user.Friends})
         }else if(this.friends){
           if( this.friends.indexOf(user.Username)===-1  && user.Username!==this.username)
             this.setPossibleFriends({username:user.Username,isOnline:user.IsOnline,instanceId:user.InstanceId,friends:user.Friends})
         }else if(this.friendRequests){
-          if( this.friendRequests.indexOf(user.Username)===-1 && user.Username!==this.username)
+          if( !this.friendRequests.hasOwnProperty(user.Username) && user.Username!==this.username)
           this.setPossibleFriends({username:user.Username,isOnline:user.IsOnline,instanceId:user.InstanceId,friends:user.Friends})
         }else{
           if( user.Username!==this.username)
@@ -274,6 +278,7 @@ export default class Store {
   }
   signOut=()=>{
     firebase.auth().signOut().then(()=>{
+      unsubscribe()
       this.collectionReference.doc(this.username).update({
       'InstanceId': firebase.firestore.FieldValue.arrayRemove(this.instanceId[0]),
       'IsOnline': false
@@ -293,7 +298,7 @@ reset=()=>{
     this.setUid(null);
     this.setIsOnline(null);
     this.setInstanceId(null);
-    this.setFriendRequests(null)
+    this.setFriendRequests({});
     this.setFriendsInfo({});
     this.setPossibleFriends({})
 }

@@ -7,7 +7,6 @@ const CustomList=inject("stores")(observer(
 	class CustomList extends React.Component {
 		render() {
 			const name=this.props.name.split(' ');
-			console.log(name,name.length)
 			const userStore = this.props.stores.userStore;
 			let object=null;
 			if(name.length>1){
@@ -15,7 +14,7 @@ const CustomList=inject("stores")(observer(
 			}else if(name.length>0){
 				object=userStore[name[0]];
 				console.log(name,object)
-			}
+			} 
 			if(Object.keys(object).length>0){
 				const data=Object.keys(object).map(name => (
 					{title:name,key:name}))

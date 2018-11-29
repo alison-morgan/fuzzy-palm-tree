@@ -15,10 +15,21 @@ const FriendsList=inject("stores")(observer(
 			if(userStore.friendSearch && userStore.searchResult){
 				return(<View style={styles.container}>
 					<CustomSearchBar name='friends'/>
+
+					<Text>Friend Requests</Text>
+					{userStore.friendRequests
+					?<CustomList name='searchResult friendRequests'/>
+					:<Text>No friend requests at this time</Text>}
+
 					<Text>Friends</Text>
-					<CustomList name='searchResult friends'/>
+					{userStore.friendsInfo
+					?<CustomList name='searchResult friends'/>
+					:<Text>You didn't find any friends yet</Text>}
+
 					<Text>Explore Users</Text>
-					<CustomList name='searchResult possibleFriends'/>					
+					{userStore.possibleFriends
+					?<CustomList name='searchResult possibleFriends'/> 
+					:<Text>No possible friends available at this moment</Text>}				
 					</View> )
 			}else{ 
 				return ( <View style={styles.container}>
@@ -46,7 +57,7 @@ const FriendsList=inject("stores")(observer(
 ))
 const styles = StyleSheet.create( {
 	container: {
-		flex: 1
+		flex: 1,
 	},
 	text:{
 		justifyContent: 'center',
