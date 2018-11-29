@@ -52,7 +52,7 @@ export default class Store {
   get possibleFriends(){return this._possibleFriends}
 
   friendReq = (friend) => {
-    this.collectionReference.doc(friend).set({FriendRequests:{username:this.username,isOnline:this.isOnline,uid:this.uid}}, { merge: true })
+    this.collectionReference.doc(friend).set({FriendRequests:[{username:this.username,isOnline:this.isOnline,uid:this.uid}]}, { merge: true })
     console.log(friend, "in friend Req")
   }
 
@@ -196,7 +196,6 @@ export default class Store {
               this.collectionReference.doc(this.username).set({
                 InstanceId: [currentToken],
                 Email: this.email,
-                Password: this.password,
                 Username: this.username,
                 Uid: uid,
                 IsOnline: true,
@@ -225,9 +224,12 @@ export default class Store {
           if( (this.friends.indexOf(user.Username)===-1 && this.friendRequests.indexOf(user.Username)===-1)
           && user.Username!==this.username)
             this.setPossibleFriends({username:user.Username,isOnline:user.IsOnline,instanceId:user.InstanceId,friends:user.Friends})
-        }else if(this.friends || this.friendRequests){
-          if( (this.friends.indexOf(user.Username)===-1 || this.friendRequests.indexOf(user.Username)===-1) && user.Username!==this.username)
+        }else if(this.friends){
+          if( this.friends.indexOf(user.Username)===-1  && user.Username!==this.username)
             this.setPossibleFriends({username:user.Username,isOnline:user.IsOnline,instanceId:user.InstanceId,friends:user.Friends})
+        }else if(this.friendRequests){
+          if( this.friendRequests.indexOf(user.Username)===-1 && user.Username!==this.username)
+          this.setPossibleFriends({username:user.Username,isOnline:user.IsOnline,instanceId:user.InstanceId,friends:user.Friends})
         }else{
           if( user.Username!==this.username)
             this.setPossibleFriends({username:user.Username,isOnline:user.IsOnline,instanceId:user.InstanceId,friends:user.Friends})
@@ -285,6 +287,7 @@ reset=()=>{
     this.setUid(null);
     this.setIsOnline(null);
     this.setInstanceId(null);
+    this.setFriendRequests(null)
     this.setFriendsInfo({});
     this.setPossibleFriends({})
 }

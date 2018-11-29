@@ -11,7 +11,7 @@ const FriendsList=inject("stores")(observer(
 		render(){
 		const userStore = this.props.stores.userStore;
 		console.log('search Result',userStore.friendSearch,userStore.searchResult)
-		console.log('friendRequests',userStore.friendRequests.length)
+		console.log('friendRequests',userStore.friendRequests)
 			if(userStore.friendSearch && userStore.searchResult){
 				return(<View style={styles.container}>
 					<CustomSearchBar name='friends'/>
@@ -20,22 +20,26 @@ const FriendsList=inject("stores")(observer(
 					<Text>Explore Users</Text>
 					<CustomList name='searchResult possibleFriends'/>					
 					</View> )
-			}else if (userStore.possibleFriends || userStore.friendsInfo) {
+			}else{ 
 				return ( <View style={styles.container}>
 				<CustomSearchBar name='friends'/>
-				{userStore.friendRequests.length>0
+				
+				<Text>Friend Requests</Text>
+				{userStore.friendRequests
 				?<CustomList name='friendRequests'/>
-				:null
-				}
+				:<Text>No friend requests at this time</Text>}
+
 				 <Text>Friends</Text>
-				<CustomList name='friendsInfo'/>
+				 {userStore.friendsInfo
+				 ?<CustomList name='friendsInfo'/>
+				 :<Text>You didn't find any friends yet</Text>}
 
 				<Text>Explore Users</Text>
-				<CustomList name='possibleFriends'/> 
+				{userStore.possibleFriends
+				?<CustomList name='possibleFriends'/> 
+				:<Text>No possible friends available at this moment</Text>}
 				</View> 
 				)
-			}else{
-				return(<Text>No information available it this time</Text>)
 			}
 		}
 	}
