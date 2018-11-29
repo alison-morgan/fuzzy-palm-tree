@@ -46,14 +46,19 @@ export default class Store {
     //assing passed object to the friendRequests object
       this._friendRequests=value
   }
+
   //getter/computed for searchResult
   get searchResult(){return this._searchResult}
+
   //setter/action for searchResult
   setSearchResult(value){this._searchResult=value}
+
   //getter/computed for friendSearch
   get friendSearch(){return this._friendSearch}
-  
+
+  //setter/action friendSearch
   setFriendSearch(value){this._friendSearch=value}
+  
   //getter/computed for 
   get possibleFriends(){return this._possibleFriends}
 
@@ -77,7 +82,7 @@ export default class Store {
   }
 
   setFriendsInfo(value) {
-    console.log('friends value',value)
+
     if(Object.keys(value).length !== 0){
       this._friendsInfo[value.username]=value
     }else{

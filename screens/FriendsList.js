@@ -18,12 +18,12 @@ const FriendsList=inject("stores")(observer(
 
 					<Text>Friend Requests</Text>
 					{userStore.friendRequests
-					?<CustomList name='searchResult friendRequests'/>
+					?<CustomList name='searchResult friendRequests' action='accept/decline'/>
 					:<Text>No friend requests at this time</Text>}
 
 					<Text>Friends</Text>
 					{userStore.friendsInfo
-					?<CustomList name='searchResult friends'/>
+					?<CustomList name='searchResult friends' action='sendMessage'/>
 					:<Text>You didn't find any friends yet</Text>}
 
 					<Text>Explore Users</Text>
