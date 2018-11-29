@@ -11,6 +11,7 @@ const FriendsList=inject("stores")(observer(
 		render(){
 		const userStore = this.props.stores.userStore;
 		console.log('search Result',userStore.friendSearch,userStore.searchResult)
+		console.log('friendRequests',userStore.friendRequests.length)
 			if(userStore.friendSearch && userStore.searchResult){
 				return(<View style={styles.container}>
 					<CustomSearchBar name='friends'/>
