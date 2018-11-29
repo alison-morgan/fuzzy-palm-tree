@@ -9,39 +9,57 @@ import CustomSearchBar from '../components/CustomSearchBar'
 const FriendsList=inject("stores")(observer(
     class FriendsList extends React.Component {
 		render(){
-		const userStore = this.props.stores.userStore;
-		console.log('search Result',userStore.friendSearch,userStore.searchResult)
-			if(userStore.friendSearch && userStore.searchResult){
-				return(<View style={styles.container}>
-					<CustomSearchBar name='friends'/>
-					<Text>Friends</Text>
-					<CustomList name='searchResult friends'/>
-					<Text>Explore Users</Text>
-					<CustomList name='searchResult possibleFriends'/>					
-					</View> )
-			}else if (userStore.possibleFriends || userStore.friendsInfo) {
-				return ( <View style={styles.container}>
-				<CustomSearchBar name='friends'/>
-				{userStore.friendRequests
-				?<CustomList name='friendRequests'/>
-				:null
-				}
-				 <Text>Friends</Text>
-				<CustomList name='friendsInfo'/>
+			const userStore = this.props.stores.userStore;
+			console.log('search Result',userStore.friendSearch,userStore.searchResult)
+				if(userStore.friendSearch && userStore.searchResult){
+					return(
+						<View style={styles.container}>
+						<CustomSearchBar name='friends'/>
+						<Text>Friend Requests</Text>
+							{
+								userStore.friendRequests
+								?<CustomList name='searchResult friendRequests'/>
+								:<Text>No friend requests at this time</Text>
+							}
+						<Text>Friends</Text>
+							{
+								userStore.friendsInfo
+								?<CustomList name='searchResult friends'/>
+								:<Text>You didn't find any friends yet</Text>
+							}
+						<Text>Explore Users</Text>
+							{
+								userStore.possibleFriends
+								?<CustomList name='searchResult possibleFriends'/> 
+								:<Text>No possible friends available at this moment</Text>
+							}				
+						</View> )
+				}else{ 
+					return ( <View style={styles.container}>
+						<CustomSearchBar name='friends'/>				
+						<Text>Friend Requests</Text>
+						{userStore.friendRequests
+						?<CustomList name='friendRequests'/>
+						:<Text>No friend requests at this time</Text>}
 
-				<Text>Explore Users</Text>
-				<CustomList name='possibleFriends'/> 
-				</View> 
+						<Text>Friends</Text>
+						{userStore.friendsInfo
+						?<CustomList name='friendsInfo'/>
+						:<Text>You didn't find any friends yet</Text>}
+
+						<Text>Explore Users</Text>
+						{userStore.possibleFriends
+						?<CustomList name='possibleFriends'/> 
+						:<Text>No possible friends available at this moment</Text>}
+						</View> 
 				)
-			}else{
-				return(<Text>No information available it this time</Text>)
 			}
 		}
 	}
 ))
 const styles = StyleSheet.create( {
 	container: {
-		flex: 1
+		flex: 1,
 	},
 	text:{
 		justifyContent: 'center',

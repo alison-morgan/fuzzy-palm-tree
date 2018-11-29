@@ -1,4 +1,5 @@
 import firebase from 'react-native-firebase';
+//import decorators for mobx
 import {
   observable,
   computed,
@@ -7,6 +8,7 @@ import {
 } from 'mobx';
 
 export default class Store {
+  //creating initial values for our store values
   constructor() {
     this._collectionReference = firebase.firestore().collection('users');
     this._email = null;
@@ -21,7 +23,7 @@ export default class Store {
     this._friendsInfo=null;
     this._possibleFriends=null;
     this._friendSearch=null;
-    this._friendRequests=null;
+    this._friendRequests={};
     this._searchResult=null;
     this._placeholders = {
       username: 'Username',
@@ -31,34 +33,44 @@ export default class Store {
       search:'Type in username'
     }
   }
-
+  //getter/computed for friendRequests
   get friendRequests(){return this._friendRequests}
-
+  //setter/action for friendRequests 
   setFriendRequests(value){
-    if(Array.isArray(value)|| value===null )
-    this._friendRequests = value;
-  else
-     this._friendRequests.push(value)
+    //if value that being passed not an empty object and friendRequests object not empty
+    if(Object.keys(value).length !== 0 && Object.keys(this.friendRequests).length!==0 )
+      //add extra field to the friendRequests
+      this._friendRequests[value.username]=value
+    //if it's initial setup for the store,after logIn/signIn or complete update
+    else
+    //assing passed object to the friendRequests object
+      this._friendRequests=value
   }
-
+  //getter/computed for searchResult
   get searchResult(){return this._searchResult}
-
+  //setter/action for searchResult
   setSearchResult(value){this._searchResult=value}
-
+  //getter/computed for friendSearch
   get friendSearch(){return this._friendSearch}
-
+  
   setFriendSearch(value){this._friendSearch=value}
-
+  //getter/computed for 
   get possibleFriends(){return this._possibleFriends}
 
   friendReq = (friend) => {
-    this.collectionReference.doc(friend).set({FriendRequests:[{username:this.username,isOnline:this.isOnline,uid:this.uid}]}, { merge: true })
+    this.collectionReference.doc(friend).set({FriendRequests: {
+      [this.username]: { 
+        username:this.username,
+        isOnline:this.isOnline,
+        uid:this.uid
+      }
+    }}, { merge: true })
     console.log(friend, "in friend Req")
   }
 
   setPossibleFriends(value){
     if( Object.keys(value).length !== 0){
-      this._possibleFriends[value.username]=value
+        this._possibleFriends[value.username]=value
     }else{
       this._possibleFriends=value
     }
@@ -196,7 +208,6 @@ export default class Store {
               this.collectionReference.doc(this.username).set({
                 InstanceId: [currentToken],
                 Email: this.email,
-                Password: this.password,
                 Username: this.username,
                 Uid: uid,
                 IsOnline: true,
@@ -222,12 +233,15 @@ export default class Store {
       querySnapshot.forEach(doc=>{
         const user=doc.data();
         if(this.friends && this.friendRequests){
-          if( (this.friends.indexOf(user.Username)===-1 && this.friendRequests.indexOf(user.Username)===-1)
+          if( (this.friends.indexOf(user.Username)===-1 && !this.friendRequests.hasOwnProperty(user.Username))
           && user.Username!==this.username)
             this.setPossibleFriends({username:user.Username,isOnline:user.IsOnline,instanceId:user.InstanceId,friends:user.Friends})
-        }else if(this.friends || this.friendRequests){
-          if( (this.friends.indexOf(user.Username)===-1 || this.friendRequests.indexOf(user.Username)===-1) && user.Username!==this.username)
+        }else if(this.friends){
+          if( this.friends.indexOf(user.Username)===-1  && user.Username!==this.username)
             this.setPossibleFriends({username:user.Username,isOnline:user.IsOnline,instanceId:user.InstanceId,friends:user.Friends})
+        }else if(this.friendRequests){
+          if( !this.friendRequests.hasOwnProperty(user.Username) && user.Username!==this.username)
+          this.setPossibleFriends({username:user.Username,isOnline:user.IsOnline,instanceId:user.InstanceId,friends:user.Friends})
         }else{
           if( user.Username!==this.username)
             this.setPossibleFriends({username:user.Username,isOnline:user.IsOnline,instanceId:user.InstanceId,friends:user.Friends})
@@ -266,6 +280,7 @@ export default class Store {
   }
   signOut=()=>{
     firebase.auth().signOut().then(()=>{
+      unsubscribe()
       this.collectionReference.doc(this.username).update({
       'InstanceId': firebase.firestore.FieldValue.arrayRemove(this.instanceId[0]),
       'IsOnline': false
@@ -285,6 +300,7 @@ reset=()=>{
     this.setUid(null);
     this.setIsOnline(null);
     this.setInstanceId(null);
+    this.setFriendRequests({});
     this.setFriendsInfo({});
     this.setPossibleFriends({})
 }
