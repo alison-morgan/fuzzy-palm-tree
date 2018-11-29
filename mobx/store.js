@@ -52,7 +52,13 @@ export default class Store {
   get possibleFriends(){return this._possibleFriends}
 
   friendReq = (friend) => {
-    this.collectionReference.doc(friend).set({FriendRequests:[{username:this.username,isOnline:this.isOnline,uid:this.uid}]}, { merge: true })
+    this.collectionReference.doc(friend).set({FriendRequests: {
+      [this.username]: { 
+        username:this.username,
+        isOnline:this.isOnline,
+        uid:this.uid
+      }
+    }}, { merge: true })
     console.log(friend, "in friend Req")
   }
 
