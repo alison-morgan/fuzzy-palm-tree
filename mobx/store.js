@@ -1,4 +1,5 @@
 import firebase from 'react-native-firebase';
+//import decorators for mobx
 import {
   observable,
   computed,
@@ -7,6 +8,7 @@ import {
 } from 'mobx';
 
 export default class Store {
+  //creating initial values for our store values
   constructor() {
     this._collectionReference = firebase.firestore().collection('users');
     this._email = null;
@@ -31,28 +33,28 @@ export default class Store {
       search:'Type in username'
     }
   }
-
+  //getter/computed for friendRequests
   get friendRequests(){return this._friendRequests}
-
+  //setter/action for friendRequests 
   setFriendRequests(value){
-    console.log('settttttttting request',value.username)
-    if(Object.keys(value).length !== 0 && Object.keys(this.friendRequests).length!==0 ){
-      console.log('will add field',this.friendRequests)
+    //if value that being passed not an empty object and friendRequests object not empty
+    if(Object.keys(value).length !== 0 && Object.keys(this.friendRequests).length!==0 )
+      //add extra field to the friendRequests
       this._friendRequests[value.username]=value
-    }else{
+    //if it's initial setup for the store,after logIn/signIn or complete update
+    else
+    //assing passed object to the friendRequests object
       this._friendRequests=value
-    }
-    console.log('settiiiiiiing',this._friendRequests)
   }
-
+  //getter/computed for searchResult
   get searchResult(){return this._searchResult}
-
+  //setter/action for searchResult
   setSearchResult(value){this._searchResult=value}
-
+  //getter/computed for friendSearch
   get friendSearch(){return this._friendSearch}
-
+  
   setFriendSearch(value){this._friendSearch=value}
-
+  //getter/computed for 
   get possibleFriends(){return this._possibleFriends}
 
   friendReq = (friend) => {
