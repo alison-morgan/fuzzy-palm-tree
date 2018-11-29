@@ -144,7 +144,6 @@ export default class Store {
           this.collectionReference.where("Uid", "==", uid).onSnapshot((querySnapshot)=>{
             console.log('found document')
             const data=querySnapshot._docs[0].data();
-            // console.log('data',data)
             this.collectionReference.doc(data.Username).update({
               'InstanceId': firebase.firestore.FieldValue.arrayUnion(currentToken),
               'IsOnline': true
@@ -222,9 +221,12 @@ export default class Store {
     this.collectionReference.onSnapshot(querySnapshot=>{
       querySnapshot.forEach(doc=>{
         const user=doc.data();
-        if(this.friends){
-          if( this.friends.indexOf(user.Username)===-1  
+        if(this.friends && this.friendRequests){
+          if( (this.friends.indexOf(user.Username)===-1 && this.friendRequests.indexOf(user.Username)===-1)
           && user.Username!==this.username)
+            this.setPossibleFriends({username:user.Username,isOnline:user.IsOnline,instanceId:user.InstanceId,friends:user.Friends})
+        }else if(this.friends || this.friendRequests){
+          if( (this.friends.indexOf(user.Username)===-1 || this.friendRequests.indexOf(user.Username)===-1) && user.Username!==this.username)
             this.setPossibleFriends({username:user.Username,isOnline:user.IsOnline,instanceId:user.InstanceId,friends:user.Friends})
         }else{
           if( user.Username!==this.username)
@@ -247,10 +249,17 @@ export default class Store {
         }
         return searchPossibleFriend
        },{})
+       const searchFriendRequests = Object.keys(this.friendRequests).reduce((searchFriendRequests,name)=>{
+        if(name.toLowerCase().includes(this.friendSearch.toLowerCase())){
+          searchFriendRequests[name]=this.friendRequests[name]
+        }
+        return searchFriendRequests
+       },{})
 
       this.setSearchResult({
         friends: searchFriend,
-        possibleFriends: searchPossibleFriend
+        possibleFriends: searchPossibleFriend,
+        friendRequests: searchFriendRequests
       })
     }
 
@@ -260,7 +269,8 @@ export default class Store {
       this.collectionReference.doc(this.username).update({
       'InstanceId': firebase.firestore.FieldValue.arrayRemove(this.instanceId[0]),
       'IsOnline': false
-    })})
+    }).catch(error=>console.log('failed to update',error))
+  }).catch(error => console.log('error when sign out user: ',error))
 }
 
 reset=()=>{
