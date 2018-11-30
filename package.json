@@ -18,7 +18,7 @@
     "apk": "cd android && ./gradlew assembleRelease",
     "rename": "node ./bin/rename.js",
     "start": "react-native start -- --reset-cache",
-    "clean":"watchman watch-del-all && rm -rf /tmp/metro-cache && yarn cache clean && cd android/app rm -rf build cd ../..",
+    "clean": "watchman watch-del-all && rm -rf /tmp/metro-cache && yarn cache clean && cd android/app rm -rf build cd ../..",
     "test": "jest"
   },
   "jest": {
@@ -42,6 +42,7 @@
     "react-native-chat-ui": "^0.1.8",
     "react-native-elements": "^0.19.1",
     "react-native-firebase": "^5.1.0",
+    "react-native-swipe-list-view": "^1.5.0",
     "react-native-vector-icons": "^4.2.0",
     "react-navigation": "^2.18.2",
     "react-navigation-mobx-helpers": "^2.0.0"

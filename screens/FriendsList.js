@@ -9,48 +9,49 @@ import CustomSearchBar from '../components/CustomSearchBar'
 const FriendsList=inject("stores")(observer(
     class FriendsList extends React.Component {
 		render(){
-		const userStore = this.props.stores.userStore;
-		console.log('search Result',userStore.friendSearch,userStore.searchResult)
-		console.log('friendRequests',userStore.friendRequests)
+			const userStore = this.props.stores.userStore;
+			console.log('search Result',userStore.friendSearch,userStore.searchResult)
 			if(userStore.friendSearch && userStore.searchResult){
-				return(<View style={styles.container}>
+				return(
+					<View style={styles.container}>
 					<CustomSearchBar name='friends'/>
-
 					<Text>Friend Requests</Text>
-					{userStore.friendRequests
-					?<CustomList name='searchResult friendRequests' action='accept/decline'/>
-					:<Text>No friend requests at this time</Text>}
-
+						{
+							userStore.friendRequests
+							?<CustomList name='searchResult friendRequests' action='accept/decline'/>
+							:<Text>No friend requests at this time</Text>
+						}
 					<Text>Friends</Text>
-					{userStore.friendsInfo
-					?<CustomList name='searchResult friends' action='sendMessage'/>
-					:<Text>You didn't find any friends yet</Text>}
-
+						{
+							userStore.friendsInfo
+							?<CustomList name='searchResult friends' action='sendMessage'/>
+							:<Text>You didn't find any friends yet</Text>
+						}
 					<Text>Explore Users</Text>
-					{userStore.possibleFriends
-					?<CustomList name='searchResult possibleFriends'/> 
-					:<Text>No possible friends available at this moment</Text>}				
+						{
+							userStore.possibleFriends
+							?<CustomList name='searchResult possibleFriends' name='friendRequest'/> 
+							:<Text>No possible friends available at this moment</Text>
+						}				
 					</View> )
 			}else{ 
 				return ( <View style={styles.container}>
-				<CustomSearchBar name='friends'/>
-				
+					<CustomSearchBar name='friends'/>
 				<Text>Friend Requests</Text>
 				{userStore.friendRequests
-				?<CustomList name='friendRequests'/>
+				?<CustomList name='searchResult friendRequests' action='accept/decline'/>
 				:<Text>No friend requests at this time</Text>}
 
-				 <Text>Friends</Text>
-				 {userStore.friendsInfo
-				 ?<CustomList name='friendsInfo'/>
-				 :<Text>You didn't find any friends yet</Text>}
+				<Text>Friends</Text>
+				{userStore.friendsInfo
+				?<CustomList name='searchResult friends' action='sendMessage'/>
+				:<Text>You didn't find any friends yet</Text>}
 
 				<Text>Explore Users</Text>
 				{userStore.possibleFriends
-				?<CustomList name='possibleFriends'/> 
-				:<Text>No possible friends available at this moment</Text>}
-				</View> 
-				)
+				?<CustomList name='searchResult possibleFriends' name='friendRequest'/> 
+				:<Text>No possible friends available at this moment</Text>}				
+				</View> )
 			}
 		}
 	}
