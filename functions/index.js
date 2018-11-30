@@ -3,6 +3,8 @@ const functions = require('firebase-functions');
 
 admin.initializeApp(functions.config().firebase);
 
+
+//sends notification when someone recieves a friend request
 exports.sendPushNotification = functions.firestore
   .document("users/{Username}")
   .onUpdate(snap => {
@@ -24,10 +26,7 @@ exports.sendPushNotification = functions.firestore
         badge:"1"
      }
     }
-    // either store the recepient tokens in the document write
-    // const tokens = writeData.tokens;  
-    
-    // or collect them by accessing your database
+
     return admin.firestore().collection('users').doc(userDoc)
       .get()
       .then(doc => {
@@ -40,38 +39,39 @@ exports.sendPushNotification = functions.firestore
       });
 });
 
-// exports.sendPushNotification = functions.firestore
-//   .document("users/{alis}")
-//   .onUpdate(event => {
-//     // gets standard JavaScript object from the new write
-//     console.log(event, "event")
-//     const writeData = event.after._fieldsProto;
-//     // access data necessary for push notification 
-//     const sender = writeData.Uid;
-//     const senderName = writeData.Username;
-//     // const recipient = writeData.recipient;
-//     // the payload is what will be delivered to the device(s)
-//     let payload = {
-//       notification: {
-//       title:"hey",
-//       body:"ok",
-//       sound:"default",
-//       badge:"1"
-//      }
-//     }
-//     // either store the recepient tokens in the document write
-//     // const tokens = writeData.tokens;  
+//sends notification when someone has a friend request accepted
+exports.sendPushNotification = functions.firestore
+  .document("users/{Username}")
+  .onUpdate(snap => {
+    // gets standard JavaScript object from the new write
+    console.log(snap.before.data(), "snap")
+    const prevData = snap.after.data();
+    const afterData = snap.before.data();
+    var userDoc = prevData.Username;
+    var pushToken = prevData.InstanceId[0];
+
+    // const recipient = writeData.recipient;
+    // the payload is what will be delivered to the device(s)
+    let payload = {
+      notification: {
+        title:"Hey!",
+        body:"New Friends!",
+        sound:"default",
+        badge:"1"
+     }
+    }
     
-//     // or collect them by accessing your database
-//     var pushToken = "fJfPI8fPO3o:APA91bFC-Qnmp-vVHhmVtxB3gvKyLWbAr1yNsv0mnRZsawVCfjJxYaoeXZymVKdmKHYuT8fboMldvnHL-anaf7q0sHXTrTzRj7UcfQokB8VUt8mGH9SH2ZCYMwvgfycWQGIXly4G7Y4c";
-//     return admin.firestore().collection('users').doc('to')
-//       .get()
-//       .then(doc => {
-//           console.log(doc)
-//          // sendToDevice can also accept an array of push tokens
-//          return admin.messaging().sendToDevice(pushToken, payload);
-//       });
-// });
+    return admin.firestore().collection('users').doc(userDoc)
+      .get()
+      .then(doc => {
+        if (prevData.Friends && prevData.Friends.length > afterData.Friends.length) {
+            console.log(doc, "doc sent")
+            // sendToDevice can also accept an array of push tokens
+            return admin.messaging().sendToDevice(pushToken, payload);
+        }
+          return console.log('no added friends')
+      });
+});
 
 
 

@@ -23,7 +23,7 @@ export default class Store {
     this._friendsInfo=null;
     this._possibleFriends=null;
     this._friendSearch=null;
-    this._friendRequests={};
+    this._friendRequests=null;
     this._searchResult=null;
     this._placeholders = {
       username: 'Username',
@@ -31,7 +31,12 @@ export default class Store {
       password: 'Password',
       email: 'Email',
       search:'Type in username'
-    }
+    },
+    this._navigate=null;
+  }
+  get navigate(){return this._navigate}
+  setNavigate(value){
+    this._navigate = value;
   }
   //getter/computed for friendRequests
   get friendRequests(){return this._friendRequests}
@@ -56,6 +61,37 @@ export default class Store {
   setFriendSearch(value){this._friendSearch=value}
   //getter/computed for 
   get possibleFriends(){return this._possibleFriends}
+
+  declineReq = (friend) => {
+    this.collectionReference.doc(this.username).update({[`FriendRequests.${friend}`]: firebase.firestore.FieldValue.delete()
+    })
+  }
+
+  acceptReq = (friend) => {
+    this.collectionReference.doc(friend).set({Friends:[this.username]}, { merge: true })
+    .then(() => {
+      this.collectionReference.doc(this.username).update({[`FriendRequests.${friend}`]: firebase.firestore.FieldValue.delete()
+      })
+     console.log("deleted")
+    })
+    .then(() => {
+      this.collectionReference.doc(this.username).set({Friends:[friend]}, {merge: true})
+      console.log("added new friend to user doc")
+    })
+    .then(() => {
+      this.collectionReference.doc(this.username).get().then(doc => {
+        if(Object.keys(doc._data.FriendRequests).length === 0) {
+          this.collectionReference.doc(this.username).update({FriendRequests: firebase.firestore.FieldValue.delete()})
+          console.log("empty object")
+        } else {
+          console.log("not empty object")
+        }
+      })
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+  }
 
   friendReq = (friend) => {
     this.collectionReference.doc(friend).set({FriendRequests: {
@@ -324,6 +360,7 @@ decorate(Store,{
   _isOnline:observable,
   _placeholders:observable,
   _instanceId:observable,
+  _navigate:observable,
   collectionReference:computed,
   isOnline:computed,
   setIsOnline:action,
@@ -354,5 +391,7 @@ decorate(Store,{
   searchResult:computed,
   setSearchResult:action,
   friendRequests:computed,
-  setFriendRequests:action
+  setFriendRequests:action,
+  navigate:computed,
+  setNavigate:action
 })
