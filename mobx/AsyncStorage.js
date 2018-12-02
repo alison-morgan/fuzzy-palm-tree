@@ -11,8 +11,6 @@ const FRIENDS_INFO = null;
 const POSSIBLE_FRIENDS = null;
 
 
-
-
 export const asyncStorageKeys = {
   USER_UID,
   EMAIL,

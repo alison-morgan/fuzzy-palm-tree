@@ -6,6 +6,7 @@ import CustomSearchBar from '../components/CustomSearchBar'
 
 const FriendsList=inject("stores")(observer(
     class FriendsList extends React.Component {
+
 		render(){
 			const userStore = this.props.stores.userStore;
 			console.log(userStore)

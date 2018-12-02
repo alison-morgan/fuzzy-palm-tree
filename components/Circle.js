@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 export default class Circle extends React.Component{
 
@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
         borderRadius: 40,
     },
     innerCircle: {
-        backgroundColor: 'red',
+        backgroundColor: 'black',
         width: 70,
         height: 70,
         margin: 15,

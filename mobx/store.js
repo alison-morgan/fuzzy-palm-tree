@@ -5,6 +5,7 @@ import { AsyncStorage } from 'react-native'
 import { asyncStorageKeys } from './AsyncStorage'
 
 export default class Store {
+<<<<<<< HEAD
 	//creating initial values for our store values
 	constructor() {
 		this._collectionReference = firebase.firestore().collection( 'users' );
@@ -84,16 +85,6 @@ export default class Store {
 	//getter/computed for
 	get possibleFriends() {
 		return this._possibleFriends
-	}
-
-	friendReq = ( friend ) => {
-		this.collectionReference.doc( friend ).set( {
-			FriendRequests: {
-				[ this.username ]: {
-					username: this.username,
-				}
-			}
-		}, { merge: true } )
 	}
 
 	setPossibleFriends( value ) {
@@ -255,10 +246,10 @@ export default class Store {
 							} ).then( () => {
 								this.collectionReference.doc( this.username ).onSnapshot( ( doc ) => {
 									const data = doc.data();
-									let flags='';
 									for ( field in data ) {
 										this[ `set${ field }` ]( data[ field ] )
-									}				
+									}			
+									this.getAllUsersInfo()	
 								}, error => {
 									console.log( 'error getting document: ', error )
 								} )
@@ -319,6 +310,48 @@ export default class Store {
 		}
 
 	}
+
+	friendReq = ( friend ) => {
+		this.collectionReference.doc( friend ).set( {
+			FriendRequests: {
+				[ this.username ]: {
+					username: this.username,
+				}
+			}
+		}, { merge: true } )
+	}
+
+	declineReq = (friend) => {
+		this.collectionReference.doc(this.username).update({[`FriendRequests.${friend}`]: firebase.firestore.FieldValue.delete()
+		})
+	  }
+	
+	  acceptReq = (friend) => {
+		this.collectionReference.doc(friend).set({Friends:[this.username]}, { merge: true })
+		.then(() => {
+		  this.collectionReference.doc(this.username).update({[`FriendRequests.${friend}`]: firebase.firestore.FieldValue.delete()
+		  })
+		 console.log("deleted")
+		})
+		.then(() => {
+		  this.collectionReference.doc(this.username).set({Friends:[friend]}, {merge: true})
+		  console.log("added new friend to user doc")
+		})
+		.then(() => {
+		  this.collectionReference.doc(this.username).get().then(doc => {
+			if(Object.keys(doc._data.FriendRequests).length === 0) {
+			  this.collectionReference.doc(this.username).update({FriendRequests: firebase.firestore.FieldValue.delete()})
+			  console.log("empty object")
+			} else {
+			  console.log("not empty object")
+			}
+		  })
+		})
+		.catch((err) => {
+		  console.log(err)
+		})
+	  }
+
 	signOut = () => {
 		firebase.auth().signOut().then( () => {
 			unsubscribe()
