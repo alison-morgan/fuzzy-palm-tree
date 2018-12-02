@@ -15,7 +15,8 @@ import {
 
 
 export default class PromptArea extends Component {
- generateResultText(result: number) {
+ generateResultText(result) {
+   console.log(result, "result in pormpt")
    switch (result) {
      case GAME_RESULT_USER:
        return 'You won the game!'

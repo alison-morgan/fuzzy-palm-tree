@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, TextInput, View, Button, TouchableWithoutFeedback, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import Circle from '../components/Circle';
 import Cross from '../components/Cross';
 import { CENTERPOINTS, AREAS, CONDITIONS, GAME_RESULT_NO, GAME_RESULT_USER, GAME_RESULT_AI, GAME_RESULT_TIE, CENTER_POINTS } from '../components/Constants';
@@ -33,12 +33,9 @@ export default class TicTacToe extends React.Component{
     }
 
     boardClickHandler(e) {
-
         function allInputs() {
         return e !== area.id
         }
-
-        console.log("got me")
         const { locationX, locationY } = e.nativeEvent
         const { userInputs, AIInputs, result } = this.state
         if (result !== -1) {
@@ -53,9 +50,9 @@ export default class TicTacToe extends React.Component{
             if (area && inputs.every(allInputs)) {
                 this.setState({ userInputs: userInputs.concat(area.id) })
                 setTimeout(() => {
-                this.judgeWinner()
-                this.AIAction()
-                 }, 5)
+                    this.judgeWinner()
+                    this.AIAction()
+                }, 5)
             }
     }
 
@@ -80,24 +77,26 @@ export default class TicTacToe extends React.Component{
         this.restart()
     }
 
-    isWinner() {
-        const { userInputs, AIInputs } = this.state
-        const inputs = userInputs.concat(AIInputs)
-        console.log(userInputs, "in inputs")
-        return CONDITIONS.some(e => e.every(item => inputs.indexOf(item !== -1)))
-    }
+    isWinner(inputs) {
+        return CONDITIONS.some(d => d.every(item => inputs.indexOf(item) !== -1))
+      }
 
     judgeWinner() {
         const { userInputs, AIInputs, result } = this.state
         const inputs = userInputs.concat(AIInputs)
-        //maybe change line 96 to less turns
-        if (inputs.length >= 8) {
-            let res = this.isWinner(userInputs)
+        if (inputs.length >= 5) {
+            let res;
+            console.log(result, "result")
+            console.log(GAME_RESULT_USER, "GAME USER")
+            console.log(GAME_RESULT_AI, 'GAME AI')
+            res = this.isWinner(userInputs)
             if (res && result !== GAME_RESULT_USER) {
+                console.log(res, "in if")
                 return this.setState({ result: GAME_RESULT_USER })
             }
             res = this.isWinner(AIInputs)
             if (res && result !== GAME_RESULT_AI) {
+                console.log(res, "in else")
                 return this.setState({ result: GAME_RESULT_AI })
             }
         }
@@ -115,14 +114,14 @@ export default class TicTacToe extends React.Component{
         const { userInputs, AIInputs, result } = this.state;
         return(
             <TouchableOpacity onPress={(e) => this.boardClickHandler(e)}>
-            <View style={styles.container}> 
-                <View style={styles.board} >
-                    <View style={[styles.lines,{
-                        transform: [
-                           { translateX: 200 }
-                        ] 
-                    } ] }  
-                    />
+                <View style={styles.container}> 
+                    <View style={styles.board} >
+                        <View style={[styles.lines,{
+                            transform: [
+                            { translateX: 200 }
+                            ] 
+                        } ] }  
+                        />
                     <View style={[styles.lines,{
                         transform: [
                            { translateX: 100 }
@@ -151,7 +150,7 @@ export default class TicTacToe extends React.Component{
                                 key={i}
                                 xTranslate={CENTER_POINTS[e].x}
                                 yTranslate={CENTER_POINTS[e].y}
-                                color='blue'
+                                color='black'
                             />
                         ))
                     }

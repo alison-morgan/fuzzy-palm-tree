@@ -4,10 +4,7 @@ import {
   Text,
   View,
   TouchableOpacity,
-  Button
 } from 'react-native';
-
-
 import TicTacToe from './TicTacToe'
 
 export default class TicMain extends Component {
@@ -19,6 +16,7 @@ export default class TicMain extends Component {
   startGame() {
     this.setState({ gameStarted: true })
   }
+
   render() {
     const { gameStarted } = this.state
     return (
@@ -36,8 +34,6 @@ export default class TicMain extends Component {
                   Touch here to start
                 </Text>
               </TouchableOpacity>
-              {/* <Button title='instanceId' 
-				onPress={() => this.getInstanceId()}/> */}
             </View>
           )
         }
