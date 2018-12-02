@@ -8,8 +8,10 @@ export default Loading=inject('stores')(observer(
 	class Loading extends React.Component{
 		componentDidMount() {
 			firebase.auth().onAuthStateChanged(user => {
-				if(user){
+				if(user ){
 					this.props.navigation.navigate( 'AppStack')
+				// }else if(user){
+				// 	console.log('no info')
 				}else{
 					this.props.stores.userStore.reset()
 					this.props.navigation.navigate( 'AuthStack')

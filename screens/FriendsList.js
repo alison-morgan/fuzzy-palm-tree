@@ -1,7 +1,5 @@
-// Main.js
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { List, ListItem,SearchBar } from 'react-native-elements';
 import { observer,inject } from 'mobx-react';
 import CustomList from '../components/CustomList';
 import CustomSearchBar from '../components/CustomSearchBar'
@@ -10,46 +8,46 @@ const FriendsList=inject("stores")(observer(
     class FriendsList extends React.Component {
 		render(){
 			const userStore = this.props.stores.userStore;
-			console.log('search Result',userStore.friendSearch,userStore.searchResult)
+			console.log(userStore)
 			if(userStore.friendSearch && userStore.searchResult){
 				return(
 					<View style={styles.container}>
 					<CustomSearchBar name='friends'/>
-					<Text>Friend Requests</Text>
+					<Text style={styles.headers}>Friend Requests</Text>
 						{
-							userStore.friendRequests
+							Object.keys(userStore.friendRequests).length!==0
 							?<CustomList name='searchResult friendRequests' action='accept/decline'/>
 							:<Text>No friend requests at this time</Text>
 						}
-					<Text>Friends</Text>
+					<Text style={styles.headers}>Friends</Text>
 						{
-							userStore.friendsInfo
+							Object.keys(userStore.friendsInfo).length!==0
 							?<CustomList name='searchResult friends' action='sendMessage'/>
 							:<Text>You didn't find any friends yet</Text>
 						}
-					<Text>Explore Users</Text>
+					<Text style={styles.headers}>Explore Users</Text>
 						{
-							userStore.possibleFriends
-							?<CustomList name='searchResult possibleFriends' name='friendRequest'/> 
+							Object.keys(userStore.possibleFriends).length!==0
+							?<CustomList name='searchResult possibleFriends' action='friendRequest'/> 
 							:<Text>No possible friends available at this moment</Text>
 						}				
 					</View> )
 			}else{ 
 				return ( <View style={styles.container}>
 					<CustomSearchBar name='friends'/>
-				<Text>Friend Requests</Text>
-				{userStore.friendRequests
-				?<CustomList name='searchResult friendRequests' action='accept/decline'/>
+				<Text style={styles.headers}>Friend Requests</Text>
+				{Object.keys(userStore.friendRequests).length!==0
+				?<CustomList name='friendRequests' action='accept/decline'/>
 				:<Text>No friend requests at this time</Text>}
 
-				<Text>Friends</Text>
-				{userStore.friendsInfo
-				?<CustomList name='searchResult friends' action='sendMessage'/>
+				<Text style={styles.headers}>Friends</Text>
+				{Object.keys(userStore.friendsInfo).length!==0
+				?<CustomList name='friendsInfo' action='sendMessage'/>
 				:<Text>You didn't find any friends yet</Text>}
 
-				<Text>Explore Users</Text>
-				{userStore.possibleFriends
-				?<CustomList name='searchResult possibleFriends' name='friendRequest'/> 
+				<Text style={styles.headers}>Explore Users</Text>
+				{Object.keys(userStore.possibleFriends).length!==0
+				?<CustomList name='possibleFriends' action='friendRequest'/> 
 				:<Text>No possible friends available at this moment</Text>}				
 				</View> )
 			}
@@ -63,7 +61,11 @@ const styles = StyleSheet.create( {
 	text:{
 		justifyContent: 'center',
 		fontSize:10,
-		padding:12
+		padding:0
+	},
+	headers:{
+		color: 'purple',
+		fontWeight: 'bold'
 	}
 } )
 export default FriendsList;

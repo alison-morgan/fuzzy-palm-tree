@@ -43,6 +43,7 @@
     "react-native-elements": "^0.19.1",
     "react-native-firebase": "^5.1.0",
     "react-native-swipe-list-view": "^1.5.0",
+    "react-native-swipeable": "^0.6.0",
     "react-native-vector-icons": "^4.2.0",
     "react-navigation": "^2.18.2",
     "react-navigation-mobx-helpers": "^2.0.0"

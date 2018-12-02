@@ -40,6 +40,7 @@ export default class TicTacToe extends React.Component{
 
         console.log("got me")
         const { locationX, locationY } = e.nativeEvent
+        console.log(locationX,locationY)
         const { userInputs, AIInputs, result } = this.state
         if (result !== -1) {
             return
