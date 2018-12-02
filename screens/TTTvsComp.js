@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import Circle from '../components/Circle';
 import Cross from '../components/Cross';
-import { CENTERPOINTS, AREAS, CONDITIONS, GAME_RESULT_NO, GAME_RESULT_USER, GAME_RESULT_AI, GAME_RESULT_TIE, CENTER_POINTS } from '../components/Constants';
+import {AREAS, CONDITIONS, GAME_RESULT_NO, GAME_RESULT_USER, GAME_RESULT_AI, GAME_RESULT_TIE, CENTER_POINTS } from '../components/Constants';
 import PromptArea from './PromptArea';
 
 export default class TicTacToe extends React.Component{
@@ -14,6 +14,7 @@ export default class TicTacToe extends React.Component{
         userInputs: [],
         result: GAME_RESULT_NO,
         round: 0,
+        playFriend: true,
         }
     }      
 
@@ -48,6 +49,8 @@ export default class TicTacToe extends React.Component{
             (locationY >= e.startY && locationY <= e.endY))
 
             if (area && inputs.every(allInputs)) {
+                console.log(locationX, locationY)
+                console.log('locationX', 'locationY')
                 this.setState({ userInputs: userInputs.concat(area.id) })
                 setTimeout(() => {
                     this.judgeWinner()
@@ -63,7 +66,6 @@ export default class TicTacToe extends React.Component{
         }
         while(true) {
             const inputs = userInputs.concat(AIInputs)
-
             const randomNumber = Math.round(Math.random() * 8.3)
             if (inputs.every(e => e !== randomNumber)) {
                 this.setState({ AIInputs: AIInputs.concat(randomNumber) })
@@ -122,50 +124,50 @@ export default class TicTacToe extends React.Component{
                             ] 
                         } ] }  
                         />
-                    <View style={[styles.lines,{
-                        transform: [
-                           { translateX: 100 }
-                        ] 
-                    } ] } 
-                    />
-                     <View style={[styles.lines,{
-                         height: 3,
-                         width: 295,
-                        transform: [
-                           { translateY: 100 }
-                        ] 
-                    } ] } 
-                    />
-                    <View style={[styles.lines,{
-                         height: 3,
-                         width: 295,
-                        transform: [
-                           { translateY: 200 }
-                        ] 
-                    } ] } 
-                    />
-                    {
-                        userInputs.map((e, i) => (
-                            <Circle
-                                key={i}
-                                xTranslate={CENTER_POINTS[e].x}
-                                yTranslate={CENTER_POINTS[e].y}
-                                color='black'
-                            />
-                        ))
-                    }
-                    {
-                        AIInputs.map((e, i) => (
-                            <Cross
-                                key={i}
-                                xTranslate={CENTER_POINTS[e].x}
-                                yTranslate={CENTER_POINTS[e].y}
-                            />
-                        ))
-                    }
-                </View>
+                        <View style={[styles.lines,{
+                            transform: [
+                                { translateX: 100 }
+                            ] 
+                        } ] } 
+                        />
+                        <View style={[styles.lines,{
+                            height: 3,
+                            width: 295,
+                            transform: [
+                                { translateY: 100 }
+                            ] 
+                        } ] } 
+                        />
+                        <View style={[styles.lines,{
+                            height: 3,
+                            width: 295,
+                            transform: [
+                                { translateY: 200 }
+                            ] 
+                        } ] } 
+                        />
+                        {
+                            userInputs.map((e, i) => (
+                                <Circle
+                                    key={i}
+                                    xTranslate={CENTER_POINTS[e].x}
+                                    yTranslate={CENTER_POINTS[e].y}
+                                    color='black'
+                                />
+                            ))
+                        }
+                        {
+                            AIInputs.map((e, i) => (
+                                <Cross
+                                    key={i}
+                                    xTranslate={CENTER_POINTS[e].x}
+                                    yTranslate={CENTER_POINTS[e].y}
+                                />
+                            ))
+                        }
+                    </View>
                 <PromptArea result={result} onRestart={() => this.restart()} />
-            </View>
+                </View>
             </TouchableOpacity>
         )
     }
@@ -189,3 +191,4 @@ const styles = StyleSheet.create({
         position: 'absolute'
     }
 })
+

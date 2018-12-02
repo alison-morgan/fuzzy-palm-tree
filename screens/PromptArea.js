@@ -10,27 +10,33 @@ import {
  GAME_RESULT_NO,
  GAME_RESULT_USER,
  GAME_RESULT_AI,
- GAME_RESULT_TIE
+ GAME_RESULT_TIE,
+ GAME_RESULT_USER1,
+ GAME_RESULT_USER2
 } from '../components/Constants'
 
 
 export default class PromptArea extends Component {
- generateResultText(result) {
-   console.log(result, "result in pormpt")
-   switch (result) {
-     case GAME_RESULT_USER:
-       return 'You won the game!'
-     case GAME_RESULT_AI:
-       return 'AI won the game!'
-     case GAME_RESULT_TIE:
-       return 'Tie!'
-     default:
-       return ''
+  generateResultText(result) {
+    console.log(result, "result in pormpt")
+    switch (result) {
+      case GAME_RESULT_USER:
+        return 'You won!'
+      case GAME_RESULT_AI:
+        return 'AI won!'
+      case GAME_RESULT_USER1:
+        return 'Player 1 won!'
+      case GAME_RESULT_USER2:
+        return 'Player 2 won!'
+      case GAME_RESULT_TIE:
+        return 'Tie!'
+      default:
+        return ''
    }
  }
 
  render() {
-   const { result, onRestart } = this.props
+   const { result, onRestart, round } = this.props
    return (
      <View>
        <Text style={styles.text}>{ this.generateResultText(result) }</Text>
