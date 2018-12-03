@@ -5,7 +5,6 @@ import { AsyncStorage } from 'react-native'
 import { asyncStorageKeys } from './AsyncStorage'
 
 export default class Store {
-<<<<<<< HEAD
 	//creating initial values for our store values
 	constructor() {
 		this._collectionReference = firebase.firestore().collection( 'users' );
@@ -327,6 +326,7 @@ export default class Store {
 	  }
 	
 	  acceptReq = (friend) => {
+		  console.log('accepting')
 		this.collectionReference.doc(friend).set({Friends:[this.username]}, { merge: true })
 		.then(() => {
 		  this.collectionReference.doc(this.username).update({[`FriendRequests.${friend}`]: firebase.firestore.FieldValue.delete()
