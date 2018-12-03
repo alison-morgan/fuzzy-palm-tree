@@ -1,6 +1,6 @@
 // Main.js
 import React from 'react';
-import { StyleSheet, Text, View,Button } from 'react-native';
+import { StyleSheet, Text, View,Button,Image } from 'react-native';
 import {observer,inject} from 'mobx-react';
 const Main=inject("stores")(observer( 
 	class Main extends React.Component {
@@ -12,7 +12,9 @@ const Main=inject("stores")(observer(
 					 {userStore.username}
 					Hi
 				</Text>
-				<Button title='TicTacToe' onPress={()=>{this.props.navigation.push('TicTacToe')}}/>
+				<Button title='TicTacToe' onPress={()=>{this.props.navigation.push('TicTacToe')}}><Image
+          source={require('../img/TicTacIcon.png')}
+        /></Button>
 			</View> 
 			)}
 }

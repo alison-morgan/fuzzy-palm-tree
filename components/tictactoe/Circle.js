@@ -1,38 +1,38 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-
-export default class SmallCircle extends React.Component{
+import { observer,inject } from 'mobx-react';
+``
+export default Circle = inject( "stores" )( observer(
+class Circle extends React.Component{
 
     render() {
             const { xTranslate, yTranslate, color } = this.props;
+            const outerCircle=this.props.stores.ticTacToe.squareSize - 20;
+            const innerCircle=this.props.stores.ticTacToe.squareSize - 30;
         return(
-            <View style={[styles.container, {
+            <View style={[{height:outerCircle, width:outerCircle}, styles.container, {
                 transform: [
                     {translateX: xTranslate ? xTranslate : 10},
                     {translateY: yTranslate ? yTranslate : 10},
                 ],
                 backgroundColor: color ? color : '#000'
             }]}>
-                <View style={styles.innerCircle}>
+                <View style={[{height:innerCircle, width:innerCircle}, styles.innerCircle]}>
                 </View>
             </View>
         )
     }
-}
+}))
 
 const styles = StyleSheet.create({
     container: {
         position: 'absolute',
         alignItems: 'center',
         justifyContent: 'center',
-        width: 80,
-        height: 80,
         borderRadius: 40,
     },
     innerCircle: {
         backgroundColor: 'black',
-        width: 70,
-        height: 70,
         margin: 15,
         borderRadius: 35
     }

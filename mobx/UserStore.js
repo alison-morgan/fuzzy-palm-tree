@@ -263,12 +263,7 @@ export default class Store {
 	getAllUsersInfo = () => {
 		console.log( 'gettingAllUsers', )
 		this.collectionReference.onSnapshot( querySnapshot => {
-			const users={
-			 FriendsInfo:{},
-			 PossibleFriends:{},
-			 FriendRequests:{}
-			}
-			querySnapshot.forEach( doc => {
+			const users=querySnapshot.reduce( (users,doc) => {
 				const user = doc.data();
 				if(user.Username===this.username){
 					return
@@ -279,7 +274,12 @@ export default class Store {
 				}else{
 					users.PossibleFriends[user.Username] = { username: user.Username, isOnline: user.IsOnline, instanceId: user.InstanceId, friends: user.Friends }
 				}
-			} )
+				return users
+			}, {
+			FriendsInfo:{},
+			PossibleFriends:{},
+			FriendRequests:{}}
+		   )
 			for(group in users){
 				this[ `set${ group }` ]( users[group] )
 			}
