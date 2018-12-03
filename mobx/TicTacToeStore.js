@@ -136,7 +136,7 @@ export default class TicTacToeStore {
 	}
 	reset = () => {
 		console.log('resetting',this.size);
-		const cleanBoard=[ ... Array(this.size)].map(el => Array(this.size));
+		const cleanBoard=[... Array(this.size)].map(el => Array(this.size).fill(1));
 		this.setResult(null)
 		this.setBoardState(cleanBoard);
 		this.setTurn(this.turn==='X'?'O':'X');
