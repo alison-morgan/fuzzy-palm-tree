@@ -8,6 +8,24 @@ import PromptArea from './PromptArea';
 
 export default TicTacToe= inject( "stores" )( observer( 
 class TicTacToe extends React.Component{
+    componentWillMount() {
+        if(this.props.stores.ticTacToe.size === 5) {
+            console.log('small')
+            this.state.board = <SmallBoard/>
+            this.state.cross = <SmallCross/>
+            this.state.circle = <SmallCircle/>
+        } else if (this.props.stores.ticTacToe.size === 4) {
+            console.log('med')
+            this.state.board = <MedBoard/>
+            this.state.cross = <MedCross/>
+            this.state.circle = <MedCircle/>
+        } else if (this.props.stores.ticTacToe.size === 3) {
+            console.log('large')
+            this.state.board = <LargeBoard/>
+            this.state.cross = <LargeCross/>
+            this.state.circle = <LargeCircle/>
+        }
+    }
 
     boardClickHandler(e) {
         const gameStore=this.props.stores.ticTacToe;

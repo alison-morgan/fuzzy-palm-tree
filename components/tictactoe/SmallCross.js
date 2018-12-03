@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 
-export default class Cross extends React.Component{
+export default class SmallCross extends React.Component{
     
     render(){
         const { xTranslate, yTranslate, color } = this.props;

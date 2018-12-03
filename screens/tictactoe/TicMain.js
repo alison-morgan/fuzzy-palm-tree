@@ -4,6 +4,7 @@ import {
   Text,
   View,
   TouchableOpacity,
+  Button
 } from 'react-native';
 import TicTacToe from './TicTacToe';
 import { observer,inject } from 'mobx-react';
@@ -21,6 +22,14 @@ class TicMain extends Component {
               <Text style={styles.welcome}>
                 Welcome to the game!
               </Text>
+              <TouchableOpacity>
+                <Text style={styles.instructions}>
+                  Choose a board size to play!
+                </Text>
+                <Button title='3x3' onPress={() => {gameStore.setSize(3);gameStore.setSquareSize(100)}}>3x3</Button>
+                <Button title='4x4' onPress={() => {gameStore.setSize(4);gameStore.setSquareSize(75)}}>4x4</Button>
+                <Button title='5x5' onPress={() => {gameStore.setSize(5);gameStore.setSquareSize(50)}}>5x5</Button>
+              </TouchableOpacity>
               <TouchableOpacity onPress={() => gameStore.setOpponent('computer')}>
                 <Text style={styles.instructions}>
                   Touch here to play the computer!

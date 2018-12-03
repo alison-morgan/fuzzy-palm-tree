@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 
-export default class Circle extends React.Component{
+export default class SmallCircle extends React.Component{
 
     render() {
             const { xTranslate, yTranslate, color } = this.props;
