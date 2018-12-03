@@ -2,7 +2,7 @@ import React from 'react';
 import { createStackNavigator, createDrawerNavigator, } from 'react-navigation';
 import { Icon } from 'react-native-elements';
 import Main from '../screens/Main';
-import TicMain from '../screens/TicMain'
+import TicMain from '../screens/tictactoe/TicMain'
 import MessagesList from '../screens/MessagesList';
 import FriendsList from '../screens/FriendsList';
 import SignOut from '../components/SignOut';

@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 
-export default class Cross extends React.Component{
+export default class MedCross extends React.Component{
     
     render(){
         const { xTranslate, yTranslate, color } = this.props;
@@ -32,14 +32,14 @@ export default class Cross extends React.Component{
 const styles = StyleSheet.create({
     container: {
         position: 'absolute',
-        width: 80,
-        height: 80,
+        width: 40,
+        height: 40,
         justifyContent: 'center',
-        marginLeft: '12%'
+        marginLeft: '15%'
     },
     line: {
         position: 'absolute',
         width: 8,
-        height: 105,
+        height: 40,
     }
 })

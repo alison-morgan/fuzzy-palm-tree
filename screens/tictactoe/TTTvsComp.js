@@ -1,11 +1,17 @@
 import React from 'react';
 import { StyleSheet, View, TouchableOpacity } from 'react-native';
-import Circle from '../components/Circle';
-import Cross from '../components/Cross';
-import {AREAS, CONDITIONS, GAME_RESULT_NO, GAME_RESULT_USER, GAME_RESULT_AI, GAME_RESULT_TIE, CENTER_POINTS } from '../components/Constants';
+import SmallCircle from '../../components/tictactoe/SmallCircle';
+import SmallCross from '../../components/tictactoe/SmallCross';
+import MedCross from '../../components/tictactoe/MedCross';
+import MedCircle from '../../components/tictactoe/MedCircle';
+import LargeCircle from '../../components/tictactoe/LargeCircle';
+import LargeCross from '../../components/tictactoe/LargeCross';
+import SmallBoard from './SmallBoard';
+import MedBoard from './MedBoard';
+import LargeBoard from './LargeBoard';
+import {AREAS, CONDITIONS, GAME_RESULT_NO, GAME_RESULT_USER, GAME_RESULT_AI, GAME_RESULT_TIE, CENTER_POINTS } from '../../components/tictactoe/Constants';
 import PromptArea from './PromptArea';
-
-export default class TicTacToe extends React.Component{
+export default class TicTacComp extends React.Component{
 
     constructor(){
         super()
@@ -14,9 +20,30 @@ export default class TicTacToe extends React.Component{
         userInputs: [],
         result: GAME_RESULT_NO,
         round: 0,
-        playFriend: true,
+        board: '',
+        cross: '',
+        circle: ''
         }
     }      
+
+    componentWillMount() {
+        if(this.props.board.small === true) {
+            console.log('small')
+            this.state.board = <SmallBoard/>
+            this.state.cross = <SmallCross/>
+            this.state.circle = <SmallCircle/>
+        } else if (this.props.board.med === true) {
+            console.log('med')
+            this.state.board = <MedBoard/>
+            this.state.cross = <MedCross/>
+            this.state.circle = <MedCircle/>
+        } else if (this.props.board.large === true) {
+            console.log('large')
+            this.state.board = <LargeBoard/>
+            this.state.cross = <LargeCross/>
+            this.state.circle = <LargeCircle/>
+        }
+    }
 
     restart() {
         const { round } = this.state
@@ -114,42 +141,17 @@ export default class TicTacToe extends React.Component{
     }
 
     render(){
-        const { userInputs, AIInputs, result } = this.state;
+        const { userInputs, AIInputs, result, board, cross, circle } = this.state;
         return(
             <TouchableOpacity onPress={(e) => this.boardClickHandler(e)}>
                 <View style={styles.container}> 
                     <View style={styles.board} >
-                        <View style={[styles.lines,{
-                            transform: [
-                            { translateX: 200 }
-                            ] 
-                        } ] }  
-                        />
-                        <View style={[styles.lines,{
-                            transform: [
-                                { translateX: 100 }
-                            ] 
-                        } ] } 
-                        />
-                        <View style={[styles.lines,{
-                            height: 3,
-                            width: 295,
-                            transform: [
-                                { translateY: 100 }
-                            ] 
-                        } ] } 
-                        />
-                        <View style={[styles.lines,{
-                            height: 3,
-                            width: 295,
-                            transform: [
-                                { translateY: 200 }
-                            ] 
-                        } ] } 
-                        />
+                    {board}
                         {
                             userInputs.map((e, i) => (
-                                <Circle
+                                // {circle}
+                                //have to find out how to make this component respond to state change
+                                    <SmallCircle
                                     key={i}
                                     xTranslate={CENTER_POINTS[e].x}
                                     yTranslate={CENTER_POINTS[e].y}
@@ -159,7 +161,9 @@ export default class TicTacToe extends React.Component{
                         }
                         {
                             AIInputs.map((e, i) => (
-                                <Cross
+                                // {cross}
+                                //have to find out how to make this component respond to state change
+                                <SmallCross
                                     key={i}
                                     xTranslate={CENTER_POINTS[e].x}
                                     yTranslate={CENTER_POINTS[e].y}
@@ -192,4 +196,3 @@ const styles = StyleSheet.create({
         position: 'absolute'
     }
 })
-

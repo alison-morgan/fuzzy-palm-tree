@@ -13,7 +13,7 @@ import {
  GAME_RESULT_TIE,
  GAME_RESULT_USER1,
  GAME_RESULT_USER2
-} from '../components/Constants'
+} from '../../components/tictactoe/Constants'
 
 
 export default class PromptArea extends Component {
