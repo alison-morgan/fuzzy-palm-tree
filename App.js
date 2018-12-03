@@ -1,5 +1,6 @@
 import React from 'react';
-import Store from './mobx/store';
+import Store from './mobx/UserStore';
+import TicTacToe from './mobx/TicTacToeStore';
 import {Provider} from 'mobx-react';
 import AppNavigator from './Navigation/Navigation';
 import NavigationStore from 'react-navigation-mobx-helpers';
@@ -9,10 +10,11 @@ export default class Root extends React.Component {
 	componentWillMount(){
 		this.userStore=new Store();
 		this.rootNavigation= new NavigationStore();
+		this.ticTacToe=new TicTacToe()
 	}
   render() {
     return (
-			<Provider rootNavigation={this.rootNavigation}  stores={{userStore:this.userStore}} >
+			<Provider rootNavigation={this.rootNavigation}  stores={{userStore:this.userStore,ticTacToe:this.ticTacToe}} >
 				<App />
 		</Provider>
     );

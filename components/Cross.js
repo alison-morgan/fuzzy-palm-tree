@@ -5,6 +5,7 @@ export default class Cross extends React.Component{
     
     render(){
         const { xTranslate, yTranslate, color } = this.props;
+        console.log('new cross',xTranslate,yTranslate)
         return(
             <View style={[styles.container, {
                 transform: [

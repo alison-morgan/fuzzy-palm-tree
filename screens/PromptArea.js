@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { observer,inject } from 'mobx-react';
 import {
  StyleSheet,
  Text,
@@ -6,43 +7,18 @@ import {
  TouchableOpacity,
 } from 'react-native'
 
-import {
- GAME_RESULT_NO,
- GAME_RESULT_USER,
- GAME_RESULT_AI,
- GAME_RESULT_TIE,
- GAME_RESULT_USER1,
- GAME_RESULT_USER2
-} from '../components/Constants'
-
-
-export default class PromptArea extends Component {
-  generateResultText(result) {
-    console.log(result, "result in pormpt")
-    switch (result) {
-      case GAME_RESULT_USER:
-        return 'You won!'
-      case GAME_RESULT_AI:
-        return 'AI won!'
-      case GAME_RESULT_USER1:
-        return 'Player 1 won!'
-      case GAME_RESULT_USER2:
-        return 'Player 2 won!'
-      case GAME_RESULT_TIE:
-        return 'Tie!'
-      default:
-        return ''
-   }
- }
+export default PromptArea = inject( "stores" )( observer( 
+class PromptArea extends Component {
 
  render() {
-   const { result, onRestart, round } = this.props
+   const gameStore=this.props.stores.ticTacToe;
+   console.log(gameStore)
    return (
      <View>
-       <Text style={styles.text}>{ this.generateResultText(result) }</Text>
+       <Text style={styles.text}>{ gameStore.result }</Text>
        {
-         result !== GAME_RESULT_NO && (
-           <TouchableOpacity onPress={() => onRestart()}>
+         gameStore.result !== null && (
+           <TouchableOpacity onPress={() => {console.log('restart');gameStore.reset()}}>
              <Text style={styles.instructions}>
                Touch here to play again
              </Text>
@@ -52,7 +28,7 @@ export default class PromptArea extends Component {
      </View>
    )
  }
-}
+}))
 
 const styles = StyleSheet.create({
  text: {

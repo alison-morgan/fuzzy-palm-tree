@@ -52,6 +52,7 @@ export default class Store {
 		search:'Type in username'
 		}
 	}
+
 	//getter/computed for friendRequests
 	get friendRequests() {
 		return this._friendRequests
@@ -428,5 +429,5 @@ decorate( Store, {
 	searchResult: computed,
 	setSearchResult: action,
 	friendRequests: computed,
-	setFriendRequests: action
+	setFriendRequests: action,
 } )

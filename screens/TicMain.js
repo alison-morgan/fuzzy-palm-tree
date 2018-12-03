@@ -5,48 +5,40 @@ import {
   View,
   TouchableOpacity,
 } from 'react-native';
-import TicTacFriend from './TTTvsFriend';
-import TicTacComp from './TTTvsComp';
+import TicTacToe from './TicTacToe';
+import { observer,inject } from 'mobx-react';
 
-export default class TicMain extends Component {
-  constructor() {
-    super()
-    this.state={ playFriend: false, playComputer: false }
-  }
+export default TicMain=inject( "stores" )( observer(
+class TicMain extends Component {
 
   render() {
-    const { playFriend, playComputer } = this.state
+    const gameStore=this.props.stores.ticTacToe
     return (
       <View style={styles.container}>
-        {
-          playFriend ? (
-            <TicTacFriend />
-          ) : 
-          playComputer ? (
-            <TicTacComp/>
-          ) : 
+        { !gameStore.opponent?
           (
             <View>
               <Text style={styles.welcome}>
                 Welcome to the game!
               </Text>
-              <TouchableOpacity onPress={() => this.setState({ playComputer:true })}>
+              <TouchableOpacity onPress={() => gameStore.setOpponent('computer')}>
                 <Text style={styles.instructions}>
                   Touch here to play the computer!
                 </Text>
               </TouchableOpacity>
-              <TouchableOpacity onPress={() => this.setState({ playFriend: true })}>
+              <TouchableOpacity onPress={() => gameStore.setOpponent('friend')}>
                 <Text style={styles.instructions}>
                   Touch here to play a friend!
                 </Text>
               </TouchableOpacity>
             </View>
-          )
+          ):
+          (<TicTacToe/>)
         }
       </View>
     )
   }
-}
+}))
 
 const styles = StyleSheet.create({
   container: {
