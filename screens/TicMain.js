@@ -5,33 +5,39 @@ import {
   View,
   TouchableOpacity,
 } from 'react-native';
-import TicTacToe from './TicTacToe'
+import TicTacFriend from './TTTvsFriend';
+import TicTacComp from './TTTvsComp';
 
 export default class TicMain extends Component {
   constructor() {
     super()
-    this.state={ gameStarted: false }
-  }
-
-  startGame() {
-    this.setState({ gameStarted: true })
+    this.state={ playFriend: false, playComputer: false }
   }
 
   render() {
-    const { gameStarted } = this.state
+    const { playFriend, playComputer } = this.state
     return (
       <View style={styles.container}>
         {
-          gameStarted ? (
-            <TicTacToe />
-          ) : (
+          playFriend ? (
+            <TicTacFriend />
+          ) : 
+          playComputer ? (
+            <TicTacComp/>
+          ) : 
+          (
             <View>
               <Text style={styles.welcome}>
                 Welcome to the game!
               </Text>
-              <TouchableOpacity onPress={() => this.startGame()}>
+              <TouchableOpacity onPress={() => this.setState({ playComputer:true })}>
                 <Text style={styles.instructions}>
-                  Touch here to start
+                  Touch here to play the computer!
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => this.setState({ playFriend: true })}>
+                <Text style={styles.instructions}>
+                  Touch here to play a friend!
                 </Text>
               </TouchableOpacity>
             </View>

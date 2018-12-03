@@ -35,5 +35,7 @@ export const CENTER_POINTS = [
   
   export const GAME_RESULT_NO = -1
   export const GAME_RESULT_USER= 0
+  export const GAME_RESULT_USER1 = 0
+  export const GAME_RESULT_USER2 = 1
   export const GAME_RESULT_AI =  1
   export const GAME_RESULT_TIE = 2
