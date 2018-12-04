@@ -10,18 +10,16 @@ class Board extends React.Component {
         const board=[];
         for(let i=1;i<gameStore.size;i++){
             const lineCoordinate = i * gameStore.squareSize;
-            board.push( <View key={`${i}x`} style={[styles.linesVertical,{
-                transform: [
-                { translateX: lineCoordinate }
-                ] 
-            } ] }  
-            />)
-            board.push(<View key={`${i}y`} style={[styles.linesHorizontal,{
-                transform: [
-                    { translateY: lineCoordinate }
-                ] 
-            } ] } 
-            />)
+            board.push( 
+                <View 
+                    key={`${i}x`} 
+                    style={ [ styles.linesVertical,
+                    { transform: [ { translateX: lineCoordinate } ] } ] } />)
+            board.push(
+                <View 
+                    key={`${i}y`} 
+                    style={ [ styles.linesHorizontal,
+                    { transform: [ { translateY: lineCoordinate } ] } ] } />)
         }
         return board;
     }

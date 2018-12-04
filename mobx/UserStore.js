@@ -8,36 +8,16 @@ export default class Store {
 	//creating initial values for our store values
 	constructor() {
 		this._collectionReference = firebase.firestore().collection( 'users' );
-		// AsyncStorage.getItem(asyncStorageKeys.EMAIL)
-		// 	  .then(email => {this._email = email ? email : ''})
-			  
-		// AsyncStorage.getItem(asyncStorageKeys.PASSWORD)
-		//   	.then(password => {this._password = password ? password : ''})
-			
-		// this._confirmPassword = '';
 
-		// this._errorMessage = '';
-
-		// AsyncStorage.getItem(asyncStorageKeys.USERNAME)
-		// 	.then(username => {this._username = username ? username : ''})
-		
-  		// AsyncStorage.getItem(asyncStorageKeys.IS_ONLINE)
-		// 	.then(isOnline => {this._isOnline = isOnline? isOnline : ''})
-		
-		// AsyncStorage.getItem(asyncStorageKeys.USER_UID)
-		// 	.then(uid => {this._uid = uid ? uid : ''})
-
-		// AsyncStorage.getItem(asyncStorageKeys.INSTANCE_ID)
-		// 	.then(instanceId => {this._instanceId = instanceId ? instanceId : ''})
-
-			this._email = '';
-			this._password = '';
-			this._confirmPassword = '';
-			this._username = '';
-			this._errorMessage = '';
-			this._uid = '';
-			this._isOnline = '';
-			this._instanceId = '';
+		AsyncStorage.getItem(asyncStorageKeys.USERNAME)
+			.then(username => {console.log('username',username);this._username = username ? username : ''})
+		this._email = '';
+		this._password = '';
+		this._confirmPassword = '';
+		this._errorMessage = '';
+		this._uid = '';
+		this._isOnline = '';
+		this._instanceId = '';
 		this._friends = [];
 		this._friendsInfo={};
 		this._possibleFriends={};
@@ -92,9 +72,7 @@ export default class Store {
 	}
 
 	setFriendsInfo( value ) {
-		console.log('settibng',value)
 		this._friendsInfo = value
-		console.log('checking', this.friendsInfo)
 	}
 
 	get friendsInfo() {
@@ -142,7 +120,8 @@ export default class Store {
 	}
 
 	setUsername( value ) {
-		this._username = value
+		this._username = value;
+		AsyncStorage.setItem(asyncStorageKeys.USERNAME, value)
 	}
 
 	get confirmPassword() {
@@ -244,15 +223,7 @@ export default class Store {
 								IsOnline: true,
 								FriendRequests: [],
 							} ).then( () => {
-								this.collectionReference.doc( this.username ).onSnapshot( ( doc ) => {
-									const data = doc.data();
-									for ( field in data ) {
-										this[ `set${ field }` ]( data[ field ] )
-									}			
-									this.getAllUsersInfo()	
-								}, error => {
-									console.log( 'error getting document: ', error )
-								} )
+								this.getUserInfo();
 							} )
 						} ).catch( error => console.log( 'error getting token', error ) )
 					} ).catch( error => console.log( 'error getting permission', error ) )
@@ -260,31 +231,62 @@ export default class Store {
 			}
 		} )
 	}
+
+	getUserInfo=()=>{
+		this.collectionReference.doc( this.username ).onSnapshot( ( doc ) => {
+			const data = doc.data();
+			for ( field in data ) {
+				this[ `set${ field }` ]( data[ field ] )
+			}			
+			this.getAllUsersInfo()	
+		}, error => {
+			console.log( 'error getting document: ', error )
+		} )
+	}
+
 	getAllUsersInfo = () => {
 		console.log( 'gettingAllUsers', )
 		this.collectionReference.onSnapshot( querySnapshot => {
-			const users=querySnapshot.reduce( (users,doc) => {
-				const user = doc.data();
-				if(user.Username===this.username){
-					return
-				}else if(this.friends.indexOf(user.Username)!==-1){
-					users.FriendsInfo[user.Username]={ username: user.Username, isOnline: user.IsOnline, instanceId: user.InstanceId};
-				}else if(this.friendRequests.hasOwnProperty(user.Username)){
-					users.FriendRequests[user.Username]={ username: user.Username, isOnline: user.IsOnline}
-				}else{
-					users.PossibleFriends[user.Username] = { username: user.Username, isOnline: user.IsOnline, instanceId: user.InstanceId, friends: user.Friends }
-				}
-				return users
-			}, {
+		// 	const users=querySnapshot.reduce( (users,doc) => {
+		// 		const user = doc.data();
+		// 		if(user.Username===this.username){
+		// 			return
+		// 		}else if(this.friends.indexOf(user.Username)!==-1){
+		// 			users.FriendsInfo[user.Username]={ username: user.Username, isOnline: user.IsOnline, instanceId: user.InstanceId};
+		// 		}else if(this.friendRequests.hasOwnProperty(user.Username)){
+		// 			users.FriendRequests[user.Username]={ username: user.Username, isOnline: user.IsOnline}
+		// 		}else{
+		// 			users.PossibleFriends[user.Username] = { username: user.Username, isOnline: user.IsOnline, instanceId: user.InstanceId, friends: user.Friends }
+		// 		}
+		// 		return users
+		// 	}, {
+		// 	FriendsInfo:{},
+		// 	PossibleFriends:{},
+		// 	FriendRequests:{}}
+		//    )
+		   const users={
 			FriendsInfo:{},
 			PossibleFriends:{},
-			FriendRequests:{}}
-		   )
+			FriendRequests:{}
+		   }
+		   querySnapshot.forEach( doc => {
+			   const user = doc.data();
+			   if(user.Username===this.username){
+				   return
+			   }else if(this.friends.indexOf(user.Username)!==-1){
+				   users.FriendsInfo[user.Username]={ username: user.Username, isOnline: user.IsOnline, instanceId: user.InstanceId};
+			   }else if(this.friendRequests.hasOwnProperty(user.Username)){
+				   users.FriendRequests[user.Username]={ username: user.Username, isOnline: user.IsOnline}
+			   }else{
+				   users.PossibleFriends[user.Username] = { username: user.Username, isOnline: user.IsOnline, instanceId: user.InstanceId, friends: user.Friends }
+			   }
+		   } )
 			for(group in users){
 				this[ `set${ group }` ]( users[group] )
 			}
 		} )
 	}
+
 	search = ( name ) => {
 		if ( name === 'friends' ) {
 			const searchFriend = Object.keys( this.friendsInfo ).reduce( ( searchFriend, name ) => {
@@ -355,11 +357,13 @@ export default class Store {
 
 	signOut = () => {
 		firebase.auth().signOut().then( () => {
-			unsubscribe()
-			this.collectionReference.doc( this.username ).update( {
-				'InstanceId': firebase.firestore.FieldValue.arrayRemove( this.instanceId[ 0 ] ),
-				'IsOnline': false
-			} ).catch( error => console.log( 'failed to update', error ) )
+			unsubscribe();
+			if(this.username){
+				this.collectionReference.doc( this.username ).update( {
+					'InstanceId': firebase.firestore.FieldValue.arrayRemove( this.instanceId[ 0 ] ),
+					'IsOnline': false
+				} ).catch( error => console.log( 'failed to update', error ) )
+			}
 		} ).catch( error => console.log( 'error when sign out user: ', error ) )
 	}
 

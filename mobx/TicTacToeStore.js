@@ -5,8 +5,8 @@ export default class TicTacToeStore {
 	//creating initial values for our store values
 	constructor() {
 		this._turn='X';
-		this._size=3;
-		this._squareSize=100;
+		this._size=null;
+		this._squareSize=null;
 		this._boardState=null;
 		this._result=null;
 		this._opponent=null;
