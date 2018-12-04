@@ -17,14 +17,17 @@ class TicTacToe extends React.Component{
         console.log('location',locationX,locationY)
         const y=Math.floor(locationY/gameStore.squareSize);
         const x=Math.floor(locationX/gameStore.squareSize)
-        gameStore.setBoardState(gameStore.turn,y,x);
-        gameStore.isWinner(y,x);
-        console.log(gameStore.boardState)
-        if(gameStore.result===null){
-            gameStore.setTurn(gameStore.turn==='X'?'O':'X')
-            if(gameStore.opponent==='computer'){
-                gameStore.AIAction()
-            }
+        console.log(y,x)
+        if(gameStore.boardState[y][x]===1){
+             gameStore.setBoardState(gameStore.turn,y,x);
+             gameStore.isWinner(y,x);
+             console.log(gameStore.boardState)
+             if(gameStore.result===null){
+                 gameStore.setTurn(gameStore.turn==='X'?'O':'X')
+                 if(gameStore.opponent==='computer'){
+                     gameStore.AIAction()
+                 }
+             }
         }
     }
 
@@ -38,21 +41,22 @@ class TicTacToe extends React.Component{
                         {
                             gameStore.boardState.map((subArr,row) =>
                              subArr.map((el,column)=>{
-                                 console.log(el,row,column)
-                             return(el==='O'?
+                                 {/* console.log(el,row,column) */}
+                            return(el==='O'?
                                 <Circle
                                     key={`${row} ${column}`}
                                     xTranslate={gameStore.getCenter(column)}
                                     yTranslate={gameStore.getCenter(row)}
                                     color='black'
                                 />
-                               :(el==='X'? <Cross
-                                    key={`${row} ${column}`}
-                                    xTranslate={gameStore.getCenter(column)}
-                                    yTranslate={gameStore.getCenter(row)}/>
+                               :(el==='X'
+                                    ? <Cross
+                                        key={`${row} ${column}`}
+                                        xTranslate={gameStore.getCenter(column)}
+                                        yTranslate={gameStore.getCenter(row)}/>
                                     :null)
                             )}))
-                        }
+                        } 
                                        
                     </View>
                  <PromptArea/> 
@@ -65,13 +69,13 @@ class TicTacToe extends React.Component{
 const styles = StyleSheet.create({
     container: {
         justifyContent: 'center',
-        marginTop: '80%',
+        marginTop: '40%',
         alignItems: 'center'
     },
     board: {
         borderWidth: 3,
-        height: 300,
-        width: 300
+        height: 305,
+        width: 305
     }
 })
 

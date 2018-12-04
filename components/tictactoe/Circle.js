@@ -7,13 +7,13 @@ class Circle extends React.Component{
 
     render() {
             const { xTranslate, yTranslate, color } = this.props;
-            const outerCircle=this.props.stores.ticTacToe.squareSize - 20;
-            const innerCircle=this.props.stores.ticTacToe.squareSize - 30;
+            const outerCircle=this.props.stores.ticTacToe.squareSize - 15;
+            const innerCircle=this.props.stores.ticTacToe.squareSize - 25;
         return(
             <View style={[{height:outerCircle, width:outerCircle}, styles.container, {
                 transform: [
-                    {translateX: xTranslate ? xTranslate : 10},
-                    {translateY: yTranslate ? yTranslate : 10},
+                    {translateX: xTranslate },
+                    {translateY: yTranslate },
                 ],
                 backgroundColor: color ? color : '#000'
             }]}>
@@ -33,7 +33,6 @@ const styles = StyleSheet.create({
     },
     innerCircle: {
         backgroundColor: 'black',
-        margin: 15,
         borderRadius: 35
     }
 })

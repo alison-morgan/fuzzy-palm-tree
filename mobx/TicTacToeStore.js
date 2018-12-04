@@ -7,7 +7,7 @@ export default class TicTacToeStore {
 		this._turn='X';
 		this._size=3;
 		this._squareSize=100;
-		this._boardState= [... Array(this.size)].map(el => Array(this.size).fill(1));
+		this._boardState=null;
 		this._result=null;
 		this._opponent=null;
 	}
@@ -66,46 +66,46 @@ export default class TicTacToeStore {
 
 	isWinner(y,x){
 		console.log('bla',this.size,y,x)
-		// let counter=0;
-		// //one diagnol
-		// if(x===y){
-		// 	while(this.boardState[counter][counter]===this.turn){
-		// 		counter++;
-		// 		if(counter===this.size-1){
-		// 			this.setResult(`${this.turn} won`);
-		// 			return 
-		// 		}
-		// 	}
-		// }
-		// counter=0;
-		// //another diagnol
-		// if((x+y)===this.size-1){
-		// 	while(this.boardState[counter][this.size-counter-1]===this.turn){
-		// 		counter++;
-		// 		if(counter===this.size-1){
-		// 			this.setResult(`${this.turn} won`);
-		// 			return 
-		// 		}
-		// 	}
-		// }
-		// counter=0;
-		// //checking row
-		// while(this.boardState[y][this.size-counter-1]===this.turn){
-		// 	counter++;
-		// 	if(counter===this.size-1){
-		// 		this.setResult(`${this.turn} won`);
-		// 		return 
-		// 	}
-		// }
-		// counter=0;
-		// //checking column
-		// while(this.boardState[this.size-counter-1][x]===this.turn){
-		// 	counter++;
-		// 	if(counter===this.size-1){
-		// 		this.setResult(`${this.turn} won`);
-		// 		return 
-		// 	}
-		// }
+		let counter=0;
+		//one diagnol
+		if(x===y){
+			while(counter<this.size && this.boardState[counter][counter]===this.turn){
+				counter++;
+				if(counter===this.size){
+					this.setResult(`${this.turn} won`);
+					return 
+				}
+			}
+		}
+		counter=0;
+		//another diagnol
+		if((x+y)===this.size-1){
+			while(counter<this.size && this.boardState[counter][this.size-counter-1]===this.turn){
+				counter++;
+				if(counter===this.size){
+					this.setResult(`${this.turn} won`);
+					return 
+				}
+			}
+		}
+		counter=0;
+		//checking row
+		while(counter<this.size && this.boardState[y][this.size-counter-1]===this.turn){
+			counter++;
+			if(counter===this.size){
+				this.setResult(`${this.turn} won`);
+				return 
+			}
+		}
+		counter=0;
+		//checking column
+		while(counter<this.size && this.boardState[this.size-counter-1][x]===this.turn){
+			counter++;
+			if(counter===this.size){
+				this.setResult(`${this.turn} won`);
+				return 
+			}
+		}
 		const isTie = !this.boardState.find(subArr=>
 			subArr.includes(1)
 		)
@@ -121,7 +121,7 @@ export default class TicTacToeStore {
 		const y = this.getRandom(0, this.size-1)
 		if(this.boardState[y][x]===1){
 			this.setBoardState(this.turn,y,x)
-			this.setTurn('X')
+			this.setTurn(this.turn==='X'?'O':'X')
 		}else{
 			this.AIAction()
 		}
@@ -131,8 +131,8 @@ export default class TicTacToeStore {
 		return min + Math.floor(Math.random() * (max - min + 1));
 	}
 	getCenter=(num)=>{
-		console.log('getting center',num)
-		return num * this.squareSize+10;
+		console.log('getting center',num,this.squareSize)
+		return num * this.squareSize + 10;
 	}
 	reset = () => {
 		console.log('resetting',this.size);

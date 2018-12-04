@@ -8,13 +8,13 @@ class Cross extends React.Component{
     render(){
         const { xTranslate, yTranslate, color } = this.props;
         
-        const containerSize=this.props.stores.ticTacToe.squareSize - 20;
+        const containerSize=this.props.stores.ticTacToe.squareSize - 10;
         console.log('new cross',xTranslate,yTranslate)
         return(
             <View style={[styles.container,{height:containerSize,width:containerSize}, {
                 transform: [
-                    {translateX: xTranslate ? xTranslate : 10},
-                    {translateY: yTranslate ? yTranslate : 10},
+                    {translateX: xTranslate },
+                    {translateY: yTranslate },
                 ]
             }]}>
                 <View style={[{height: containerSize},styles.line, {
@@ -37,8 +37,8 @@ class Cross extends React.Component{
 const styles = StyleSheet.create({
     container: {
         position: 'absolute',
+        alignItems: 'center',
         justifyContent: 'center',
-        marginLeft: '12%'
     },
     line: {
         position: 'absolute',

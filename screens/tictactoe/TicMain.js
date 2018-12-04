@@ -11,6 +11,12 @@ import { observer,inject } from 'mobx-react';
 
 export default TicMain=inject( "stores" )( observer(
 class TicMain extends Component {
+  setGameInfo=(boardSize,squareSize)=>{
+    const gameStore=this.props.stores.ticTacToe;
+    gameStore.setSize(boardSize);
+    gameStore.setSquareSize(squareSize);
+    gameStore.setBoardState( [... Array(boardSize)].map(el => Array(boardSize).fill(1)));
+  }
 
   render() {
     const gameStore=this.props.stores.ticTacToe
@@ -26,9 +32,9 @@ class TicMain extends Component {
                 <Text style={styles.instructions}>
                   Choose a board size to play!
                 </Text>
-                <Button title='3x3' onPress={() => {gameStore.setSize(3);gameStore.setSquareSize(100)}}>3x3</Button>
-                <Button title='4x4' onPress={() => {gameStore.setSize(4);gameStore.setSquareSize(75)}}>4x4</Button>
-                <Button title='5x5' onPress={() => {gameStore.setSize(5);gameStore.setSquareSize(60)}}>5x5</Button>
+                <Button title='3x3' onPress={() => this.setGameInfo(3,100)}/>
+                <Button title='4x4' onPress={() => this.setGameInfo(4,75)}/>
+                <Button title='5x5' onPress={() => this.setGameInfo(5,60)}/>
               </TouchableOpacity>
               <TouchableOpacity onPress={() => gameStore.setOpponent('computer')}>
                 <Text style={styles.instructions}>
