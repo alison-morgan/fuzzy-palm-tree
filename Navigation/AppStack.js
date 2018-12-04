@@ -2,7 +2,8 @@ import React from 'react';
 import { createStackNavigator, createDrawerNavigator, } from 'react-navigation';
 import { Icon } from 'react-native-elements';
 import Main from '../screens/Main';
-import TicMain from '../screens/tictactoe/TicMain'
+import TicMain from '../screens/tictactoe/TicMain';
+import TicTacToe from '../screens/tictactoe/TicTacToe';
 import MessagesList from '../screens/MessagesList';
 import FriendsList from '../screens/FriendsList';
 import SignOut from '../components/SignOut';
@@ -23,21 +24,22 @@ export default AppStack = createStackNavigator( {
 			}
 		} )
 	},
-	TicTacToe: {
+	TicMain: {
 		screen: TicMain
 	},
+	TicTacToe:{
+		screen: TicTacToe
+	}
 }, {
 	headerMode: 'float',
 	navigationOptions: ( { navigation } ) => ( {
 		headerLeft: DrawerButton( navigation ),
-		headerRight: ( < Icon name = 'home' size = {
-			45
-		}
-		onPress = {
-			() => {
-				navigation.navigate( 'Home' )
-			}
-		} /> ),
+		headerRight: ( 
+			<Icon 
+				name = 'home' 
+				size = {45}
+				onPress = { () => navigation.navigate( 'Home' ) }/> 
+			),
 		headerStyle: {
 			backgroundColor: 'purple'
 		},
@@ -47,26 +49,11 @@ export default AppStack = createStackNavigator( {
 const DrawerButton = ( navigation ) => {
 	return navigation.toggleDrawer
 		? <Icon
-	name = 'menu'
-	size = {
-		45
-	}
-	onPress = {
-		() => {
-			console.log( navigation )
-			navigation.toggleDrawer()
-		}
-	}
-	/>: < Icon
+			name = 'menu'
+			size = {45}
+			onPress = {() => navigation.toggleDrawer() }/>
+		: <Icon
 			name = 'arrow-back'
-			size = {
-				45
-			}
-			onPress = {
-				() => {
-					console.log( navigation )
-					navigation.goBack()
-				}
-			}
-			/ >
+			size = {45}
+			onPress = { () => navigation.goBack() }/>
 }

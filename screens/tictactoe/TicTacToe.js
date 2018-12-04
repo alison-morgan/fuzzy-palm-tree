@@ -11,23 +11,22 @@ export default TicTacToe= inject( "stores" )( observer(
 class TicTacToe extends React.Component{
 
     boardClickHandler(e) {
-        const gameStore=this.props.stores.ticTacToe;
-        console.log(gameStore.opponent)
-        const { locationX, locationY } = e.nativeEvent
-        console.log('location',locationX,locationY)
-        const y=Math.floor(locationY/gameStore.squareSize);
-        const x=Math.floor(locationX/gameStore.squareSize)
-        console.log(y,x)
-        if(gameStore.boardState[y][x]===1){
-             gameStore.setBoardState(gameStore.turn,y,x);
-             gameStore.isWinner(y,x);
-             console.log(gameStore.boardState)
-             if(gameStore.result===null){
-                 gameStore.setTurn(gameStore.turn==='X'?'O':'X')
-                 if(gameStore.opponent==='computer'){
-                     gameStore.AIAction()
-                 }
-             }
+        if(this.props.stores.ticTacToe.result===null){
+            const gameStore=this.props.stores.ticTacToe;
+            const { locationX, locationY } = e.nativeEvent
+            console.log('location',locationX,locationY)
+            const y=Math.floor(locationY/gameStore.squareSize);
+            const x=Math.floor(locationX/gameStore.squareSize)
+            if(gameStore.boardState[y][x]===1){
+                gameStore.setBoardState(gameStore.turn,y,x);
+                gameStore.isWinner(y,x);
+                if(gameStore.result===null){
+                    gameStore.setTurn(gameStore.turn==='X'?'O':'X')
+                    if(gameStore.opponent==='computer'){
+                        gameStore.AIAction()
+                    }
+                }
+            }
         }
     }
 
@@ -40,9 +39,8 @@ class TicTacToe extends React.Component{
                         <Board />
                         {
                             gameStore.boardState.map((subArr,row) =>
-                             subArr.map((el,column)=>{
-                                 {/* console.log(el,row,column) */}
-                            return(el==='O'?
+                             subArr.map((el,column)=>
+                            el==='O'?
                                 <Circle
                                     key={`${row} ${column}`}
                                     xTranslate={gameStore.getCenter(column)}
@@ -55,9 +53,8 @@ class TicTacToe extends React.Component{
                                         xTranslate={gameStore.getCenter(column)}
                                         yTranslate={gameStore.getCenter(row)}/>
                                     :null)
-                            )}))
-                        } 
-                                       
+                            ))
+                        }    
                     </View>
                  <PromptArea/> 
                 </View>
@@ -69,7 +66,7 @@ class TicTacToe extends React.Component{
 const styles = StyleSheet.create({
     container: {
         justifyContent: 'center',
-        marginTop: '40%',
+        marginTop: '30%',
         alignItems: 'center'
     },
     board: {

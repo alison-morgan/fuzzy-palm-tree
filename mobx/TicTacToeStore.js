@@ -17,7 +17,6 @@ export default class TicTacToeStore {
 	}
 
 	setTurn(value){
-		console.log('setting turn',value)
 		this._turn=value
 	}
 
@@ -116,12 +115,14 @@ export default class TicTacToeStore {
 	}
 
 	AIAction=()=> {
-		console.log('AIAction',this.turn)
 		const x = this.getRandom(0, this.size-1);
 		const y = this.getRandom(0, this.size-1)
 		if(this.boardState[y][x]===1){
 			this.setBoardState(this.turn,y,x)
-			this.setTurn(this.turn==='X'?'O':'X')
+			this.isWinner(y,x);
+			if(this.result===null){
+				this.setTurn(this.turn==='X'?'O':'X')
+			}
 		}else{
 			this.AIAction()
 		}
@@ -131,11 +132,9 @@ export default class TicTacToeStore {
 		return min + Math.floor(Math.random() * (max - min + 1));
 	}
 	getCenter=(num)=>{
-		console.log('getting center',num,this.squareSize)
 		return num * this.squareSize + 10;
 	}
 	reset = () => {
-		console.log('resetting',this.size);
 		const cleanBoard=[... Array(this.size)].map(el => Array(this.size).fill(1));
 		this.setResult(null)
 		this.setBoardState(cleanBoard);

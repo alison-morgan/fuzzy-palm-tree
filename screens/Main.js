@@ -12,7 +12,7 @@ const Main=inject("stores")(observer(
 					 {userStore.username}
 					Hi
 				</Text>
-				<TouchableOpacity  onPress={()=>{this.props.navigation.push('TicTacToe')}}><Image
+				<TouchableOpacity  onPress={()=>{this.props.navigation.navigate('TicMain')}}><Image
           source={require('../img/TicTacIcon.png')}
         /></TouchableOpacity>
 			</View> 
