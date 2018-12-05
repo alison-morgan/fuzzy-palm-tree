@@ -206,7 +206,6 @@ export default class Store {
 						}
 						for ( field in data ) {
 							if(field==='InstanceId'){
-								console.log(uid)
 								this[ `set${ field }` ]( currentToken )
 							}else{
 								this[ `set${ field }` ]( data[ field ] )
@@ -237,6 +236,7 @@ export default class Store {
 				firebase.auth().createUserWithEmailAndPassword( this.email, this.password ).then( () => {
 					firebase.messaging().requestPermission().then( () => {
 						firebase.messaging().getToken().then( ( currentToken ) => {
+							this.setInstanceId(currentToken);
 							const uid = firebase.auth().currentUser.uid;
 							this.collectionReference.doc( this.username ).set( {
 								InstanceId: [currentToken],
@@ -246,7 +246,7 @@ export default class Store {
 								IsOnline: true,
 								FriendRequests: [],
 							} ).then( () => {
-								this.getUserInfo(currentToken);
+								this.getUserInfo();
 							} )
 						} ).catch( error => console.log( 'error getting token', error ) )
 					} ).catch( error => console.log( 'error getting permission', error ) )
@@ -255,18 +255,13 @@ export default class Store {
 		} )
 	}
 
-	getUserInfo=(token='')=>{
+	getUserInfo=()=>{
 		let unsubscribe = this.collectionReference.doc( this.username ).onSnapshot( ( doc ) => {
 			const data = doc.data();
 			for ( field in data ) {
 				if(field==='InstanceId'){
-					console.log(token)
-					if(token===''){
-						console.log('I dont know token')
-						this[ `set${ field }` ]( this.instanceId )
-					}else{
-						this[ `set${ field }` ]( token )
-					}
+					console.log('I dont know token')
+					this[ `set${ field }` ]( this.instanceId )
 				}else{
 					this[ `set${ field }` ]( data[ field ] )
 				}
@@ -373,7 +368,6 @@ export default class Store {
 
 
 	signOut = () => {
-		console.log('sign out',this.username,this.instanceId)
 		firebase.auth().signOut().then( () => {
 			console.log('signed out',this.username,this.instanceId);
 			let unsubscribe=this.unsubscriber;
