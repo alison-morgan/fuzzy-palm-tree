@@ -7,6 +7,7 @@ import {
 } from 'react-native';
 import {Button} from 'react-native-elements'
 import { observer,inject } from 'mobx-react';
+import LinearGradient from 'react-native-linear-gradient'
 
 export default TicMain=inject( "stores" )( observer(
 class TicMain extends Component {
@@ -20,42 +21,60 @@ class TicMain extends Component {
   }
 
   render() {
-    const gameStore=this.props.stores.ticTacToe
     console.log(this.props)
     return (
-      <View style={styles.container}>
-            <View>
+      <LinearGradient
+					colors={['#075aaa','#efe9e5']}
+					start={{x:0, y:1}} 
+					end={{x:1.5, y:0}}
+					style={styles.container}>
               <Text style={styles.welcome}>
                 Welcome to the game!
               </Text>
               <TouchableOpacity>
-                <Text style={styles.instructions}>
+                <View style={styles.buttonContainer}>
+                  <Button title='3x3' buttonStyle={styles.buttonStyle} onPress={() => this.setGameInfo(3,100)}/>
+                  <Button title='4x4' buttonStyle={styles.buttonStyle} onPress={() => this.setGameInfo(4,75)}/>
+                  <Button title='5x5' buttonStyle={styles.buttonStyle} onPress={() => this.setGameInfo(5,60)}/>
+                </View>
+              </TouchableOpacity>
+              <Text style={styles.instructions}>
                   Choose a board size to play!
                 </Text>
-                <Button title='3x3' onPress={() => this.setGameInfo(3,100)}/>
-                <Button title='4x4' onPress={() => this.setGameInfo(4,75)}/>
-                <Button title='5x5' onPress={() => this.setGameInfo(5,60)}/>
-              </TouchableOpacity>
-            </View>
-      </View>
+      </LinearGradient>
     )
   }
 }))
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: 'center',
     flex: 1,
-    backgroundColor: '#F5FCFF',
+    alignItems: 'center',
+    justifyContent:'space-evenly',
   },
   welcome: {
-    fontSize: 20,
-    marginTop: 50,
+    fontSize: 30,
+    // marginTop:40,
+    color:'#400000',
+    fontWeight: 'bold',
+    fontStyle:'italic'
   },
   instructions: {
     textAlign: 'center',
-    marginTop: 20,
-    color: 'grey',
-    marginBottom: 5,
+    fontSize:23,
+    // marginTop:40,
+    color:'#400000',
+    fontWeight: 'bold',
+    fontStyle:'italic'
   },
+  buttonContainer:{
+    flexDirection:'row',
+    // margin:60
+  },
+  buttonStyle:{
+    width:100,
+    height:100,
+    backgroundColor:'#01295c',
+    borderRadius:50,
+  }
 })

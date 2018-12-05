@@ -4,28 +4,38 @@ import firebase from 'react-native-firebase';
 import {inject,observer} from 'mobx-react';
 import LinearGradient from 'react-native-linear-gradient';
 
+//Loading screen component
 export default Loading=inject('stores')(observer(
 	class Loading extends React.Component{
 		componentDidMount() {
+			//create variable userStore
 			const userStore=this.props.stores.userStore;
-			console.log(userStore.hasSeenAuthPage,userStore)
+			//listen to changes in authorization
 			firebase.auth().onAuthStateChanged(user => {
-				console.log('inside auth change',user )
+				//if user exists in the system
 				if(user){
+					//check if user seen Login/SignUp pages
 					if(userStore.hasSeenAuthPage){
-						console.log('signed in through auth pages')
+						//user signing in through Login/SignUp page
+						//navigate to AppStack
 						 this.props.navigation.navigate( 'AppStack' );
+					// user is already signed in and try to reopen our app
 					}else{
+						//checking if username was saved in AsyncStorage
 						if(userStore.username!==''){
+							//pull infromation about user from database
 							console.log('grabbing info from async storage')
 							userStore.getUserInfo();
+							//navigate user to the AppStack
 							this.props.navigation.navigate( 'AppStack' )
+						// no information available
 						}else{
+							//sign out user
 							userStore.signOut();
 						}
-					}			
+					}	
+				//if user doesn't exist navigate to AuthStack		
 				}else{
-					console.log('no user will reset')
 					this.props.navigation.navigate( 'AuthStack' );
 				}
 				

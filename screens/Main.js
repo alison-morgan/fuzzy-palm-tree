@@ -5,31 +5,28 @@ import LinearGradient from 'react-native-linear-gradient'
 
 const Main=inject("stores")(observer( 
 	class Main extends React.Component {
-	render(){
-		const userStore=this.props.stores.userStore;
-		console.log(userStore.friends);
-		console.log(userStore.friendsInfo);
-		console.log(userStore.frindRequests);
-		return (
-			<LinearGradient
-				colors={['#091540', '#880D1E']}
-				start={{x:0, y:1}} 
-				end={{x:1.5, y:0}}
-				style={styles.container}>
-					<View > 
-					<TouchableOpacity 
-						style={{height:125, width:100}} 
-						onPress={()=>{this.props.navigation.navigate('TicMain')}}>
-						<View style={styles.iconContainer}>
-							<Image 
-								style={styles.icon}
-								source={require('../img/TicTacIcon.png')}/>
-							<Text style={styles.gameText}>TicTacToe</Text>
-						</View>
-					</TouchableOpacity>
-				</View>
-			</LinearGradient>
-				)}
+		render(){
+			return (
+				<LinearGradient
+					colors={['#091540', '#880D1E']}
+					start={{x:0, y:1}} 
+					end={{x:1.5, y:0}}
+					style={styles.container}>
+						<View > 
+						<TouchableOpacity 
+							style={{height:125, width:100}} 
+							onPress={()=>{this.props.navigation.navigate('TicMain')}}>
+							<View style={styles.iconContainer}>
+								<Image 
+									style={styles.icon}
+									source={require('../img/TicTacIcon.png')}/>
+								<Text style={styles.gameText}>TicTacToe</Text>
+							</View>
+						</TouchableOpacity>
+					</View>
+				</LinearGradient>
+			)
+		}
 	}
 ))
 const styles = StyleSheet.create( {

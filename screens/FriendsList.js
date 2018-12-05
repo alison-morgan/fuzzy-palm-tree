@@ -23,20 +23,20 @@ const FriendsList=inject("stores")(observer(
 					<Text style={styles.headers}>Friend Requests</Text>
 						{
 							Object.keys(userStore.friendRequests).length!==0
-							?<CustomList name='searchResult friendRequests' action='accept/decline' style={{backgroundColor:'#311b92'}}/>
-							:<Text>No friend requests at this time</Text>
+							?<CustomList name='searchResult friendRequests' action='accept/decline'/>
+							:<Text style={styles.text}>No friend requests at this time</Text>
 						}
 					<Text style={styles.headers}>Friends</Text>
 						{
 							Object.keys(userStore.friendsInfo).length!==0
 							?<CustomList name='searchResult friends' action='sendMessage'/>
-							:<Text>You didn't find any friends yet</Text>
+							:<Text style={styles.text}>You didn't find any friends yet</Text>
 						}
 					<Text style={styles.headers}>Explore Users</Text>
 						{
 							Object.keys(userStore.possibleFriends).length!==0
 							?<CustomList name='searchResult possibleFriends' action='friendRequest'/> 
-							:<Text>No possible friends available at this moment</Text>
+							:<Text style={styles.text}>No possible friends available at this moment</Text>
 						}				
 					</View> 
 					</LinearGradient>)
@@ -71,13 +71,11 @@ const FriendsList=inject("stores")(observer(
 ))
 const styles = StyleSheet.create( {
 	container: {
-		flex: 1,
-		// backgroundColor: '#9ac2c9'
+		flex: 1
 	},
 	text:{
 		textAlign:'center',
 		fontSize:15,
-		padding:0,
 		color:'white'
 	},
 	headers:{
@@ -85,7 +83,10 @@ const styles = StyleSheet.create( {
 		marginTop:50,
 		color:'#880D1E',
 		fontWeight: 'bold',
-		fontSize: 20
+		fontSize: 20,
+		textShadowColor:'#311b92', 
+		textShadowRadius: 1, 
+		textShadowOffset: {width: -1, height: 1}
 	}
 } )
 export default FriendsList;

@@ -5,6 +5,7 @@ import Cross from '../../components/tictactoe/Cross';
 import Board from './Board';
 import { observer,inject } from 'mobx-react';
 import PromptArea from './PromptArea';
+import LinearGradient from 'react-native-linear-gradient';
 
 
 export default TicTacToe= inject( "stores" )( observer( 
@@ -33,8 +34,13 @@ class TicTacToe extends React.Component{
     render(){
         const gameStore=this.props.stores.ticTacToe
         return(
+            <LinearGradient
+					colors={['#075aaa','#efe9e5']}
+					start={{x:0, y:1}} 
+					end={{x:1.5, y:0}}
+					style={styles.container}>
             <TouchableOpacity onPress={(e) => this.boardClickHandler(e)}>
-                <View style={styles.container}> 
+                <View > 
                     <View style={styles.board} >
                         <Board />
                         {
@@ -59,14 +65,15 @@ class TicTacToe extends React.Component{
                  <PromptArea/> 
                 </View>
             </TouchableOpacity>
+            </LinearGradient>
         )
     }
 }))
 
 const styles = StyleSheet.create({
     container: {
+        flex:1,
         justifyContent: 'center',
-        marginTop: '30%',
         alignItems: 'center'
     },
     board: {

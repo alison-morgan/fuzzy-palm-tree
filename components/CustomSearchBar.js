@@ -1,40 +1,44 @@
 import React from 'react';
-import { StyleSheet} from 'react-native';
-import { SearchBar} from 'react-native-elements';
+import { StyleSheet, View,TextInput} from 'react-native';
 import { observer,inject } from 'mobx-react';
-import LinearGradient from 'react-native-linear-gradient';
 
+//search bar component
 const CustomSearchBar=inject("stores")(observer( 
 	class CustomSearchBar extends React.Component {
 		render() {
 			const userStore = this.props.stores.userStore;
 		return(
-			<LinearGradient
-						colors={['#091540', '#880D1E']}
-						start={{x:0, y:1}} 
-						end={{x:1.5, y:0}}
-						style={styles.container}>
-        <SearchBar
-            lightTheme
-            round
-            onChangeText={(text)=>{
-                userStore.setFriendSearch(text);
-                userStore.search(this.props.name)}}
-            inputStyle={styles.text}
-            searchIcon={true}
-            placeholder={userStore.placeholders.search}
-        />
-		</LinearGradient>	)
-			
+			<View style={styles.container}>
+			<TextInput
+					style={styles.textInput}
+					autoCapitalize={false}
+					placeholder={userStore.placeholders.search}
+					placeholderTextColor='white'
+					selectionColor='white'
+					inlineImageLeft='search_icon'
+					inlineImagePadding={5}
+					onChangeText={(text)=>{
+						userStore.setFriendSearch(text);
+						userStore.search(this.props.name)}}
+					value={userStore.search}/> 
+			</View>)
 		}
 	}
 ))
 const styles = StyleSheet.create( {
-	container: {
-		flex: 1,
-		height: 14,
+	container:{
+		marginTop: 10,
+		marginLeft:10,
+		marginRight:10
+	},
+	textInput:{
+		fontSize:15,
+		borderRadius: 50,
+		paddingRight:10,
+		color:'white',
 		justifyContent: 'center',
-		alignItems: 'stretch'
+		alignItems: 'center',
+		backgroundColor:'rgba(255,255,255,.1)'
 	}
 } )
 export default CustomSearchBar

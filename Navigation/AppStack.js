@@ -24,6 +24,13 @@ export default AppStack = createStackNavigator( {
 				},
 				SignOut: {
 					screen: SignOut
+				} 
+			},{
+				drawerWidth:200,
+				drawerBackgroundColor:'rgba(9, 21, 64, .5)',
+				contentOptions:{
+					labelStyle:{color:'white',fontSize:17},
+					activeTintColor:'white'
 				}
 			} )
 		},
