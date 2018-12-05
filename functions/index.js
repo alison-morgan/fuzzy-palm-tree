@@ -19,7 +19,7 @@ exports.sendPushNotification = functions.firestore
     var pushToken = prevData.InstanceId[0];
     
     // the payload is what will be delivered to the device(s)
-    let payload = {
+    let payloadFriendReq = {
       notification: {
         title:"Hey there!",
         body:"You have a new friend request!",
@@ -27,6 +27,15 @@ exports.sendPushNotification = functions.firestore
         badge:"1"
      }
     }
+
+    let payloadNewFriend = {
+        notification: {
+          title:"Hey!",
+          body:"New Friends!",
+          sound:"default",
+          badge:"1"
+       }
+      }
 
     //look at the doc that had changes made to it
     return admin.firestore().collection('users').doc(userDoc)
@@ -36,71 +45,28 @@ exports.sendPushNotification = functions.firestore
         if (Object.keys(prevData.FriendRequests) && Object.keys(afterData.FriendRequests)) {
             if (Object.keys(prevData.FriendRequests).length < Object.keys(afterData.FriendRequests).length){
               // sendToDevice can also accept an array of push tokens
-              return admin.messaging().sendToDevice(pushToken, payload);
+              console.log("in friend req")
+              return admin.messaging().sendToDevice(pushToken, payloadFriendReq);
             }
         } else if (Object.keys(afterData.FriendRequests) && Object.keys(prevData.FriendRequests) === undefined) {
             // sendToDevice can also accept an array of push tokens
-            return admin.messaging().sendToDevice(pushToken, payload);
-        }
-          return console.log('no changes to friend requests')
-      });
-});
-
-//sends notification when someone has a friend request accepted
-exports.sendPushNotification = functions.firestore
-  .document("users/{Username}")
-  .onUpdate(snap => {
-    // gets standard JavaScript object from the new write
-    console.log(snap.before.data(), snap.after.data())
-    const prevData = snap.before.data();
-    const afterData = snap.after.data();
-    var userDoc = prevData.Username;
-    var pushToken = prevData.InstanceId[0];
-
-    // const recipient = writeData.recipient;
-    // the payload is what will be delivered to the device(s)
-    let payload = {
-      notification: {
-        title:"Hey!",
-        body:"New Friends!",
-        sound:"default",
-        badge:"1"
-     }
-    }
-    
-    return admin.firestore().collection('users').doc(userDoc)
-      .get()
-      .then(doc => {
+            console.log("in friend req")
+            return admin.messaging().sendToDevice(pushToken, payloadFriendReq);
+        } 
+        //if new Friends have been added (I.e friend request accepted)
         if (prevData.Friends) {
-            if(prevData.Friends.length < afterData.Friends.length) {
-               // sendToDevice can also accept an array of push tokens
-            return admin.messaging().sendToDevice(pushToken, payload);
-            } else {
-              console.log('error')
+          if(prevData.Friends.length < afterData.Friends.length) {
+            // sendToDevice can also accept an array of push tokens
+            console.log("prev data.friends")
+            return admin.messaging().sendToDevice(pushToken, payloadNewFriend);
+          } else {
+            console.log('error')
             }
         } else if (afterData.Friends) {
-          return admin.messaging().sendToDevice(pushToken, payload);
+          console.log("in afterdata.friends")
+          return admin.messaging().sendToDevice(pushToken, payloadNewFriend);
         }
-        return console.log('no added friends')
+          return console.log('no changes to friends')
       });
 });
 
-
-//test function for creating a new User
-exports.createUser = functions.firestore
-    .document('users/{Username}')
-    .onCreate((snap, context) => {
-        console.log(snap, "snap")
-        //gets Javascript object from the new write
-        const newValue = snap.data();
-
-        return console.log(newValue, 'done')
-    });
-
-
-// // Create and Deploy Your First Cloud Functions
-// // https://firebase.google.com/docs/functions/write-firebase-functions
-//
-// exports.helloWorld = functions.https.onRequest((request, response) => {
-//  response.send("Hello from Firebase!");
-// });
