@@ -154,6 +154,10 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-vector-icons')
+    compile project(':react-native-linear-gradient')
+    compile project(':react-native-firebase')
+    compile project(':react-native-android-log')
     implementation project(':react-native-vector-icons')
     implementation project(':react-native-firebase')
   //noinspection GradleDynamicVersion

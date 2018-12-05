@@ -73,8 +73,6 @@ exports.sendPushNotification = functions.firestore
       });
 });
 
-
-
 //test function for creating a new User
 exports.createUser = functions.firestore
     .document('users/{Username}')

@@ -10,8 +10,8 @@ export default Loading=inject('stores')(observer(
 		componentDidMount() {
 			const userStore=this.props.stores.userStore;
 			console.log(userStore.username)
-			// firebase.auth().onAuthStateChanged(user => {
-			// 	if(user){
+			firebase.auth().onAuthStateChanged(user => {
+				if(user){
 			// 		console.log(user)
 			// 		if(userStore.username==='' && this.props.stores.userStore.email!==''){
 			// 			console.log('user exist in the store')
@@ -22,15 +22,15 @@ export default Loading=inject('stores')(observer(
 			// 			userStore.getUserInfo();
 			// 			this.props.navigation.navigate( 'AppStack' );
 			// 		}else{
-			// 			this.props.navigation.navigate( 'AppStack' );
+						this.props.navigation.navigate( 'AppStack' );
 			// 		}
 				
-			// 	}else{
-			// 		userStore.reset();
-			// 		this.props.navigation.navigate( 'AuthStack' );
-			// 	}
+				}else{
+					userStore.reset();
+					this.props.navigation.navigate( 'AuthStack' );
+				}
 				
-			// })
+			})
 		  }
 		render() {
 			return ( <View style={styles.container}>

@@ -51,7 +51,7 @@ const CustomList = inject( "stores" )( observer(
                     containerStyle={{
                         borderRadius: 0,
                         flex: 1,
-                        backgroundColor: 'purple'
+                        backgroundColor: "rgba(92, 99,216, 1)"
                     }}
                     onPress={() => userStore.friendReq( name )}/> ]
         }
@@ -82,7 +82,7 @@ const CustomList = inject( "stores" )( observer(
                             ? {
                                 type: 'font-awesome',
                                 name: 'eye',
-                                color: 'green'
+                                color: '#009624'
                             }
                             : {
                                 type: 'font-awesome',
@@ -104,10 +104,10 @@ const styles = StyleSheet.create( {
         alignItems: 'center'
     },
     list: {
-        backgroundColor: '#99CCFF'
+        backgroundColor:'rgba(255, 255, 255, .50)',
     },
     titleStyle: {
-        color: 'purple',
+        color: 'white',
         fontWeight: 'bold'
     }
 } )

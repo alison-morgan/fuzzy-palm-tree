@@ -1,5 +1,6 @@
 import React from 'react';
-import { StyleSheet, Text, TextInput, View, Button } from 'react-native';
+import { StyleSheet, Text, TextInput, View} from 'react-native';
+import { Button } from 'react-native-elements'
 import {observer,inject} from 'mobx-react';
 
 const SignUp=inject('stores')(observer(
@@ -9,7 +10,7 @@ const SignUp=inject('stores')(observer(
 		const userStore=this.props.stores.userStore;
 		return (
 		  <View style={styles.container}>
-			<Text>Sign Up</Text>
+			<Text style={styles.text}>Sign Up</Text>
 			  <Text style={{ color: 'red' }}>
 				{userStore.errorMessage}
 			  </Text>
@@ -43,7 +44,7 @@ const SignUp=inject('stores')(observer(
 				onChangeText={confirmPassword => userStore.setConfirmPassword(confirmPassword)}
 				value={userStore.confirmPassword}
 			/>
-			<Button title='Sign Up' onPress={() => {
+			<Button buttonStyle={styles.button} title='Sign Up' onPress={() => {
 			  if (userStore.password === null) {
 					userStore.setPlaceholders('password', 'Please enter password');
 			  } else if (userStore.email === null) {
@@ -70,8 +71,9 @@ const SignUp=inject('stores')(observer(
 				}
 			  }
 			}} />
-			<Button title='forgot password'/>
+			<Button buttonStyle={styles.button} title='Forgot password?'/>
 			<Button
+				buttonStyle={styles.button}
 			  title='Already have an account? Login'
 			  onPress={() => this.props.navigation.navigate('Login')}/>
 		  </View>
@@ -80,17 +82,43 @@ const SignUp=inject('stores')(observer(
 	}
 	))
 	const styles = StyleSheet.create({
-	  container: {
+	  // container: {
+		// 	flex: 1,
+		// 	justifyContent: 'center',
+		// 	alignItems: 'center'
+	  // },
+	  // textInput: {
+		// 	height: 40,
+		// 	width: '90%',
+		// 	borderColor: 'gray',
+		// 	borderWidth: 1,
+		// 	marginTop: 8
+		// }
+		container: {
 			flex: 1,
 			justifyContent: 'center',
-			alignItems: 'center'
-	  },
-	  textInput: {
+			alignItems: 'center',
+			backgroundColor: '#311b92'
+		},
+		textInput: {
 			height: 40,
 			width: '90%',
-			borderColor: 'gray',
+			borderColor: 'white',
 			borderWidth: 1,
-			marginTop: 8
+			marginTop: 8,
+			backgroundColor: 'white'
+		},
+		button: {
+			marginTop: 15,
+			borderRadius: 20,
+			backgroundColor: "rgba(92, 99,216, 1)",
+			elevation: 10,
+		},
+		text: {
+			color: "white",
+			fontSize: 25,
+			fontWeight: '400',
+			// fontFamily:'monospace'
 		}
 	})
 	export default SignUp;
