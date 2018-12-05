@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.rnfs.RNFSPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.BV.LinearGradient.LinearGradientPackage;
 import io.invertase.firebase.RNFirebasePackage;
@@ -46,6 +47,7 @@ public class MainApplication extends Application implements ReactApplication {
    protected List<ReactPackage> getPackages() {
      return Arrays.asList(
        new MainReactPackage(),
+            new RNFSPackage(),
             new VectorIconsPackage(),
             new LinearGradientPackage(),
             new RNFirebasePackage(),

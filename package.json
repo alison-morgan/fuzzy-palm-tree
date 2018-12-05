@@ -25,14 +25,14 @@
     "preset": "react-native"
   },
   "dependencies": {
-    "@babel/core": "^7.0.0-0",
+    "@babel/core": "^7.2.0",
     "@babel/plugin-proposal-decorators": "^7.1.6",
     "@babel/runtime": "^7.1.5",
     "@firebase/app-types": "0.x",
     "babel-core": "^6.0.0",
     "babel-plugin-transform-flow-strip-types": "^6.22.0",
     "babel-upgrade": "^0.0.24",
-    "firebase-admin": "^6.2.0",
+    "firebase-admin": "^6.3.0",
     "firebase-tools": "^6.1.2",
     "mobx": "^4.0.0",
     "mobx-react": "^5.4.0",
