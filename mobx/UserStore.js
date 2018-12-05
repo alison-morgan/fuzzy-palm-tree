@@ -1,8 +1,10 @@
 import firebase from 'react-native-firebase';
 //import decorators for mobx
 import { observable, computed, action, decorate } from 'mobx';
-import { AsyncStorage } from 'react-native'
-import { asyncStorageKeys } from './AsyncStorage'
+import { AsyncStorage, Alert} from 'react-native'
+import { asyncStorageKeys } from './AsyncStorage';
+// import admin  from 'firebase-admin';
+// var app = admin.initializeApp();
 
 export default class Store {
 	//creating initial values for our store values
@@ -387,11 +389,23 @@ export default class Store {
 		if(this.email!==''){
 			if(this.validate(this.email)==='Email is Not Correct'){
 				this.setPlaceholders('email', 'Please enter a valid email');
+				console.log('in if reset password')
 			}else{
 				firebase.auth().sendPasswordResetEmail(this.email)
 					.then(function() {
+						let uemail = this.email
+						console.log("in else reset password")
 						// Email sent.
+						Alert.alert(
+							`Sorry you forgot your password. :(`,
+							'An Email Has Been Sent!',
+							[
+								{text: 'OK', onPress: () => console.log('OK Pressed')},
+							],
+							{ cancelable: false }
+						  )
 					}).catch(function(error) {
+						console.log(error)
 						// An error happened.
 					});
 			}

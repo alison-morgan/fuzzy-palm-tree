@@ -103,6 +103,7 @@ const styles = StyleSheet.create( {
 	},
 	text: {
 		textAlign:'center',
+		// fontFamily: 'GreatVibes-Regular',
 		color: "white",
 		fontSize: 25,
 		fontWeight: '400',
