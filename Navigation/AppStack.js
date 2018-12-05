@@ -40,7 +40,7 @@ export default AppStack = createStackNavigator( {
 				<Icon 
 					name = 'home' 
 					size = {45}
-					onPress = { () => {console.log(this);navigation.navigate( 'Home' )} }/> 
+					onPress = { () => navigation.navigate( 'Home' )}/> 
 				),
 			headerStyle: {
 				backgroundColor: 'purple'

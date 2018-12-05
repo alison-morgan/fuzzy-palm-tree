@@ -8,11 +8,12 @@ export default class Store {
 	//creating initial values for our store values
 	constructor() {
 		this._collectionReference = firebase.firestore().collection( 'users' );
-
-		AsyncStorage.getItem(asyncStorageKeys.USERNAME)
-			.then(username => {console.log('username',username);this._username = username ? username : ''})
+		AsyncStorage.getItem('USERNAME').then(action((data)=>console.log('data',data)))
+		this._username='';
 		this._email = '';
 		this._password = '';
+		this._unsubscriber=null;
+		this._hasSeenAuthPage=false;
 		this._confirmPassword = '';
 		this._errorMessage = '';
 		this._uid = '';
@@ -31,6 +32,20 @@ export default class Store {
 		email: 'Email',
 		search:'Type in username'
 		}
+	}
+	get unsubscriber(){
+		return this._unsubscriber
+	}
+	setUnsubscriber(value){
+		this._unsubscriber=value
+	}
+
+	get hasSeenAuthPage(){
+		return this._hasSeenAuthPage
+	}
+
+	setHasSeenAuthPage(value){
+		this._hasSeenAuthPage=value
 	}
 
 	//getter/computed for friendRequests
@@ -182,17 +197,26 @@ export default class Store {
 					console.log( 'token' )
 					const uid = firebase.auth().currentUser.uid
 					console.log( 'uid  ', uid )
-					this.collectionReference.where( "Uid", "==", uid ).onSnapshot( ( querySnapshot ) => {
+					let unsubscribe = this.collectionReference.where( "Uid", "==", uid ).onSnapshot( ( querySnapshot ) => {
 						console.log( 'found document' )
 						const data = querySnapshot._docs[ 0 ].data();
-						this.collectionReference.doc( data.Username ).update( { 'InstanceId': firebase.firestore.FieldValue.arrayUnion( currentToken ), 'IsOnline': true } )
+						if(this.uid===''){
+							console.log('making user online')
+							this.collectionReference.doc( data.Username ).update( { 'InstanceId': firebase.firestore.FieldValue.arrayUnion( currentToken ), 'IsOnline': true } )
+						}
 						for ( field in data ) {
-							this[ `set${ field }` ]( data[ field ] )
+							if(field==='InstanceId'){
+								console.log(uid)
+								this[ `set${ field }` ]( currentToken )
+							}else{
+								this[ `set${ field }` ]( data[ field ] )
+							}
 						}
 						this.getAllUsersInfo()
 					}, error => {
 						console.log( 'error getting document: ', error )
 					} )
+					this.setUnsubscriber(unsubscribe)
 				} ).catch( error => console.log( 'An error occurred while retrieving token. ', error ) )
 			} ).catch( error => console.log( 'Unable to get permission to notify.', error ) )
 		} ).catch( error => this.setErrorMessage( error.message ) )
@@ -211,7 +235,6 @@ export default class Store {
 			} else {
 				//authorize user in the system
 				firebase.auth().createUserWithEmailAndPassword( this.email, this.password ).then( () => {
-					console.log( 'signed up' )
 					firebase.messaging().requestPermission().then( () => {
 						firebase.messaging().getToken().then( ( currentToken ) => {
 							const uid = firebase.auth().currentUser.uid;
@@ -223,7 +246,7 @@ export default class Store {
 								IsOnline: true,
 								FriendRequests: [],
 							} ).then( () => {
-								this.getUserInfo();
+								this.getUserInfo(currentToken);
 							} )
 						} ).catch( error => console.log( 'error getting token', error ) )
 					} ).catch( error => console.log( 'error getting permission', error ) )
@@ -232,38 +255,30 @@ export default class Store {
 		} )
 	}
 
-	getUserInfo=()=>{
-		this.collectionReference.doc( this.username ).onSnapshot( ( doc ) => {
+	getUserInfo=(token='')=>{
+		let unsubscribe = this.collectionReference.doc( this.username ).onSnapshot( ( doc ) => {
 			const data = doc.data();
 			for ( field in data ) {
-				this[ `set${ field }` ]( data[ field ] )
+				if(field==='InstanceId'){
+					console.log(token)
+					if(token===''){
+						console.log('I dont know token')
+					}else{
+						this[ `set${ field }` ]( token )
+					}
+				}else{
+					this[ `set${ field }` ]( data[ field ] )
+				}
 			}			
 			this.getAllUsersInfo()	
 		}, error => {
 			console.log( 'error getting document: ', error )
 		} )
+		this.setUnsubscriber(unsubscribe)
 	}
 
 	getAllUsersInfo = () => {
-		console.log( 'gettingAllUsers', )
 		this.collectionReference.onSnapshot( querySnapshot => {
-		// 	const users=querySnapshot.reduce( (users,doc) => {
-		// 		const user = doc.data();
-		// 		if(user.Username===this.username){
-		// 			return
-		// 		}else if(this.friends.indexOf(user.Username)!==-1){
-		// 			users.FriendsInfo[user.Username]={ username: user.Username, isOnline: user.IsOnline, instanceId: user.InstanceId};
-		// 		}else if(this.friendRequests.hasOwnProperty(user.Username)){
-		// 			users.FriendRequests[user.Username]={ username: user.Username, isOnline: user.IsOnline}
-		// 		}else{
-		// 			users.PossibleFriends[user.Username] = { username: user.Username, isOnline: user.IsOnline, instanceId: user.InstanceId, friends: user.Friends }
-		// 		}
-		// 		return users
-		// 	}, {
-		// 	FriendsInfo:{},
-		// 	PossibleFriends:{},
-		// 	FriendRequests:{}}
-		//    )
 		   const users={
 			FriendsInfo:{},
 			PossibleFriends:{},
@@ -328,7 +343,7 @@ export default class Store {
 		})
 	  }
 	
-	  acceptReq = (friend) => {
+	acceptReq = (friend) => {
 		  console.log('accepting')
 		this.collectionReference.doc(friend).set({Friends:[this.username]}, { merge: true })
 		.then(() => {
@@ -353,21 +368,28 @@ export default class Store {
 		.catch((err) => {
 		  console.log(err)
 		})
-	  }
+	}
+
 
 	signOut = () => {
+		console.log('sign out',this.username,this.instanceId)
 		firebase.auth().signOut().then( () => {
+			console.log('signed out',this.username,this.instanceId);
+			let unsubscribe=this.unsubscriber;
 			unsubscribe();
-			if(this.username){
-				this.collectionReference.doc( this.username ).update( {
-					'InstanceId': firebase.firestore.FieldValue.arrayRemove( this.instanceId[ 0 ] ),
-					'IsOnline': false
-				} ).catch( error => console.log( 'failed to update', error ) )
-			}
+			this.collectionReference.doc( this.username ).update( {
+				'InstanceId': firebase.firestore.FieldValue.arrayRemove( this.instanceId ),
+				'IsOnline': false
+			}).then(()=>{
+				this.reset();
+				console.log('updated')
+			})
 		} ).catch( error => console.log( 'error when sign out user: ', error ) )
 	}
 
 	reset = () => {
+		console.log('resetting')
+		this.setHasSeenAuthPage(false)
 		this.setEmail( '' );
 		this.setPassword( '' );
 		this.setConfirmPassword( '' );
@@ -379,6 +401,7 @@ export default class Store {
 		this.setUid( '' );
 		this.setIsOnline( '' );
 		this.setInstanceId( '' );
+		this.setUnsubscriber(null);
 		this.setFriendRequests({});
 		this.setFriendsInfo({});
 		this.setPossibleFriends({})
@@ -392,7 +415,7 @@ decorate( Store, {
 	_confirmPassword: observable,
 	_username: observable,
 	_errorMessage: observable,
-	_isAuthorized: observable,
+	_hasSeenAuthPage: observable,
 	_friends: observable,
 	_friendsInfo: observable,
 	_possibleFriends: observable,
@@ -403,6 +426,7 @@ decorate( Store, {
 	_isOnline: observable,
 	_placeholders: observable,
 	_instanceId: observable,
+	_unsubscriber:observable,
 	collectionReference: computed,
 	isOnline: computed,
 	setIsOnline: action,
@@ -434,4 +458,8 @@ decorate( Store, {
 	setSearchResult: action,
 	friendRequests: computed,
 	setFriendRequests: action,
+	hasSeenAuthPage:computed,
+	setHasSeenAuthPage:action,
+	unsubscriber:computed,
+	setUnsubscriber:action
 } )

@@ -64,7 +64,6 @@ export default class TicTacToeStore {
 	}
 
 	isWinner(y,x){
-		console.log('bla',this.size,y,x)
 		let counter=0;
 		//one diagnol
 		if(x===y){

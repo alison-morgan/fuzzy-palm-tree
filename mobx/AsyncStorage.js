@@ -1,6 +1,6 @@
 import { AsyncStorage } from "react-native";
 
-const USERNAME = 'ol';
+const USERNAME = 'USERNAME';
 
 
 export const asyncStorageKeys = {

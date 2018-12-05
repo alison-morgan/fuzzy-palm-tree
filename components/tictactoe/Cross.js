@@ -7,9 +7,7 @@ class Cross extends React.Component{
 
     render(){
         const { xTranslate, yTranslate, color } = this.props;
-        
         const containerSize=this.props.stores.ticTacToe.squareSize - 10;
-        console.log('new cross',xTranslate,yTranslate)
         return(
             <View style={[styles.container,{height:containerSize,width:containerSize}, {
                 transform: [

@@ -11,8 +11,12 @@ import {observer,inject} from 'mobx-react';
 
 const Login=inject('stores')(observer(
 	class Login extends React.Component{
+		componentDidMount(){
+			this.props.stores.userStore.setHasSeenAuthPage(true)
+		}
 	render(){
 	const userStore=this.props.stores.userStore;
+	console.log('something',userStore)
 	return ( <View style={styles.container}>
 
 		<Text>Login</Text>
@@ -46,7 +50,7 @@ const Login=inject('stores')(observer(
 					} else if ( userStore.email ) {
 						if ( userStore.validate( userStore.email ) === 'Email is Not Correct' ) {
 							userStore.setPlaceholders('email', 'Please enter a valid email');
-							userStore.setEmail(null)
+							userStore.setEmail(null);
 						} else {
 							userStore.handleLogin();
 						}

@@ -4,7 +4,9 @@ import {observer,inject} from 'mobx-react';
 
 const SignUp=inject('stores')(observer(
  class SignUp extends React.Component {
-
+		componentDidMount(){
+			this.props.stores.userStore.setHasSeenAuthPage(true)
+		}
 	render() {
 		const userStore=this.props.stores.userStore;
 		return (

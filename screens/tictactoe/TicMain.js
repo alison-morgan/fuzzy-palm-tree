@@ -14,6 +14,7 @@ class TicMain extends Component {
     const gameStore=this.props.stores.ticTacToe;
     gameStore.setSize(boardSize);
     gameStore.setSquareSize(squareSize);
+    gameStore.setResult(null);
     gameStore.setBoardState( [... Array(boardSize)].map(el => Array(boardSize).fill(1)));
   }
 

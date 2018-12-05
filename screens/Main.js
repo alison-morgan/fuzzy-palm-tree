@@ -8,7 +8,7 @@ const Main=inject("stores")(observer(
 		const userStore=this.props.stores.userStore;
 		console.log(userStore)
 		return ( <View style={styles.container}>
-					<TouchableOpacity  
+					<TouchableOpacity  style={{height:125, width:100}}
 						onPress={()=>{this.props.navigation.navigate('TicMain')}}>
 						<View style={styles.iconContainer}>
 							<Image 
@@ -24,7 +24,6 @@ const Main=inject("stores")(observer(
 const styles = StyleSheet.create( {
 	container: {
 		flex: 1,
-		paddingTop: 60,
 	},
 	iconContainer:{
 		flex: 1,
