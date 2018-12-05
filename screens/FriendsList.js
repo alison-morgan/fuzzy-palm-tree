@@ -2,7 +2,8 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { observer,inject } from 'mobx-react';
 import CustomList from '../components/CustomList';
-import CustomSearchBar from '../components/CustomSearchBar'
+import CustomSearchBar from '../components/CustomSearchBar';
+import LinearGradient from 'react-native-linear-gradient';
 
 const FriendsList=inject("stores")(observer(
     class FriendsList extends React.Component {
@@ -12,12 +13,17 @@ const FriendsList=inject("stores")(observer(
 			console.log(userStore)
 			if(userStore.friendSearch && userStore.searchResult){
 				return(
-					<View style={styles.container}>
-					<CustomSearchBar name='friends'/>
+					<LinearGradient
+						colors={['#091540', '#880D1E']}
+						start={{x:0, y:1}} 
+						end={{x:1.5, y:0}}
+						style={styles.container}>
+					<View >
+					<CustomSearchBar containerStyle={{backgroundColor: '#311b92'}} name='friends'/>
 					<Text style={styles.headers}>Friend Requests</Text>
 						{
 							Object.keys(userStore.friendRequests).length!==0
-							?<CustomList name='searchResult friendRequests' action='accept/decline'/>
+							?<CustomList name='searchResult friendRequests' action='accept/decline' style={{backgroundColor:'#311b92'}}/>
 							:<Text>No friend requests at this time</Text>
 						}
 					<Text style={styles.headers}>Friends</Text>
@@ -32,25 +38,33 @@ const FriendsList=inject("stores")(observer(
 							?<CustomList name='searchResult possibleFriends' action='friendRequest'/> 
 							:<Text>No possible friends available at this moment</Text>
 						}				
-					</View> )
+					</View> 
+					</LinearGradient>)
 			}else{ 
-				return ( <View style={styles.container}>
-					<CustomSearchBar name='friends'/>
+				return ( 
+					<LinearGradient
+						colors={['#091540', '#880D1E']}
+						start={{x:0, y:1}} 
+						end={{x:1.5, y:0}}
+						style={styles.container}>
+					<View >
+					<CustomSearchBar style={{backgroundColor: '#311b92'}} name='friends'/>
 				<Text style={styles.headers}>Friend Requests</Text>
 				{Object.keys(userStore.friendRequests).length!==0
 				?<CustomList name='friendRequests' action='accept/decline'/>
-				:<Text>No friend requests at this time</Text>}
+				:<Text style={styles.text}>No friend requests at this time</Text>}
 
 				<Text style={styles.headers}>Friends</Text>
 				{Object.keys(userStore.friendsInfo).length!==0
 				?<CustomList name='friendsInfo' action='sendMessage'/>
-				:<Text>You didn't find any friends yet</Text>}
+				:<Text style={styles.text}>You didn't find any friends yet</Text>}
 
 				<Text style={styles.headers}>Explore Users</Text>
 				{Object.keys(userStore.possibleFriends).length!==0
 				?<CustomList name='possibleFriends' action='friendRequest'/> 
-				:<Text>No possible friends available at this moment</Text>}				
-				</View> )
+				:<Text style={styles.text}>No possible friends available at this moment</Text>}				
+				</View>
+				</LinearGradient> )
 			}
 		}
 	}
@@ -58,15 +72,20 @@ const FriendsList=inject("stores")(observer(
 const styles = StyleSheet.create( {
 	container: {
 		flex: 1,
+		// backgroundColor: '#9ac2c9'
 	},
 	text:{
-		justifyContent: 'center',
-		fontSize:10,
-		padding:0
+		textAlign:'center',
+		fontSize:15,
+		padding:0,
+		color:'white'
 	},
 	headers:{
-		color: 'purple',
-		fontWeight: 'bold'
+		textAlign:'center',
+		marginTop:50,
+		color:'#880D1E',
+		fontWeight: 'bold',
+		fontSize: 20
 	}
 } )
 export default FriendsList;

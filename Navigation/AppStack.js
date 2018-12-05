@@ -40,10 +40,11 @@ export default AppStack = createStackNavigator( {
 				<Icon 
 					name = 'home' 
 					size = {45}
+					color = '#880D1E'
 					onPress = { () => navigation.navigate( 'Home' )}/> 
 				),
 			headerStyle: {
-				backgroundColor: 'purple'
+				backgroundColor: '#091540'
 			},
 			headerTintColor: 'white',
 		} )
@@ -53,9 +54,11 @@ const DrawerButton = ( navigation ) => {
 		? <Icon
 			name = 'menu'
 			size = {45}
+			color = '#880D1E'
 			onPress = {() => navigation.toggleDrawer() }/>
 		: <Icon
 			name = 'arrow-back'
 			size = {45}
+			color = '#880D1E'
 			onPress = { () => navigation.goBack() }/>
 }
