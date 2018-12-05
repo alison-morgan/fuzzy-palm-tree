@@ -4,10 +4,12 @@ import { Icon } from 'react-native-elements';
 import Main from '../screens/Main';
 import TicMain from '../screens/tictactoe/TicMain';
 import TicTacToe from '../screens/tictactoe/TicTacToe';
+import TTTSelectOpponent from '../screens/tictactoe/TTTSelectOpponent'
 import MessagesList from '../screens/MessagesList';
 import FriendsList from '../screens/FriendsList';
-import SignOut from '../components/SignOut';
+import SignOut from '../screens/SignOut';
 
+//stack navigator for authorized users
 export default AppStack = createStackNavigator( {
 		DrawerStack: {
 			screen: createDrawerNavigator( {
@@ -30,11 +32,13 @@ export default AppStack = createStackNavigator( {
 		},
 		TicTacToe:{
 			screen: TicTacToe
+		},
+		TTTSelectOpponent:{
+			screen: TTTSelectOpponent
 		}
 	}, {
 		headerMode: 'float',
 		navigationOptions: ( { navigation } ) => ( {
-			title: `Hello, `,
 			headerLeft: DrawerButton( navigation ),
 			headerRight: ( 
 				<Icon 
@@ -45,10 +49,11 @@ export default AppStack = createStackNavigator( {
 				),
 			headerStyle: {
 				backgroundColor: '#091540'
-			},
-			headerTintColor: 'white',
+			}
 		} )
 } )
+
+//buttons for the header
 const DrawerButton = ( navigation ) => {
 	return navigation.toggleDrawer
 		? <Icon

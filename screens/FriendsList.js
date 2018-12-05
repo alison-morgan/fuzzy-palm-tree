@@ -19,7 +19,7 @@ const FriendsList=inject("stores")(observer(
 						end={{x:1.5, y:0}}
 						style={styles.container}>
 					<View >
-					<CustomSearchBar containerStyle={{backgroundColor: '#311b92'}} name='friends'/>
+					<CustomSearchBar name='friends'/>
 					<Text style={styles.headers}>Friend Requests</Text>
 						{
 							Object.keys(userStore.friendRequests).length!==0

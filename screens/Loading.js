@@ -1,7 +1,8 @@
 import React from 'react';
-import { View, Text, ActivityIndicator, StyleSheet, } from 'react-native';
+import { Text, ActivityIndicator, StyleSheet, } from 'react-native';
 import firebase from 'react-native-firebase';
 import {inject,observer} from 'mobx-react';
+import LinearGradient from 'react-native-linear-gradient';
 
 export default Loading=inject('stores')(observer(
 	class Loading extends React.Component{
@@ -31,17 +32,27 @@ export default Loading=inject('stores')(observer(
 			})
 		  }
 		render() {
-			return ( <View style={styles.container}>
-				<Text>Loading</Text>
-				<ActivityIndicator size="large"/>
-			</View> )
+			return ( 
+			<LinearGradient
+				colors={['#880D1E', '#311b92']}
+				start={{x:0, y:1}} 
+				end={{x:1.5, y:0}}
+				style={styles.container}>
+					<Text style={styles.text}>Loading...</Text>
+					<ActivityIndicator size='large' color = 'white'/>
+				</LinearGradient> )
 		}	}
 ))
 const styles = StyleSheet.create( {
 	container: {
 		flex: 1,
 		justifyContent: 'center',
-		alignItems: 'center',
-		backgroundColor: '#311b92'
+		alignItems: 'center'
+	},
+	text:{
+		color:'white',
+		fontSize: 15,
+		fontWeight: '400',
 	}
+
 } )

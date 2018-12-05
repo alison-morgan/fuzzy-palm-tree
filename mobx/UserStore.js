@@ -194,7 +194,7 @@ export default class Store {
 			firebase.messaging().requestPermission().then( () => {
 				console.log( 'permission' )
 				firebase.messaging().getToken().then( ( currentToken ) => {
-					console.log( 'token' )
+					console.log( 'token' ,firebase.auth())
 					const uid = firebase.auth().currentUser.uid
 					console.log( 'uid  ', uid )
 					let unsubscribe = this.collectionReference.where( "Uid", "==", uid ).onSnapshot( ( querySnapshot ) => {
@@ -220,6 +220,7 @@ export default class Store {
 			} ).catch( error => console.log( 'Unable to get permission to notify.', error ) )
 		} ).catch( error => this.setErrorMessage( error.message ) )
 	}
+
 	handleSignUp = () => {
 		console.log( 'handleSignUp' )
 		// check if user with entered username already exist in the
@@ -380,6 +381,24 @@ export default class Store {
 				console.log('updated')
 			})
 		} ).catch( error => console.log( 'error when sign out user: ', error ) )
+	}
+
+	resetPassword=()=>{
+		if(this.email!==''){
+			if(this.validate(this.email)==='Email is Not Correct'){
+				this.setPlaceholders('email', 'Please enter a valid email');
+			}else{
+				firebase.auth().sendPasswordResetEmail(this.email)
+					.then(function() {
+						// Email sent.
+					}).catch(function(error) {
+						// An error happened.
+					});
+			}
+		}else{
+			this.setPlaceholders('email', 'Please enter an email');
+		}
+		
 	}
 
 	reset = () => {

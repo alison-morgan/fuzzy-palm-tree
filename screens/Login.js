@@ -8,15 +8,13 @@ import {
 } from 'react-native';
 import { Button } from 'react-native-elements';
 import { observer,inject } from 'mobx-react';
-import LinearGradient from 'react-native-linear-gradient'
+import LinearGradient from 'react-native-linear-gradient';
 
 const Login=inject('stores')(observer(
 	class Login extends React.Component{
-		componentDidMount(){
-			this.props.stores.userStore.setHasSeenAuthPage(true)
-		}
 	render(){
 	const userStore=this.props.stores.userStore;
+	userStore.setHasSeenAuthPage(true)
 	return ( 
 		<LinearGradient
 				colors={['#880D1E', '#311b92']}
@@ -64,7 +62,7 @@ const Login=inject('stores')(observer(
 							}
 						}
 					}}/>
-				<Button buttonStyle={styles.button} title='Forgot Password?'/>
+				<Button buttonStyle={styles.button} title='Forgot Password?' onPress={()=>userStore.resetPassword()}/>
 				</View>
 				<Button
 					buttonStyle={styles.button}

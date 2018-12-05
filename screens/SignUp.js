@@ -6,11 +6,9 @@ import LinearGradient from 'react-native-linear-gradient'
 
 const SignUp=inject('stores')(observer(
  class SignUp extends React.Component {
-		componentDidMount(){
-			this.props.stores.userStore.setHasSeenAuthPage(true)
-		}
 	render() {
 		const userStore=this.props.stores.userStore;
+		userStore.setHasSeenAuthPage(true)
 		return (
 			<LinearGradient
 				colors={['#880D1E', '#311b92']}

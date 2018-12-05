@@ -7,7 +7,9 @@ const Main=inject("stores")(observer(
 	class Main extends React.Component {
 	render(){
 		const userStore=this.props.stores.userStore;
-		console.log(userStore)
+		console.log(userStore.friends);
+		console.log(userStore.friendsInfo);
+		console.log(userStore.frindRequests);
 		return (
 			<LinearGradient
 				colors={['#091540', '#880D1E']}

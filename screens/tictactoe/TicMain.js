@@ -16,6 +16,7 @@ class TicMain extends Component {
     gameStore.setSquareSize(squareSize);
     gameStore.setResult(null);
     gameStore.setBoardState( [... Array(boardSize)].map(el => Array(boardSize).fill(1)));
+    this.props.navigation.navigate('TTTSelectOpponent')
   }
 
   render() {
@@ -34,22 +35,6 @@ class TicMain extends Component {
                 <Button title='3x3' onPress={() => this.setGameInfo(3,100)}/>
                 <Button title='4x4' onPress={() => this.setGameInfo(4,75)}/>
                 <Button title='5x5' onPress={() => this.setGameInfo(5,60)}/>
-              </TouchableOpacity>
-              <TouchableOpacity 
-                  onPress={() => { 
-                  gameStore.setOpponent('computer');
-                  this.props.navigation.navigate('TicTacToe')}}>
-                <Text style={styles.instructions}>
-                  Touch here to play the computer!
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity 
-                  onPress={() => { 
-                  gameStore.setOpponent('friend');
-                  this.props.navigation.navigate('TicTacToe')}}>
-                <Text style={styles.instructions}>
-                  Touch here to play a friend!
-                </Text>
               </TouchableOpacity>
             </View>
       </View>
