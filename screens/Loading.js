@@ -14,19 +14,17 @@ export default Loading=inject('stores')(observer(
 					if(userStore.hasSeenAuthPage){
 						console.log('signed in through auth pages')
 						 this.props.navigation.navigate( 'AppStack' );
-					// }else{
-					// 	if(userStore.username && userStore.username!==''){
-					// 		console.log('grabbing info from async storage')
-					// 		userStore.getUserInfo();
-					// 		this.props.navigation.navigate( 'AppStack' )
-					// 	}else{
-					// 		userStore.signOut();
-					// 	}
-						
+					}else{
+						if(userStore.username!==''){
+							console.log('grabbing info from async storage')
+							userStore.getUserInfo();
+							this.props.navigation.navigate( 'AppStack' )
+						}else{
+							userStore.signOut();
+						}
 					}			
 				}else{
 					console.log('no user will reset')
-
 					this.props.navigation.navigate( 'AuthStack' );
 				}
 				

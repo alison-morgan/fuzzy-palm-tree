@@ -8,8 +8,7 @@ export default class Store {
 	//creating initial values for our store values
 	constructor() {
 		this._collectionReference = firebase.firestore().collection( 'users' );
-		AsyncStorage.getItem('USERNAME').then(action((data)=>console.log('data',data)))
-		this._username='';
+		AsyncStorage.getItem('USERNAME').then(action(username=>{this._username=username?username:''}))
 		this._email = '';
 		this._password = '';
 		this._unsubscriber=null;
@@ -18,7 +17,7 @@ export default class Store {
 		this._errorMessage = '';
 		this._uid = '';
 		this._isOnline = '';
-		this._instanceId = '';
+		AsyncStorage.getItem('INSTANCE_ID').then(action(instanceId=>{this._instanceId=instanceId?instanceId:''}))
 		this._friends = [];
 		this._friendsInfo={};
 		this._possibleFriends={};
@@ -176,7 +175,8 @@ export default class Store {
 	}
 
 	setInstanceId( value ) {
-		this._instanceId = value
+		this._instanceId = value;
+		AsyncStorage.setItem(asyncStorageKeys.INSTANCE_ID, value)
 	}
 
 	validate = ( text ) => {
@@ -263,6 +263,7 @@ export default class Store {
 					console.log(token)
 					if(token===''){
 						console.log('I dont know token')
+						this[ `set${ field }` ]( this.instanceId )
 					}else{
 						this[ `set${ field }` ]( token )
 					}
