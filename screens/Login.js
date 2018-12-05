@@ -20,7 +20,7 @@ const Login=inject('stores')(observer(
 				start={{x:0, y:1}} 
 				end={{x:1.5, y:0}}
 				style={styles.container}>
-			<View > 
+			<View> 
 				<Text style={styles.text}>Login</Text>
 					<Text style={{color: 'red'}}>
 						{userStore.errorMessage}
@@ -38,7 +38,7 @@ const Login=inject('stores')(observer(
 					placeholder={userStore.placeholders.password}
 					onChangeText={password => userStore.setPassword(password)}
 					value={userStore.password}/>
-					<View style={{flexDirection:'row', alignItems:'stretch'}}>
+					<View style={{flexDirection:'row'}}>
 				<Button
 					buttonStyle={styles.button}
 					title='Login'
@@ -77,10 +77,9 @@ const styles = StyleSheet.create( {
 		justifyContent: 'center',
 		padding: 13,
 		alignItems: 'stretch',
-		// backgroundColor: '#311b92'
 	},
 	textInput: {
-		margin: 10,
+		margin: 17,
 		height: 40,
 		width: '90%',
 		borderColor: 'white',
@@ -88,20 +87,24 @@ const styles = StyleSheet.create( {
 		marginTop: 8,
 		backgroundColor: 'white',
 		borderRadius: 15,
+		justifyContent: 'center',
+		alignItems: 'center',
 	},
 	button: {
 		marginTop: 15,
 		borderRadius: 20,
 		backgroundColor: "rgba(92, 99, 216, 1)",
 		elevation: 10,
-		alignItems: 'center',
+    	flexDirection:'row',
+    	alignItems:'center',
+		justifyContent:'center',
+		margin: 17
 	},
 	text: {
 		textAlign:'center',
 		color: "white",
 		fontSize: 25,
 		fontWeight: '400',
-		// fontFamily:'monospace'
 	}
 } )
 export default Login

@@ -104,7 +104,10 @@ const styles = StyleSheet.create( {
         alignItems: 'center'
     },
     list: {
-        backgroundColor:'rgba(255, 255, 255, .50)',
+        backgroundColor:'rgba(255, 255, 255, .10)',
+        borderRadius:50,
+        margin: 5,
+        
     },
     titleStyle: {
         color: 'white',

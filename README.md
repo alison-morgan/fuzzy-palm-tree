@@ -4,7 +4,8 @@
 
 - 1.1) `git clone https://github.com/alison-morgan/fuzzy-palm-tree`
 - 1.2) `cd fuzzy-palm-tree` - cd into your newly created project directory.
-- 1.3) Install NPM packages with your package manager of choice - i.e run `yarn install`
+- 1.3) Install NPM packages with your package manager of choice - i.e run `yarn install`.
+- 1.4) `cd functions` run `yarn install`
 
 #### 2) Rename Project
 
