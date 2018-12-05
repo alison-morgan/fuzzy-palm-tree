@@ -4,7 +4,7 @@ import { Icon } from 'react-native-elements';
 import Main from '../screens/Main';
 import TicMain from '../screens/tictactoe/TicMain';
 import TicTacToe from '../screens/tictactoe/TicTacToe';
-import TTTSelectOpponent from '../screens/tictactoe/TTTSelectOpponent'
+import TTTSelectOpponent from '../screens/tictactoe/TTTSelectOpponent';
 import MessagesList from '../screens/MessagesList';
 import FriendsList from '../screens/FriendsList';
 import SignOut from '../screens/SignOut';

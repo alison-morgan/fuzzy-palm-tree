@@ -1,8 +1,9 @@
 import React from 'react';
 import { StyleSheet, Text,View,TouchableOpacity,Image } from 'react-native';
 import {observer,inject} from 'mobx-react';
-import LinearGradient from 'react-native-linear-gradient'
+import LinearGradient from 'react-native-linear-gradient';
 
+//Main screen of our app with mini-games icons
 const Main=inject("stores")(observer( 
 	class Main extends React.Component {
 		render(){

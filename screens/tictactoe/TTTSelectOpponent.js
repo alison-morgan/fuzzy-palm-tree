@@ -11,6 +11,10 @@ export default TTTSelectOpponent=inject( "stores" )( observer(
         start=(opponent)=>{
             //set opponent value in the game store
             this.props.stores.ticTacToe.setOpponent(opponent);
+             //setting game outcome to null
+            gameStore.setResult(null);
+            //creating new board array to keep of the game
+            gameStore.setBoardState( [... Array(boardSize)].map(el => Array(boardSize).fill(1)));
             //navigate user to the game
             this.props.navigation.navigate('TicTacToe')
         }
