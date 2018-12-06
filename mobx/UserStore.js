@@ -425,19 +425,8 @@ export default class Store {
 		})
 		.then(() => {
 			//add new friend in user doc to friend array
-		  this.collectionReference.doc(this.username).update({Friends:firebase.firestore.FieldValue.arrayUnion( friend )})
+		  this.collectionReference.doc(this.username).update({Friends: firebase.firestore.FieldValue.arrayUnion( friend )})
 		  console.log("added new friend to user doc")
-		})
-		.then(() => {
-			//look at user doc and if friend request map is empty delete it
-		  this.collectionReference.doc(this.username).get().then(doc => {
-			if(Object.keys(doc._data.FriendRequests).length === 0) {
-			  this.collectionReference.doc(this.username).update({FriendRequests: firebase.firestore.FieldValue.delete()})
-			  console.log("empty object")
-			} else {
-			  console.log("not empty object")
-			}
-		  })
 		})
 		.catch((err) => {
 		  console.log(err)

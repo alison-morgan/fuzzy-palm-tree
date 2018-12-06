@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, ScrollView } from 'react-native';
+import { StyleSheet, Text, ScrollView } from 'react-native';
 import { observer,inject } from 'mobx-react';
 import CustomList from '../components/CustomList';
 import CustomSearchBar from '../components/CustomSearchBar';
@@ -18,8 +18,8 @@ const FriendsList=inject("stores")(observer(
 						start={{x:0, y:1}} 
 						end={{x:1.5, y:0}}
 						style={styles.container}>
+						<CustomSearchBar name='friends'/>
 						<ScrollView>
-							<CustomSearchBar name='friends'/>
 							<Text style={styles.headers}>Friend Requests</Text>
 								{
 									Object.keys(userStore.friendRequests).length!==0
