@@ -114,6 +114,7 @@ const styles = StyleSheet.create( {
         backgroundColor:'rgba(255, 255, 255, .1)',
         borderRadius:50,
         margin: 5,
+        borderBottomWidth:0
     },
     text:{
 		textAlign:'center',

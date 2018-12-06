@@ -52,24 +52,20 @@ const styles = StyleSheet.create({
     justifyContent:'space-evenly',
   },
   welcome: {
-    fontSize: 30,
-    fontFamily:'GreatVibes-Regular',
-    // marginTop:40,
+    fontSize: 50,
+    textAlign: 'center',
+    fontFamily: 'GreatVibes-Regular',
     color:'#400000',
-    fontWeight: 'bold',
-    fontStyle:'italic'
   },
   instructions: {
     textAlign: 'center',
     fontSize:23,
-    // marginTop:40,
-    color:'#400000',
+    color:'white',
     fontWeight: 'bold',
     fontStyle:'italic'
   },
   buttonContainer:{
     flexDirection:'row',
-    // margin:60
   },
   buttonStyle:{
     width:100,

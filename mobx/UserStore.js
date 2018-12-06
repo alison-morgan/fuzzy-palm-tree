@@ -34,17 +34,23 @@ export default class Store {
 		search:'Type in username'
 		}
 	}
+
+	//getter/computed for unsubscribes
 	get unsubscriber(){
 		return this._unsubscriber
 	}
+
+	//setter/action for searchResult
 	setUnsubscriber(value){
 		this._unsubscriber=value
 	}
 
+	//getter/computed for hasSeenAuthPage
 	get hasSeenAuthPage(){
 		return this._hasSeenAuthPage
 	}
 
+	//setter/action for hasSeenAuthPage
 	setHasSeenAuthPage(value){
 		this._hasSeenAuthPage=value
 	}
@@ -78,145 +84,180 @@ export default class Store {
 		this._friendSearch = value
 	}
 
-	//getter/computed for
+	//getter/computed for possibleFriends
 	get possibleFriends() {
 		return this._possibleFriends
 	}
 
+	//setter/action PossibleFriends				
 	setPossibleFriends( value ) {
 		this._possibleFriends = value
 	}
 
+	//setter/action FriendsInfo	
 	setFriendsInfo( value ) {
 		this._friendsInfo = value
 	}
 
+	//getter/computed for friendsInfo
 	get friendsInfo() {
 		return this._friendsInfo
 	}
 
+	//getter/computed for friends
 	get friends() {
 		return this._friends
 	}
 
+	//setter/action setFriends
 	setFriends( value ) {
 		this._friends = value;
 	}
 
+	//getter/computed for collectionReference
 	get collectionReference() {
 		return this._collectionReference
 	}
 
+	//getter/computed for isOnline
 	get isOnline() {
 		return this._isOnline
 	}
 
+	//setter/action isOnline
 	setIsOnline( value ) {
 		this._isOnline = value
 	}
 
+	//getter/computed for email
 	get email() {
 		return this._email
 	}
 
+	//setter/action setEmail
 	setEmail( value ) {
 		this._email = value
 	}
 
+	//getter/computed for possibleFriends
 	get password() {
 		return this._password
 	}
 
+	//setter/action setPassword
 	setPassword( value ) {
 		this._password = value
 	}
 
+	//getter/computed for username
 	get username() {
 		return this._username
 	}
 
+	//setter/action setUsername
 	setUsername( value ) {
 		this._username = value;
 		AsyncStorage.setItem(asyncStorageKeys.USERNAME, value)
 	}
 
+	//getter/computed for confirmPassword
 	get confirmPassword() {
 		return this._confirmPassword
 	}
 
+	//setter/action setConfirmPassword
 	setConfirmPassword( value ) {
 		this._confirmPassword = value
 	}
 
+	//getter/computed for errorMessage
 	get errorMessage() {
 		return this._errorMessage
 	}
 
+	//setter/action ErrorMessage	
 	setErrorMessage( value ) {
 		this._errorMessage = value
 	}
 
+	//getter/computed for uid	
 	get uid() {
 		return this._uid;
 	}
 
+	//setter/action Uid	
 	setUid( value ) {
 		this._uid = value
 	}
 
+	//getter/computed for placeholders
 	get placeholders() {
 		return this._placeholders
 	}
 
+	//setter/action Placeholders		
 	setPlaceholders( key, value ) {
 		this._placeholders[ key ] = value
 	}
 
+	//getter/computed for InstanceId
 	get instanceId() {
 		return this._instanceId
 	}
 
+	//setter/action InstanceId
 	setInstanceId( value ) {
 		this._instanceId = value;
 		AsyncStorage.setItem(asyncStorageKeys.INSTANCE_ID, value)
 	}
 
+	//function that validates email
 	validate = ( text ) => {
+		//looking for @ and . in the string and making 
+		//sure there is no extra special characters
 		let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+		//if result false => email is incorrect
 		if ( reg.test( text ) === false ) 
 			return "Email is Not Correct";
 		else 
 			return text;
-		}
+	}
 	
 	handleLogin = () => {
 		console.log( 'handle login' )
+		//login with email and password
 		firebase.auth().signInWithEmailAndPassword( this.email, this.password ).then( () => {
-			console.log( 'auth' )
+			//requestper permission for token
 			firebase.messaging().requestPermission().then( () => {
-				console.log( 'permission' )
+				//if permission granted recieve token
 				firebase.messaging().getToken().then( ( currentToken ) => {
-					console.log( 'token' ,firebase.auth())
+					//assign firebase document id to user uid
 					const uid = firebase.auth().currentUser.uid
-					console.log( 'uid  ', uid )
+					//setting listener to document with specific uid and assigning returned function to this variable
 					let unsubscribe = this.collectionReference.where( "Uid", "==", uid ).onSnapshot( ( querySnapshot ) => {
 						console.log( 'found document' )
 						const data = querySnapshot._docs[ 0 ].data();
+						//if uid does not exist in the store
 						if(this.uid===''){
-							console.log('making user online')
 							this.collectionReference.doc( data.Username ).update( { 'InstanceId': firebase.firestore.FieldValue.arrayUnion( currentToken ), 'IsOnline': true } )
 						}
+						//call setters for the store
 						for ( field in data ) {
+							//if it is instanceId field
 							if(field==='InstanceId'){
+								//assigning currentToken to the instanceId in the store
 								this[ `set${ field }` ]( currentToken )
-							}else{
+							}else{	
+								//assign remaining document fields to their store fields								
 								this[ `set${ field }` ]( data[ field ] )
 							}
 						}
+						//get all users info
 						this.getAllUsersInfo()
 					}, error => {
 						console.log( 'error getting document: ', error )
 					} )
+					//set unsubscribe function to the store
 					this.setUnsubscriber(unsubscribe)
 				} ).catch( error => console.log( 'An error occurred while retrieving token. ', error ) )
 			} ).catch( error => console.log( 'Unable to get permission to notify.', error ) )
@@ -232,15 +273,19 @@ export default class Store {
 			if ( doc.exists ) {
 				//let user know that he can not user entered username
 				this.setPlaceholders( 'username', 'this username already exist' );
-				this.setUsername( '' );
 				//if username not in use
+				this.setUsername( '' );
 			} else {
-				//authorize user in the system
+				//creating authorized account with valid email and password
 				firebase.auth().createUserWithEmailAndPassword( this.email, this.password ).then( () => {
+					//request permission to create token					
 					firebase.messaging().requestPermission().then( () => {
+						//if permission granted receive token
 						firebase.messaging().getToken().then( ( currentToken ) => {
+							//set instance id to current token for push notifications
 							this.setInstanceId(currentToken);
 							const uid = firebase.auth().currentUser.uid;
+							//create new document in the database with information that user typed in
 							this.collectionReference.doc( this.username ).set( {
 								InstanceId: [currentToken],
 								Email: this.email,
@@ -249,6 +294,7 @@ export default class Store {
 								IsOnline: true,
 								FriendRequests: [],
 							} ).then( () => {
+								//get information about user
 								this.getUserInfo();
 							} )
 						} ).catch( error => console.log( 'error getting token', error ) )
@@ -259,50 +305,71 @@ export default class Store {
 	}
 
 	getUserInfo=()=>{
+		//set listener to the user doument and assign returned function to the unsubscribe variable
 		let unsubscribe = this.collectionReference.doc( this.username ).onSnapshot( ( doc ) => {
+			//assign data from the document to the data variable
 			const data = doc.data();
+			//go through the fields in data obj
 			for ( field in data ) {
-				if(field==='InstanceId'){
-					console.log('I dont know token')
-					this[ `set${ field }` ]( this.instanceId )
-				}else{
+				//if this field not instanceId field
+				if(field!=='InstanceId'){
+					//call setter for the rest of the fields
 					this[ `set${ field }` ]( data[ field ] )
 				}
-			}			
+			}
+			//get all other users info
 			this.getAllUsersInfo()	
 		}, error => {
 			console.log( 'error getting document: ', error )
 		} )
+		//set unsubscribe function to the store
 		this.setUnsubscriber(unsubscribe)
 	}
 
 	getAllUsersInfo = () => {
+	//get info for all docs in collections		
 		this.collectionReference.onSnapshot( querySnapshot => {
+			//create object that will have information about all users
 		   const users={
 			FriendsInfo:{},
 			PossibleFriends:{},
 			FriendRequests:{}
 		   }
+		//go through all available documents in querySnapshot
 		   querySnapshot.forEach( doc => {
+			   //assign all information from the document to the user variable
 			   const user = doc.data();
+				//if username in this document equals to the current user username
 			   if(user.Username===this.username){
+				   //skip this document
 				   return
+				//if document's username inside of friends array
 			   }else if(this.friends.indexOf(user.Username)!==-1){
+				   //write information about this user to the friendsInfo object
 				   users.FriendsInfo[user.Username]={ username: user.Username, isOnline: user.IsOnline, instanceId: user.InstanceId};
-			   }else if(this.friendRequests.hasOwnProperty(user.Username)){
-				   users.FriendRequests[user.Username]={ username: user.Username, isOnline: user.IsOnline}
+				//if document's username inside of friendRequests object			  
+				}else if(this.friendRequests.hasOwnProperty(user.Username)){
+					//write information about this user to the friendRequests object
+				   users.FriendRequests[user.Username]={ username: user.Username, isOnline: user.IsOnline};
+				//otherwise
 			   }else{
+					//write information about this user to the possibleFriends object
 				   users.PossibleFriends[user.Username] = { username: user.Username, isOnline: user.IsOnline, instanceId: user.InstanceId, friends: user.Friends }
 			   }
 		   } )
+		   //go througn friends object inside users object
 			for(group in users){
+				//call setter for each object
 				this[ `set${ group }` ]( users[group] )
 			}
 		} )
 	}
 
+	//function that taking care about instant search
 	search = ( name ) => {
+		//if we are looking for friends
 		if ( name === 'friends' ) {
+			//create object for each search group and find usernames that have string that user is looking for
 			const searchFriend = Object.keys( this.friendsInfo ).reduce( ( searchFriend, name ) => {
 				if ( name.toLowerCase().includes( this.friendSearch.toLowerCase() ) ) {
 					searchFriend[ name ] = this.friendsInfo[ name ]
@@ -321,14 +388,16 @@ export default class Store {
 				}
 				return searchFriendRequests
 			}, {} )
-
+			//assign result to the searchResult object in the store
 			this.setSearchResult( { friends: searchFriend, possibleFriends: searchPossibleFriend, friendRequests: searchFriendRequests } )
 		}
 
 	}
 
 	friendReq = ( friend ) => {
+		//add friend request to doc of specified person		
 		this.collectionReference.doc( friend ).set( {
+			//add field if doesn't exist otherwise update			
 			FriendRequests: {
 				[ this.username ]: {
 					username: this.username,
@@ -338,12 +407,15 @@ export default class Store {
 	}
 
 	declineReq = (friend) => {
+		// delete friend request in doc if declined				
 		this.collectionReference.doc(this.username).update({[`FriendRequests.${friend}`]: firebase.firestore.FieldValue.delete()
 		})
 	  }
 	
+	
 	acceptReq = (friend) => {
 		  console.log('accepting')
+		  //look at doc and add friend request field if 		  
 		this.collectionReference.doc(friend).set({Friends:[this.username]}, { merge: true })
 		.then(() => {
 		  this.collectionReference.doc(this.username).update({[`FriendRequests.${friend}`]: firebase.firestore.FieldValue.delete()
@@ -369,18 +441,20 @@ export default class Store {
 		})
 	}
 
-
+	//function that signing out user from the app
 	signOut = () => {
+		//sign out user from firebase
 		firebase.auth().signOut().then( () => {
-			console.log('signed out',this.username,this.instanceId);
 			let unsubscribe=this.unsubscriber;
+			//unsubscribe store from the listeners 
 			unsubscribe();
+			//update online status to false and delete current InstanceId from the database
 			this.collectionReference.doc( this.username ).update( {
 				'InstanceId': firebase.firestore.FieldValue.arrayRemove( this.instanceId ),
 				'IsOnline': false
 			}).then(()=>{
+				//reset all variables in the store
 				this.reset();
-				console.log('updated')
 			})
 		} ).catch( error => console.log( 'error when sign out user: ', error ) )
 	}
@@ -415,8 +489,8 @@ export default class Store {
 		
 	}
 
+	//function that resets all variables in the store
 	reset = () => {
-		console.log('resetting')
 		this.setHasSeenAuthPage(false)
 		this.setEmail( '' );
 		this.setPassword( '' );
@@ -436,6 +510,7 @@ export default class Store {
 	}
 
 }
+//assign decorators to the userStore
 decorate( Store, {
 	_collectionReference: observable,
 	_email: observable,

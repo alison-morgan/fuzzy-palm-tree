@@ -9,12 +9,13 @@ export default TTTSelectOpponent=inject( "stores" )( observer(
     class TTTSelectOpponent extends Component {
         //function to start the game
         start=(opponent)=>{
+            const gameStore=this.props.stores.ticTacToe;
             //set opponent value in the game store
-            this.props.stores.ticTacToe.setOpponent(opponent);
+            gameStore.setOpponent(opponent);
              //setting game outcome to null
             gameStore.setResult(null);
             //creating new board array to keep of the game
-            gameStore.setBoardState( [... Array(boardSize)].map(el => Array(boardSize).fill(1)));
+            gameStore.setBoardState( [... Array(gameStore.size)].map(el => Array(gameStore.size).fill(1)));
             //navigate user to the game
             this.props.navigation.navigate('TicTacToe')
         }
@@ -26,9 +27,6 @@ export default TTTSelectOpponent=inject( "stores" )( observer(
 					start={{x:0, y:1}} 
 					end={{x:1.5, y:0}}
 					style={styles.container}>
-                        <Text style={styles.text}>
-                            Pick your opponent
-                        </Text>
                         <View style={styles.buttonContainer}>
                             <View style={styles.iconContainer}>
                                 <Icon 
@@ -47,6 +45,9 @@ export default TTTSelectOpponent=inject( "stores" )( observer(
                                 <Text style={styles.label}>Friend</Text>
                             </View>
                         </View>
+                        <Text style={styles.text}>
+                            Pick your opponent
+                        </Text>
                 </LinearGradient>
             )
         }
@@ -60,15 +61,22 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 20,
-    marginTop:70,
-    marginBottom:100,
-    color: '#400000',
+    color: 'white',
+    textShadowColor:'#311b92', 
+	textShadowRadius: 1, 
+    textShadowOffset: {width: -2, height: 2},
+    fontWeight:'bold'
   },
   label:{
-    fontSize: 20,
-    color: '#400000',
+    color: 'white',
+    textShadowColor:'#311b92', 
+	textShadowRadius: 1, 
+    textShadowOffset: {width: -1, height: 1},
+    fontWeight:'bold'
   },
   buttonContainer:{
+    marginTop:150,
+    marginBottom:70,
     flexDirection:'row'
   },
   iconContainer:{

@@ -1,14 +1,15 @@
-
 import React from 'react';
 import {StyleSheet,Text,TextInput,View} from 'react-native';
 import { Button } from 'react-native-elements';
 import { observer,inject } from 'mobx-react';
 import LinearGradient from 'react-native-linear-gradient';
 
+//Login screen component
 const Login=inject('stores')(observer(
 	class Login extends React.Component{
 		render(){
 		const userStore=this.props.stores.userStore;
+		//set flag that user seen Login page
 		userStore.setHasSeenAuthPage(true)
 		return ( 
 			<LinearGradient
@@ -39,19 +40,29 @@ const Login=inject('stores')(observer(
 						buttonStyle={styles.button}
 						title='Login'
 						onPress={() => {
+							//check if password field empty
 							if ( userStore.password === null ) {
+								//remind user to enter password
 								userStore.setPlaceholders('password','Please enter password');	
+							//check if email field empty
 							} else if ( userStore.email === null ) {
+								//remind user to type in email
 								userStore.setPlaceholders('email', 'Please enter email');
+							//if both fields and filled out
 							} else {
+								//check if password less than correct length
 								if ( userStore.password.length < 6 ) {
+									//let user know that length is incorrect
 									userStore.setPlaceholders('password', 'Password should be at least 6 characters');
 									userStore.setPassword(null);
 								} else if ( userStore.email ) {
+									//check if email is incorrect
 									if ( userStore.validate( userStore.email ) === 'Email is Not Correct' ) {
+										//ask user to tyoe in correct email
 										userStore.setPlaceholders('email', 'Please enter a valid email');
 										userStore.setEmail(null)
 									} else {
+										//login user to the system
 										userStore.handleLogin();
 									}
 								}
@@ -100,10 +111,9 @@ const styles = StyleSheet.create( {
 	},
 	text: {
 		textAlign:'center',
-		// fontFamily: 'GreatVibes-Regular',
+		fontFamily: 'GreatVibes-Regular',
 		color: "white",
-		fontSize: 25,
-		fontWeight: '400',
+		fontSize: 40,
 	}
 } )
 export default Login

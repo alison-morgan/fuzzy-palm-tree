@@ -40,7 +40,6 @@
     "react": "16.5.0",
     "react-native": "0.57.1",
     "react-native-android-log": "^1.1.0",
-    "react-native-chat-ui": "^0.1.8",
     "react-native-elements": "^0.19.1",
     "react-native-firebase": "^5.1.0",
     "react-native-linear-gradient": "^2.5.3",
@@ -49,5 +48,10 @@
     "react-native-vector-icons": "^4.2.0",
     "react-navigation": "^2.18.2",
     "react-navigation-mobx-helpers": "^2.0.0"
+  },
+  "rnpm": {
+    "assets": [
+      "./assets/fonts/"
+    ]
   }
 }

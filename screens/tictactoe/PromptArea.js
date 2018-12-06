@@ -9,10 +9,13 @@ export default PromptArea = inject( "stores" )( observer(
       const gameStore=this.props.stores.ticTacToe;
       return (
         <View>
-          <Text style={styles.text}>{ gameStore.result }</Text>
+          <Text style={styles.text}>{ gameStore.result}</Text>
           {
-            gameStore.result !== null && (
-              <TouchableOpacity onPress={() => gameStore.reset()}>
+            gameStore.result===null
+            ?(gameStore.opponent==='friend'
+              ?<Text style={styles.text}>{gameStore.turn} turn</Text>
+              :null)
+            :(<TouchableOpacity onPress={() => gameStore.reset()}>
                 <Text style={styles.instructions}>
                   Touch here to play again
                 </Text>
@@ -28,9 +31,9 @@ export default PromptArea = inject( "stores" )( observer(
 const styles = StyleSheet.create({
  text: {
    marginTop: 25,
-   fontSize: 20,
-   fontWeight: 'bold',
+   fontSize: 30,
    color:'#400000',
+   fontWeight: '400',
    textAlign: 'center'
  },
  instructions: {

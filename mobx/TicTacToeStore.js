@@ -78,7 +78,7 @@ export default class TicTacToeStore {
 			while(counter<this.size && this.boardState[counter][counter]===this.turn){
 				counter++;
 				if(counter===this.size){
-					this.setResult(`${this.turn} won`);
+					this.setResult(`${this.turn} won!!!`);
 					return 
 				}
 			}
@@ -89,7 +89,7 @@ export default class TicTacToeStore {
 			while(counter<this.size && this.boardState[counter][this.size-counter-1]===this.turn){
 				counter++;
 				if(counter===this.size){
-					this.setResult(`${this.turn} won`);
+					this.setResult(`${this.turn} won!!!`);
 					return 
 				}
 			}
@@ -99,7 +99,7 @@ export default class TicTacToeStore {
 		while(counter<this.size && this.boardState[y][this.size-counter-1]===this.turn){
 			counter++;
 			if(counter===this.size){
-				this.setResult(`${this.turn} won`);
+				this.setResult(`${this.turn} won!!!`);
 				return 
 			}
 		}
@@ -108,7 +108,7 @@ export default class TicTacToeStore {
 		while(counter<this.size && this.boardState[this.size-counter-1][x]===this.turn){
 			counter++;
 			if(counter===this.size){
-				this.setResult(`${this.turn} won`);
+				this.setResult(`${this.turn} won!!!`);
 				return 
 			}
 		}
@@ -119,7 +119,7 @@ export default class TicTacToeStore {
 
 		//if no empty squares available
 		if(isTie){
-			this.setResult(`It's a tie`);
+			this.setResult(`It's a tie.`);
 		}
 		return
 	}

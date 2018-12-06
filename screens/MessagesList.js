@@ -1,64 +1,31 @@
 import React from "react";
-import ChatUI from "react-native-chat-ui";
-import { StyleSheet, Text, View } from 'react-native';
-
-const messageData = [
-	{
-		id: 1,
-		userId: 1,
-		text: "Hello world",
-		error: false,
-		sending: false,
-		createdAt: "2018-12-05 12:13:24",
-	}, {
-		id: 2,
-		userId: 2,
-		text: "Hello world",
-		error: false,
-		sending: false,
-		createdAt: "2018-12-05 12:13:26",
-	},
-];
-
+import { StyleSheet, Text} from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
+//future messages list component
 class MessagesList extends React.Component {
-	state = {
-		messages: []
-	};
-
-	componentDidMount = () => {
-		this.getMessages();
-	};
-
-	getMessages = () => {
-		this.setState( { messages: messageData } );
-	};
-
-	sendMessage = message => {
-		this.setState( prevState => ( {
-			messages: [
-				message, ...prevState.messages,
-			]
-		} ) );
-	};
-
 	render() {
-		const { messages } = this.state;
 
-		return (
-				<ChatUI
-				messages={messages}
-				user={{
-					id: 1
-				}}
-				chatter={{id: 2}}
-				style={{color:'purple'}}
-				onSend={this.sendMessage}/>
+		return (<LinearGradient
+				colors={['#091540', '#880D1E']}
+				start={{x:0, y:1}} 
+				end={{x:1.5, y:0}}
+				style={styles.container}>
+					<Text style={styles.text}>This feature comming soon...</Text>
+				</LinearGradient>
 			)
 	}
 }
-const styles = StyleSheet.create( {
+const styles = StyleSheet.create({
 	container: {
-		flex: 1,
+	  flex: 1,
+	  alignItems: 'center',
+	  justifyContent:'center',
+	},
+	text: {
+	  fontSize: 50,
+	  textAlign:'center',
+	  fontFamily:'GreatVibes-Regular',
+	  color:'white',
 	}
-} )
+  })
 export default MessagesList;
