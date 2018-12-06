@@ -27,11 +27,11 @@ export default class Store {
 		this._friendRequests={};
 		this._searchResult=null;
 		this._placeholders = {
-		username: 'Username',
-		confirmPassword: 'Confirm Password',
-		password: 'Password',
-		email: 'Email',
-		search:'Type in username'
+			username: 'Username',
+			confirmPassword: 'Confirm Password',
+			password: 'Password',
+			email: 'Email',
+			search:'Type in username'
 		}
 	}
 
@@ -425,7 +425,7 @@ export default class Store {
 		})
 		.then(() => {
 			//add new friend in user doc to friend array
-		  this.collectionReference.doc(this.username).set({Friends:[friend]}, {merge: true})
+		  this.collectionReference.doc(this.username).update({Friends:firebase.firestore.FieldValue.arrayUnion( friend )})
 		  console.log("added new friend to user doc")
 		})
 		.then(() => {

@@ -11,7 +11,7 @@ const CustomSearchBar=inject("stores")(observer(
 			<View style={styles.container}>
 			<TextInput
 					style={styles.textInput}
-					autoCapitalize={false}
+					autoCapitalize='none'
 					placeholder={userStore.placeholders.search}
 					placeholderTextColor='white'
 					selectionColor='white'
@@ -20,7 +20,7 @@ const CustomSearchBar=inject("stores")(observer(
 					onChangeText={(text)=>{
 						userStore.setFriendSearch(text);
 						userStore.search(this.props.name)}}
-					value={userStore.search}/> 
+					value={userStore.friendSearch}/> 
 			</View>)
 		}
 	}

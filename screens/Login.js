@@ -27,7 +27,7 @@ const Login=inject('stores')(observer(
 						autoCapitalize='none'
 						placeholder={userStore.placeholders.email}
 						onChangeText={email => userStore.setEmail(email)}
-						value={userStore._email}/> 
+						value={userStore.email}/> 
 					<TextInput
 						secureTextEntry
 						style={styles.textInput}

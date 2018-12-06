@@ -13,6 +13,7 @@ export default class Root extends React.Component {
 		this.ticTacToe=new TicTacToe()
 	}
   render() {
+		console.disableYellowBox=true;
     return (
 			<Provider rootNavigation={this.rootNavigation}  stores={{userStore:this.userStore,ticTacToe:this.ticTacToe}} >
 				<App />
