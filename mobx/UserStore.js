@@ -415,18 +415,21 @@ export default class Store {
 	
 	acceptReq = (friend) => {
 		  console.log('accepting')
-		  //look at doc and add friend request field if 		  
+		  //look at doc of friend and add friend request field if Friends array doesn't exist		  
 		this.collectionReference.doc(friend).set({Friends:[this.username]}, { merge: true })
 		.then(() => {
+			//look at user doc and delete friend request 
 		  this.collectionReference.doc(this.username).update({[`FriendRequests.${friend}`]: firebase.firestore.FieldValue.delete()
 		  })
 		 console.log("deleted")
 		})
 		.then(() => {
+			//add new friend in user doc to friend array
 		  this.collectionReference.doc(this.username).set({Friends:[friend]}, {merge: true})
 		  console.log("added new friend to user doc")
 		})
 		.then(() => {
+			//look at user doc and if friend request map is empty delete it
 		  this.collectionReference.doc(this.username).get().then(doc => {
 			if(Object.keys(doc._data.FriendRequests).length === 0) {
 			  this.collectionReference.doc(this.username).update({FriendRequests: firebase.firestore.FieldValue.delete()})
@@ -460,16 +463,15 @@ export default class Store {
 	}
 
 	resetPassword=()=>{
+		//make sure email is valid
 		if(this.email!==''){
 			if(this.validate(this.email)==='Email is Not Correct'){
 				this.setPlaceholders('email', 'Please enter a valid email');
-				console.log('in if reset password')
 			}else{
+				//if valid send reset email
 				firebase.auth().sendPasswordResetEmail(this.email)
 					.then(function() {
-						let uemail = this.email
-						console.log("in else reset password")
-						// Email sent.
+						//popup to let you know email has been sent
 						Alert.alert(
 							`Sorry you forgot your password. :(`,
 							'An Email Has Been Sent!',
@@ -484,6 +486,7 @@ export default class Store {
 					});
 			}
 		}else{
+			//placeholders
 			this.setPlaceholders('email', 'Please enter an email');
 		}
 		
